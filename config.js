@@ -1,1 +1,7 @@
+// DESTINED — CONFIGURATION
+// ⚠️ KEEP THIS FILE PRIVATE! DO NOT SHARE!
 
+const BOT_TOKEN = "8592477719:AAENJPnXwizVOThJBeXGvJOESAOzYB6l3UI";
+const BOT_ID = "7617842224";
+
+console.log("✅ Destined Bot Configuration Loaded");
