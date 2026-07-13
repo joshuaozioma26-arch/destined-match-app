@@ -293,7 +293,44 @@ body {
     margin-bottom: 20px;
 }
 
-/* Interests Grid */
+textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #ffd700;
+}
+
+.btn-secondary {
+    width: auto;
+    padding: 12px 30px;
+    background: transparent;
+    color: #888;
+    font-weight: 700;
+    font-size: 1rem;
+    border: 1px solid #333;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.btn-secondary:hover {
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+/* ===== INTERESTS GRID ===== */
 .interests-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -320,4 +357,30 @@ body {
 
 .interest-item:hover {
     border-color: #ffd700;
+}
+
+/* ===== HOME PAGE (Coming Soon) ===== */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.home-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 20px;
+    padding: 40px 30px;
+    margin-top: 30px;
+}
+
+.home-box h2 {
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+.home-box p {
+    color: #888;
+    margin-bottom: 20px;
 }
