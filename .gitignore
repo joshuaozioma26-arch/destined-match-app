@@ -1,0 +1,43 @@
+# DESTINED — GITIGNORE
+# This file tells GitHub what to ignore
+
+# ===== SECRET FILES =====
+.env
+.env.local
+.env.*.local
+
+# ===== DEPENDENCIES =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== SYSTEM FILES =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== LOGS =====
+*.log
+*.tmp
+
+# ===== IDE FILES =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== BUILD FILES =====
+dist/
+build/
+*.min.js
+*.min.css
+
+# ===== COVERAGE =====
+coverage/
+.nyc_output/
+
+# ===== MISC =====
+*.pid
+*.seed
+*.pid.lock
