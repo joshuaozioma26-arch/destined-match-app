@@ -59,8 +59,8 @@ body {
     margin-top: 10px;
 }
 
-/* ===== BOT LINK ===== */
-.bot-link {
+/* ===== APP LINKS ===== */
+.app-links {
     margin-top: 40px;
     padding: 30px 20px;
     background: rgba(255, 215, 0, 0.05);
@@ -68,12 +68,13 @@ body {
     border-radius: 16px;
 }
 
-.bot-link p {
+.app-links p {
     color: #aaaaaa;
     font-size: 1rem;
     margin-bottom: 15px;
 }
 
+/* ===== BUTTON ===== */
 .btn {
     display: inline-block;
     padding: 14px 40px;
@@ -84,6 +85,8 @@ body {
     border-radius: 50px;
     text-decoration: none;
     transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
 }
 
 .btn:hover {
@@ -106,13 +109,6 @@ body {
     margin-left: 4px;
     vertical-align: middle;
     user-select: none;
-}
-
-/* ===== FOOTER ===== */
-.footer {
-    margin-top: 50px;
-    color: #555;
-    font-size: 0.8rem;
 }
 
 /* ===== RESPONSIVE ===== */
