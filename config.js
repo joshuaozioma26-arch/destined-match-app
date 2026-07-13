@@ -95,9 +95,11 @@ const TIER_PRICING = {
     ELITE: 24.99
 };
 
-// ===== FUNCTION TO LOAD KEYS FROM .env =====
-// NOTE: In a real app, keys are loaded from .env
-// For now, they are stored locally on your device
+// ============================================
+// NOTE: SUPABASE KEYS AND BOT TOKENS
+// ARE IN .env FILE (LOCAL ONLY)
+// DO NOT PUT THEM HERE!
+// ============================================
 
 console.log("✅ Destined Configuration Loaded");
 console.log("🔑 Keys are stored in .env (local only)");
