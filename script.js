@@ -202,8 +202,16 @@ function nextStep() {
         }
     });
 
+    // Special check for Step 5 (Interests)
+    if (currentStep === 5) {
+        const selected = document.querySelectorAll('.interest-item.selected').length;
+        if (selected < 3) {
+            valid = false;
+            alert('⚠️ Please select at least 3 interests.');
+        }
+    }
+
     if (!valid) {
-        alert('⚠️ Please fill in all required fields.');
         return;
     }
 
@@ -212,6 +220,7 @@ function nextStep() {
         currentStep++;
         document.getElementById('step' + currentStep).classList.add('active');
         updateProgressBar();
+        updateInterestCount();
     }
 }
 
@@ -222,6 +231,7 @@ function prevStep() {
         currentStep--;
         document.getElementById('step' + currentStep).classList.add('active');
         updateProgressBar();
+        updateInterestCount();
     }
 }
 
@@ -236,18 +246,55 @@ function updateProgressBar() {
             step.classList.add('done');
         }
     });
+}
 
-    document.getElementById('stepCounter').textContent = currentStep + '/' + totalSteps;
+// ===== Update Interest Count =====
+function updateInterestCount() {
+    const selected = document.querySelectorAll('.interest-item.selected').length;
+    const countElement = document.getElementById('interestCount');
+    if (countElement) {
+        countElement.textContent = selected;
+    }
 }
 
 // ===== Toggle Interest Selection =====
 function toggleInterest(element) {
     element.classList.toggle('selected');
+    updateInterestCount();
 }
 
 // ===== Handle Signup =====
 function handleSignup(event) {
     event.preventDefault();
+
+    // Check if at least 3 interests are selected
+    const selected = document.querySelectorAll('.interest-item.selected').length;
+    if (selected < 3) {
+        alert('⚠️ Please select at least 3 interests.');
+        return;
+    }
+
+    // Check phone number
+    const phone = document.getElementById('signupPhone');
+    if (phone && phone.value.length < 10) {
+        alert('⚠️ Please enter a valid phone number.');
+        return;
+    }
+
+    // Get all values
+    const fullName = document.getElementById('fullName')?.value || '';
+    const age = document.getElementById('age')?.value || '';
+    const location = document.getElementById('location')?.value || '';
+    const bio = document.getElementById('bio')?.value || '';
+
+    console.log('📝 Signup Data:');
+    console.log('📱 Phone:', phone?.value);
+    console.log('👤 Name:', fullName);
+    console.log('🎂 Age:', age);
+    console.log('📍 Location:', location);
+    console.log('📝 Bio:', bio);
+    console.log('🏷️ Interests:', selected);
+
     alert('🎉 Account created successfully! Welcome to Destined!');
     window.location.href = 'home.html';
 }
@@ -256,5 +303,21 @@ function handleSignup(event) {
 function goToLogin() {
     window.location.href = 'login.html';
 }
+
+// ============================================
+// HOME PAGE (Coming Soon)
+// ============================================
+
+// ===== Logout =====
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        alert('👋 Logged out successfully!');
+        window.location.href = 'index.html';
+    }
+}
+
+// ============================================
+// SCRIPT INITIALIZATION
+// ============================================
 
 console.log("✅ Destined script loaded successfully!");
