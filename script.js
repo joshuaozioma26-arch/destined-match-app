@@ -38,7 +38,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ===== FUNCTION: Check if user can be verified =====
+// ============================================
+// FUNCTION: Check if user can be verified
+// ============================================
 function canBeVerified(tier) {
     const key = tier.toUpperCase();
     if (TIERS[key]) {
@@ -47,7 +49,9 @@ function canBeVerified(tier) {
     return false;
 }
 
-// ===== FUNCTION: Check if user is verified =====
+// ============================================
+// FUNCTION: Check if user is verified
+// ============================================
 function isVerified(tier) {
     const key = tier.toUpperCase();
     if (TIERS[key]) {
@@ -56,7 +60,9 @@ function isVerified(tier) {
     return false;
 }
 
-// ===== FUNCTION: Get tier details =====
+// ============================================
+// FUNCTION: Get tier details
+// ============================================
 function getTierDetails(tier) {
     const key = tier.toUpperCase();
     if (TIERS[key]) {
@@ -65,7 +71,9 @@ function getTierDetails(tier) {
     return TIERS.FREE;
 }
 
-// ===== FUNCTION: Start verification =====
+// ============================================
+// FUNCTION: Start verification
+// ============================================
 function startVerification(userId, tier) {
     if (!canBeVerified(tier)) {
         return {
@@ -85,7 +93,9 @@ function startVerification(userId, tier) {
     };
 }
 
-// ===== FUNCTION: Complete verification =====
+// ============================================
+// FUNCTION: Complete verification
+// ============================================
 function completeVerification(userId, passed) {
     if (passed) {
         console.log(`✅ User ${userId} verified!`);
@@ -106,7 +116,9 @@ function completeVerification(userId, passed) {
     }
 }
 
-// ===== FUNCTION: Get verified badge HTML =====
+// ============================================
+// FUNCTION: Get verified badge HTML
+// ============================================
 function getVerifiedBadge(tier) {
     if (isVerified(tier)) {
         return '<span class="verified-check">✓</span>';
@@ -114,7 +126,9 @@ function getVerifiedBadge(tier) {
     return '';
 }
 
-// ===== FUNCTION: Test bot connection =====
+// ============================================
+// FUNCTION: Test bot connection
+// ============================================
 function testBot() {
     if (typeof BOT_TOKEN !== 'undefined') {
         alert("✅ Bot is connected!\n" +
@@ -123,6 +137,124 @@ function testBot() {
     } else {
         alert("❌ Bot not connected. Please check config.js");
     }
+}
+
+// ============================================
+// LOGIN SYSTEM
+// ============================================
+
+// ===== Handle Login Form =====
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const phone = document.getElementById('phone').value;
+    const otp = document.getElementById('otp').value;
+
+    if (!phone || phone.length < 10) {
+        alert('⚠️ Please enter a valid phone number.');
+        return;
+    }
+
+    if (!otp || otp.length !== 6) {
+        alert('⚠️ Please enter a valid 6-digit OTP.');
+        return;
+    }
+
+    console.log('📱 Phone:', phone);
+    console.log('🔐 OTP:', otp);
+
+    alert('✅ Login successful! Welcome to Destined!');
+    window.location.href = 'home.html';
+}
+
+// ===== Login with Telegram =====
+function loginWithTelegram() {
+    alert('🔗 Redirecting to Telegram...');
+    // window.location.href = 'https://t.me/Destined110_Bot';
+}
+
+// ===== Show/Hide Password (OTP) =====
+function toggleOTP() {
+    const otpInput = document.getElementById('otp');
+    otpInput.type = otpInput.type === 'password' ? 'text' : 'password';
+}
+
+// ============================================
+// SIGNUP SYSTEM
+// ============================================
+
+let currentStep = 1;
+const totalSteps = 5;
+
+// ===== Next Step =====
+function nextStep() {
+    const currentStepElement = document.getElementById('step' + currentStep);
+    const inputs = currentStepElement.querySelectorAll('input, select, textarea');
+    let valid = true;
+
+    inputs.forEach(input => {
+        if (input.hasAttribute('required') && !input.value.trim()) {
+            valid = false;
+            input.style.borderColor = '#ff4444';
+            setTimeout(() => {
+                input.style.borderColor = '';
+            }, 3000);
+        }
+    });
+
+    if (!valid) {
+        alert('⚠️ Please fill in all required fields.');
+        return;
+    }
+
+    if (currentStep < totalSteps) {
+        currentStepElement.classList.remove('active');
+        currentStep++;
+        document.getElementById('step' + currentStep).classList.add('active');
+        updateProgressBar();
+    }
+}
+
+// ===== Previous Step =====
+function prevStep() {
+    if (currentStep > 1) {
+        document.getElementById('step' + currentStep).classList.remove('active');
+        currentStep--;
+        document.getElementById('step' + currentStep).classList.add('active');
+        updateProgressBar();
+    }
+}
+
+// ===== Update Progress Bar =====
+function updateProgressBar() {
+    const steps = document.querySelectorAll('.progress-step');
+    steps.forEach((step, index) => {
+        step.classList.remove('active', 'done');
+        if (index + 1 === currentStep) {
+            step.classList.add('active');
+        } else if (index + 1 < currentStep) {
+            step.classList.add('done');
+        }
+    });
+
+    document.getElementById('stepCounter').textContent = currentStep + '/' + totalSteps;
+}
+
+// ===== Toggle Interest Selection =====
+function toggleInterest(element) {
+    element.classList.toggle('selected');
+}
+
+// ===== Handle Signup =====
+function handleSignup(event) {
+    event.preventDefault();
+    alert('🎉 Account created successfully! Welcome to Destined!');
+    window.location.href = 'home.html';
+}
+
+// ===== Go to Login =====
+function goToLogin() {
+    window.location.href = 'login.html';
 }
 
 console.log("✅ Destined script loaded successfully!");
