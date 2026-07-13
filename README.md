@@ -16,6 +16,27 @@ Destined is a premium dating app designed to help people find real connections w
 - 👑 **Elite Lounge** — Premium access
 - 📱 **Social Feed** — Share your life
 - 🌍 **Global Matching** — Connect worldwide
+- ✅ **Verified Check** — Like Telegram, for VIP & Elite
+
+---
+
+## 👑 Tiers
+
+| Tier | Verified Check | Access |
+|------|----------------|--------|
+| Free | ❌ No | Basic |
+| Premium ⭐ | ❌ No | More features |
+| VIP 🌟 | ✅ Yes (Request) | Premium features |
+| Elite 🔱 | ✅ Yes (Auto) | Everything |
+
+---
+
+## ✅ Verified Check
+
+- **Style:** Like Telegram — Blue circle with white check ✓
+- **VIP:** Request verification → Admin approves
+- **Elite:** Auto-verified
+- **Purpose:** Builds trust, prevents scams, shows status
 
 ---
 
