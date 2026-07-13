@@ -36,6 +36,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("   Checks:", VERIFICATION_RULES.checks.join(", "));
         console.log("   Retry Days:", VERIFICATION_RULES.retry_days);
     }
+
+    // Load first profile if on home page
+    if (document.getElementById('swipeCard')) {
+        loadProfile(currentProfileIndex);
+    }
 });
 
 // ============================================
@@ -305,19 +310,151 @@ function goToLogin() {
 }
 
 // ============================================
-// HOME PAGE (Coming Soon)
+// HOME PAGE — SWIPE SYSTEM
 // ============================================
 
-// ===== Logout =====
-function logout() {
-    if (confirm('Are you sure you want to logout?')) {
-        alert('👋 Logged out successfully!');
-        window.location.href = 'index.html';
+// ===== Sample Profiles Data =====
+const profiles = [
+    {
+        name: "Sarah",
+        age: 28,
+        location: "London",
+        status: "Single",
+        looking: "Long-term",
+        bio: "Love is the greatest adventure. ❤️‍🔥",
+        image: "https://picsum.photos/seed/1/400/500"
+    },
+    {
+        name: "Marcus",
+        age: 30,
+        location: "Paris",
+        status: "Single",
+        looking: "Long-term",
+        bio: "Adventure awaits! 🌍",
+        image: "https://picsum.photos/seed/2/400/500"
+    },
+    {
+        name: "Emma",
+        age: 26,
+        location: "Berlin",
+        status: "Single",
+        looking: "Short-term",
+        bio: "Live life to the fullest! ✨",
+        image: "https://picsum.photos/seed/3/400/500"
+    },
+    {
+        name: "James",
+        age: 32,
+        location: "Rome",
+        status: "Single",
+        looking: "Long-term",
+        bio: "Passion for life and love. 🍕",
+        image: "https://picsum.photos/seed/4/400/500"
+    },
+    {
+        name: "Mia",
+        age: 25,
+        location: "Barcelona",
+        status: "Single",
+        looking: "Both",
+        bio: "Dancing through life. 💃",
+        image: "https://picsum.photos/seed/5/400/500"
+    }
+];
+
+let currentProfileIndex = 0;
+let swipeHistory = [];
+
+// ===== Load Profile =====
+function loadProfile(index) {
+    const profile = profiles[index];
+    if (!profile) {
+        document.getElementById('profileName').textContent = "No more profiles";
+        document.getElementById('profileAge').textContent = "";
+        document.getElementById('profileLocation').textContent = "Come back later!";
+        document.getElementById('profileBio').textContent = "You've seen everyone!";
+        document.getElementById('profileImage').src = "https://picsum.photos/seed/end/400/500";
+        return;
+    }
+
+    document.getElementById('profileName').textContent = profile.name;
+    document.getElementById('profileAge').textContent = profile.age;
+    document.getElementById('profileLocation').textContent = profile.location;
+    document.getElementById('profileBio').textContent = profile.bio;
+    document.getElementById('profileImage').src = profile.image;
+
+    // Update status badge
+    const statusBadge = document.querySelector('.badge-status');
+    if (statusBadge) {
+        statusBadge.textContent = profile.status;
+    }
+
+    // Update looking badge
+    const lookingBadge = document.querySelector('.badge-looking');
+    if (lookingBadge) {
+        lookingBadge.textContent = '💍 Open to ' + profile.looking;
     }
 }
 
+// ===== Like Swipe =====
+function likeSwipe() {
+    const profile = profiles[currentProfileIndex];
+    if (profile) {
+        swipeHistory.push({ profile, action: 'liked' });
+        alert(`❤️ You liked ${profile.name}!`);
+        nextProfile();
+    }
+}
+
+// ===== Pass Swipe =====
+function passSwipe() {
+    const profile = profiles[currentProfileIndex];
+    if (profile) {
+        swipeHistory.push({ profile, action: 'passed' });
+        nextProfile();
+    }
+}
+
+// ===== Super Like =====
+function superLike() {
+    const profile = profiles[currentProfileIndex];
+    if (profile) {
+        alert(`⭐ You Super Liked ${profile.name}!`);
+        nextProfile();
+    }
+}
+
+// ===== Rewind =====
+function rewindSwipe() {
+    if (swipeHistory.length > 0) {
+        const last = swipeHistory.pop();
+        currentProfileIndex = profiles.indexOf(last.profile);
+        loadProfile(currentProfileIndex);
+        alert('↩️ Rewind successful!');
+    } else {
+        alert('⚠️ No profiles to rewind.');
+    }
+}
+
+// ===== Boost =====
+function boostProfile() {
+    alert('⚡ Your profile is boosted for 30 minutes!');
+}
+
+// ===== Next Profile =====
+function nextProfile() {
+    currentProfileIndex++;
+    if (currentProfileIndex >= profiles.length) {
+        currentProfileIndex = 0; // Loop back
+    }
+    loadProfile(currentProfileIndex);
+}
+
 // ============================================
-// SCRIPT INITIALIZATION
+// FUNCTION: Show notifications count
 // ============================================
+function showNotification() {
+    alert('🔔 You have 3 new notifications!');
+}
 
 console.log("✅ Destined script loaded successfully!");
