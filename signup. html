@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destined — Sign Up ❤️‍🔥</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container signup-container">
+        <div class="logo">
+            <h1>❤️‍🔥 DESTINED</h1>
+            <p>Start your journey ❤️</p>
+        </div>
+
+        <div class="signup-box">
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <span class="progress-step active"></span>
+                <span class="progress-step"></span>
+                <span class="progress-step"></span>
+                <span class="progress-step"></span>
+                <span class="progress-step"></span>
+            </div>
+
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                
+                <!-- STEP 1: Phone Number -->
+                <div id="step1" class="step active">
+                    <h2>📱 Phone Number</h2>
+                    <p>Enter your phone number to get started.</p>
+                    <div class="input-group">
+                        <label>📱 Phone Number</label>
+                        <input type="tel" id="signupPhone" placeholder="Enter your phone number" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+                </div>
+
+                <!-- STEP 2: OTP Verification -->
+                <div id="step2" class="step">
+                    <h2>🔐 Verify OTP</h2>
+                    <p>Enter the 6-digit code sent to your phone.</p>
+                    <div class="input-group">
+                        <label>🔐 OTP Code</label>
+                        <input type="text" id="signupOtp" placeholder="Enter 6-digit OTP" maxlength="6" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                </div>
+
+                <!-- STEP 3: Profile Details -->
+                <div id="step3" class="step">
+                    <h2>👤 Create Profile</h2>
+                    <p>Tell us about yourself.</p>
+                    <div class="input-group">
+                        <label>👤 Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="input-group">
+                        <label>🎂 Age</label>
+                        <input type="number" id="age" placeholder="Enter your age" min="18" max="99" required>
+                    </div>
+                    <div class="input-group">
+                        <label>📍 Location</label>
+                        <input type="text" id="location" placeholder="City, Country" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                </div>
+
+                <!-- STEP 4: Bio & Photos -->
+                <div id="step4" class="step">
+                    <h2>📸 About You</h2>
+                    <p>Tell us more about yourself.</p>
+                    <div class="input-group">
+                        <label>📝 Bio</label>
+                        <textarea id="bio" placeholder="Tell us about yourself..." rows="3" required></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>📸 Profile Photo</label>
+                        <input type="file" id="profilePhoto" accept="image/*">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                </div>
+
+                <!-- STEP 5: Interests -->
+                <div id="step5" class="step">
+                    <h2>🏷️ Select Your Interests</h2>
+                    <p>Choose at least 3 interests.</p>
+                    <div class="interests-grid">
+                        <div class="interest-item" onclick="toggleInterest(this)">✈️ Travel</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🎵 Music</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">📸 Photography</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🍣 Food</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🎮 Gaming</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">📚 Books</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🎨 Art</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🏋️ Fitness</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🎭 Theatre</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🌍 Culture</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🧘 Yoga</div>
+                        <div class="interest-item" onclick="toggleInterest(this)">🎤 Singing</div>
+                    </div>
+                    <div style="margin-top: 15px; color: #888;">
+                        <span id="interestCount">0</span> interests selected (min 3)
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Account 🚀</button>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                </div>
+
+            </form>
+
+            <p class="signup-link">
+                Already have an account? <a href="login.html">Sign In</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
