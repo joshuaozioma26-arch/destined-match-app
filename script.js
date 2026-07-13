@@ -4,9 +4,47 @@
 
 console.log("❤️‍🔥 Destined — Connecting your fate...");
 
-// ===== ON PAGE LOAD =====
+// ============================================
+// STAR GENERATOR FOR LANDING PAGE
+// ============================================
+
+function createStars() {
+    const container = document.getElementById('starsContainer');
+    if (!container) return;
+
+    const starCount = 160;
+    
+    for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        
+        const size = Math.random() * 3 + 1;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const duration = Math.random() * 3 + 2;
+        const delay = Math.random() * 5;
+        
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = x + '%';
+        star.style.top = y + '%';
+        star.style.setProperty('--duration', duration + 's');
+        star.style.animationDelay = delay + 's';
+        star.style.opacity = Math.random() * 0.5 + 0.3;
+        
+        container.appendChild(star);
+    }
+}
+
+// ============================================
+// ON PAGE LOAD
+// ============================================
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log("✅ Destined loaded successfully!");
+    
+    // Create stars for landing page
+    createStars();
 
     // Check if config.js is loaded
     if (typeof BOT_TOKEN !== 'undefined') {
@@ -175,13 +213,6 @@ function handleLogin(event) {
 // ===== Login with Telegram =====
 function loginWithTelegram() {
     alert('🔗 Redirecting to Telegram...');
-    // window.location.href = 'https://t.me/Destined110_Bot';
-}
-
-// ===== Show/Hide Password (OTP) =====
-function toggleOTP() {
-    const otpInput = document.getElementById('otp');
-    otpInput.type = otpInput.type === 'password' ? 'text' : 'password';
 }
 
 // ============================================
@@ -207,7 +238,6 @@ function nextStep() {
         }
     });
 
-    // Special check for Step 5 (Interests)
     if (currentStep === 5) {
         const selected = document.querySelectorAll('.interest-item.selected').length;
         if (selected < 3) {
@@ -272,33 +302,24 @@ function toggleInterest(element) {
 function handleSignup(event) {
     event.preventDefault();
 
-    // Check if at least 3 interests are selected
     const selected = document.querySelectorAll('.interest-item.selected').length;
     if (selected < 3) {
         alert('⚠️ Please select at least 3 interests.');
         return;
     }
 
-    // Check phone number
     const phone = document.getElementById('signupPhone');
     if (phone && phone.value.length < 10) {
         alert('⚠️ Please enter a valid phone number.');
         return;
     }
 
-    // Get all values
     const fullName = document.getElementById('fullName')?.value || '';
     const age = document.getElementById('age')?.value || '';
     const location = document.getElementById('location')?.value || '';
     const bio = document.getElementById('bio')?.value || '';
 
-    console.log('📝 Signup Data:');
-    console.log('📱 Phone:', phone?.value);
-    console.log('👤 Name:', fullName);
-    console.log('🎂 Age:', age);
-    console.log('📍 Location:', location);
-    console.log('📝 Bio:', bio);
-    console.log('🏷️ Interests:', selected);
+    console.log('📝 Signup Data:', { fullName, age, location, bio, phone: phone?.value, interests: selected });
 
     alert('🎉 Account created successfully! Welcome to Destined!');
     window.location.href = 'home.html';
@@ -313,7 +334,6 @@ function goToLogin() {
 // HOME PAGE — SWIPE SYSTEM
 // ============================================
 
-// ===== Sample Profiles Data =====
 const profiles = [
     {
         name: "Sarah",
@@ -383,17 +403,11 @@ function loadProfile(index) {
     document.getElementById('profileBio').textContent = profile.bio;
     document.getElementById('profileImage').src = profile.image;
 
-    // Update status badge
     const statusBadge = document.querySelector('.badge-status');
-    if (statusBadge) {
-        statusBadge.textContent = profile.status;
-    }
+    if (statusBadge) statusBadge.textContent = profile.status;
 
-    // Update looking badge
     const lookingBadge = document.querySelector('.badge-looking');
-    if (lookingBadge) {
-        lookingBadge.textContent = '💍 Open to ' + profile.looking;
-    }
+    if (lookingBadge) lookingBadge.textContent = '💍 Open to ' + profile.looking;
 }
 
 // ===== Like Swipe =====
@@ -445,16 +459,23 @@ function boostProfile() {
 function nextProfile() {
     currentProfileIndex++;
     if (currentProfileIndex >= profiles.length) {
-        currentProfileIndex = 0; // Loop back
+        currentProfileIndex = 0;
     }
     loadProfile(currentProfileIndex);
 }
 
 // ============================================
-// FUNCTION: Show notifications count
+// FUNCTION: Show notifications
 // ============================================
 function showNotification() {
     alert('🔔 You have 3 new notifications!');
+}
+
+// ============================================
+// FUNCTION: Go to Profile
+// ============================================
+function goToProfile() {
+    alert('👤 Profile page coming soon!');
 }
 
 console.log("✅ Destined script loaded successfully!");
