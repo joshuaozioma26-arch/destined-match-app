@@ -17,7 +17,6 @@ const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // First loading → Welcome
     setTimeout(function() {
         const firstLoading = document.getElementById('firstLoading');
         if (firstLoading) {
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ============================================
-// GO TO VERIFICATION → REGISTRATION (Skip OTP)
+// GO TO VERIFICATION → REGISTRATION
 // ============================================
 
 function goToVerification() {
@@ -64,7 +63,6 @@ async function handleRegister(event) {
     }
 
     try {
-        // 1. Create user in Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email: email,
             password: password,
@@ -76,7 +74,6 @@ async function handleRegister(event) {
             return;
         }
 
-        // 2. Save profile to database
         const { data: profileData, error: profileError } = await supabase
             .from('profiles')
             .insert([
@@ -98,7 +95,6 @@ async function handleRegister(event) {
 
         console.log('✅ User registered:', { fullName, email });
 
-        // Go to final loading
         const registrationPage = document.getElementById('registrationPage');
         const finalLoading = document.getElementById('finalLoading');
         
