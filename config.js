@@ -95,12 +95,6 @@ const TIER_PRICING = {
     ELITE: 24.99
 };
 
-// ============================================
-// NOTE: SUPABASE KEYS AND BOT TOKENS
-// ARE IN .env FILE (LOCAL ONLY)
-// DO NOT PUT THEM HERE!
-// ============================================
-
 console.log("✅ Destined Configuration Loaded");
 console.log("🔑 Keys are stored in .env (local only)");
 console.log("👑 Tiers Loaded:", Object.keys(TIERS).length);
