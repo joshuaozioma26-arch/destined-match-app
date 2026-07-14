@@ -1,116 +1,351 @@
 // ============================================
-// DESTINED — SCRIPT
+// DESTINED — MAIN SCRIPT (WITH SUPABASE)
 // ============================================
 
 console.log("❤️ Destined — Loading...");
 
-// ===== FIRST LOADING → WELCOME =====
+// ============================================
+// SUPABASE CLIENT
+// ============================================
+
+const supabaseUrl = 'https://kmhyvrhvhaqbzdyaalprk.supabase.co';
+const supabaseKey = 'sb_publishable_3g3ybut4pJDS54DitwtzeA_3l3z6RRR';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// ============================================
+// VERIFICATION STATE (PERSISTENT)
+// ============================================
+
+let verificationState = {
+    phone: '',
+    otpSent: false,
+    otpVerified: false,
+    faceVerified: false,
+    otpCode: ''
+};
+
+// ============================================
+// PAGE LOAD — RESTORE STATE
+// ============================================
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Restore verification state from localStorage
+    const saved = localStorage.getItem('destined_verification');
+    if (saved) {
+        verificationState = JSON.parse(saved);
+        restoreUI();
+    }
+
+    // First loading → Welcome
     setTimeout(function() {
         const firstLoading = document.getElementById('firstLoading');
-        firstLoading.style.display = 'none';
-        
-        const welcomePage = document.getElementById('welcomePage');
-        welcomePage.classList.add('active');
-        
+        if (firstLoading) {
+            firstLoading.style.display = 'none';
+            const welcomePage = document.getElementById('welcomePage');
+            if (welcomePage) welcomePage.classList.add('active');
+        }
     }, 3500);
 });
 
-// ===== GO TO VERIFICATION =====
+// ============================================
+// RESTORE UI BASED ON STATE
+// ============================================
+
+function restoreUI() {
+    const phoneStep = document.getElementById('stepPhone');
+    const otpStep = document.getElementById('stepOTP');
+    const faceStep = document.getElementById('stepFace');
+
+    if (verificationState.otpSent && !verificationState.otpVerified) {
+        if (phoneStep) phoneStep.style.display = 'none';
+        if (otpStep) otpStep.style.display = 'block';
+        const phoneInput = document.getElementById('verifyPhone');
+        if (phoneInput) phoneInput.value = verificationState.phone;
+    }
+
+    if (verificationState.otpVerified && !verificationState.faceVerified) {
+        if (phoneStep) phoneStep.style.display = 'none';
+        if (otpStep) otpStep.style.display = 'none';
+        if (faceStep) faceStep.style.display = 'block';
+    }
+
+    if (verificationState.faceVerified) {
+        const verificationPage = document.getElementById('verificationPage');
+        const registrationPage = document.getElementById('registrationPage');
+        if (verificationPage) verificationPage.classList.remove('active');
+        if (registrationPage) registrationPage.classList.add('active');
+    }
+}
+
+// ============================================
+// SAVE STATE
+// ============================================
+
+function saveState() {
+    localStorage.setItem('destined_verification', JSON.stringify(verificationState));
+}
+
+// ============================================
+// GO TO VERIFICATION
+// ============================================
+
 function goToVerification() {
     const welcomePage = document.getElementById('welcomePage');
     const verificationPage = document.getElementById('verificationPage');
     
-    welcomePage.style.opacity = '0';
-    welcomePage.style.transition = 'opacity 0.8s ease';
-    
-    setTimeout(function() {
-        welcomePage.classList.remove('active');
-        welcomePage.style.display = 'none';
-        verificationPage.classList.add('active');
-    }, 800);
+    if (welcomePage) {
+        welcomePage.style.opacity = '0';
+        welcomePage.style.transition = 'opacity 0.8s ease';
+        setTimeout(() => {
+            welcomePage.classList.remove('active');
+            welcomePage.style.display = 'none';
+            if (verificationPage) verificationPage.classList.add('active');
+        }, 800);
+    }
 }
 
-// ===== SECURITY VERIFICATION =====
-let otpVerified = false;
-let faceVerified = false;
+// ============================================
+// SEND OTP (WITH SUPABASE)
+// ============================================
 
-function sendOTP() {
-    const phone = document.getElementById('verifyPhone').value;
+async function sendOTP() {
+    const phoneInput = document.getElementById('verifyPhone');
+    const phone = phoneInput?.value || '';
+
     if (!phone || phone.length < 10) {
         alert('⚠️ Please enter a valid phone number.');
         return;
     }
-    alert('📱 OTP sent to ' + phone);
-    document.querySelector('.otp-group').style.display = 'block';
-    document.querySelector('#stepPhone .btn-verify').style.display = 'none';
+
+    verificationState.phone = phone;
+    verificationState.otpSent = true;
+    saveState();
+
+    try {
+        const { data, error } = await supabase.auth.signInWithOtp({
+            phone: phone,
+        });
+
+        if (error) {
+            console.error('OTP Error:', error);
+            alert('⚠️ Failed to send OTP. Please try again.');
+            return;
+        }
+
+        alert('📱 OTP sent to your phone via Telegram!');
+        
+        const phoneStep = document.getElementById('stepPhone');
+        const otpStep = document.getElementById('stepOTP');
+        if (phoneStep) phoneStep.style.display = 'none';
+        if (otpStep) otpStep.style.display = 'block';
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('⚠️ Something went wrong. Please try again.');
+    }
 }
 
-function verifyOTP() {
-    const otp = document.getElementById('otpCode').value;
+// ============================================
+// VERIFY OTP
+// ============================================
+
+async function verifyOTP() {
+    const otpInput = document.getElementById('otpCode');
+    const otp = otpInput?.value || '';
+
     if (!otp || otp.length !== 6) {
         alert('⚠️ Please enter a valid 6-digit OTP.');
         return;
     }
-    otpVerified = true;
-    alert('✅ Phone verified!');
-    document.getElementById('stepPhone').style.display = 'none';
-    document.getElementById('stepFace').style.display = 'block';
+
+    verificationState.otpCode = otp;
+    verificationState.otpVerified = true;
+    saveState();
+
+    try {
+        const { data, error } = await supabase.auth.verifyOtp({
+            phone: verificationState.phone,
+            token: otp,
+            type: 'sms'
+        });
+
+        if (error) {
+            console.error('Verification Error:', error);
+            alert('⚠️ Invalid OTP. Please try again.');
+            verificationState.otpVerified = false;
+            saveState();
+            return;
+        }
+
+        alert('✅ Phone verified successfully!');
+        
+        const otpStep = document.getElementById('stepOTP');
+        const faceStep = document.getElementById('stepFace');
+        if (otpStep) otpStep.style.display = 'none';
+        if (faceStep) faceStep.style.display = 'block';
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('⚠️ Something went wrong. Please try again.');
+    }
+}
+
+// ============================================
+// RESEND OTP
+// ============================================
+
+async function resendOTP() {
+    if (!verificationState.phone) {
+        alert('⚠️ Please enter your phone number first.');
+        return;
+    }
+
+    try {
+        const { data, error } = await supabase.auth.signInWithOtp({
+            phone: verificationState.phone,
+        });
+
+        if (error) {
+            console.error('Resend Error:', error);
+            alert('⚠️ Failed to resend OTP.');
+            return;
+        }
+
+        alert('📱 New OTP sent to your phone!');
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('⚠️ Something went wrong.');
+    }
+}
+
+// ============================================
+// FACE VERIFICATION
+// ============================================
+
+function takeSelfie() {
+    const camera = document.querySelector('.face-camera');
+    if (camera) {
+        camera.innerHTML = '<span>✅</span><p>Selfie captured!</p>';
+        document.querySelector('.face-verification .btn-verify').style.display = 'none';
+        document.querySelector('.pose-verification').style.display = 'block';
+    }
 }
 
 function verifyFace() {
-    alert('📸 Please take a selfie');
-    document.querySelector('.face-camera').innerHTML = '<span>✅</span><p>Selfie captured!</p>';
-    document.querySelector('.face-verification .btn-verify').style.display = 'none';
-    document.querySelector('.pose-verification').style.display = 'block';
-}
-
-function completeVerification() {
-    faceVerified = true;
+    verificationState.faceVerified = true;
+    saveState();
     alert('✅ Face verified!');
-    
-    setTimeout(function() {
+
+    setTimeout(() => {
         const verificationPage = document.getElementById('verificationPage');
-        verificationPage.classList.remove('active');
-        
         const registrationPage = document.getElementById('registrationPage');
-        registrationPage.classList.add('active');
+        if (verificationPage) verificationPage.classList.remove('active');
+        if (registrationPage) registrationPage.classList.add('active');
     }, 500);
 }
 
-// ===== GO TO LOGIN =====
-function goToLogin() {
-    alert('🔐 Login page coming soon!');
+function completeVerification() {
+    verifyFace();
 }
 
-// ===== HANDLE REGISTRATION =====
-function handleRegister(event) {
+// ============================================
+// REGISTRATION (SAVE TO SUPABASE)
+// ============================================
+
+async function handleRegister(event) {
     event.preventDefault();
-    
-    const fullName = document.getElementById('fullName').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
+
+    const fullName = document.getElementById('fullName')?.value || '';
+    const email = document.getElementById('email')?.value || '';
+    const password = document.getElementById('password')?.value || '';
+
     if (!fullName || !email || !password) {
         alert('⚠️ Please fill in all fields.');
         return;
     }
-    
-    console.log('📝 Registration:', { fullName, email });
-    
-    const registrationPage = document.getElementById('registrationPage');
-    registrationPage.classList.remove('active');
-    
-    const finalLoading = document.getElementById('finalLoading');
-    finalLoading.classList.add('active');
-    
-    setTimeout(function() {
-        finalLoading.classList.remove('active');
+
+    try {
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            phone: verificationState.phone,
+        });
+
+        if (authError) {
+            console.error('Auth Error:', authError);
+            alert('⚠️ Failed to create account: ' + authError.message);
+            return;
+        }
+
+        const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .insert([
+                {
+                    id: authData.user?.id,
+                    full_name: fullName,
+                    email: email,
+                    phone: verificationState.phone,
+                    verified: true,
+                    tier: 'FREE',
+                    created_at: new Date().toISOString()
+                }
+            ]);
+
+        if (profileError) {
+            console.error('Profile Error:', profileError);
+            alert('⚠️ Failed to save profile.');
+            return;
+        }
+
+        console.log('✅ User registered:', { fullName, email, phone: verificationState.phone });
+
+        const registrationPage = document.getElementById('registrationPage');
+        const finalLoading = document.getElementById('finalLoading');
         
-        const mainApp = document.getElementById('mainApp');
-        mainApp.classList.add('active');
-        
-    }, 3500);
+        if (registrationPage) registrationPage.classList.remove('active');
+        if (finalLoading) finalLoading.classList.add('active');
+
+        setTimeout(() => {
+            if (finalLoading) finalLoading.classList.remove('active');
+            const mainApp = document.getElementById('mainApp');
+            if (mainApp) mainApp.classList.add('active');
+        }, 3500);
+
+    } catch (error) {
+        console.error('Registration Error:', error);
+        alert('⚠️ Something went wrong. Please try again.');
+    }
+}
+
+// ============================================
+// GO TO LOGIN
+// ============================================
+
+function goToLogin() {
+    alert('🔐 Login page coming soon!');
+}
+
+// ============================================
+// COMING SOON MODAL
+// ============================================
+
+function showComingSoon(featureName) {
+    const modal = document.getElementById('comingSoonModal');
+    const feature = document.getElementById('featureName');
+    if (feature) feature.textContent = featureName || 'Premium Features';
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('comingSoonModal').style.display = 'none';
+}
+
+function setReminder() {
+    localStorage.setItem('destined_reminder', 'true');
+    localStorage.setItem('destined_reminder_date', Date.now());
+    alert('✅ We\'ll remind you when payments are ready!');
+    closeModal();
 }
 
 // ============================================
@@ -202,9 +437,8 @@ function nextProfile() {
 
 // Load first profile when main app appears
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if main app is active and load profile
     const mainApp = document.getElementById('mainApp');
-    if (mainApp.classList.contains('active')) {
+    if (mainApp && mainApp.classList.contains('active')) {
         loadProfile(currentProfileIndex);
     }
 });
@@ -212,7 +446,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Also load when main app becomes active
 const observer = new MutationObserver(function() {
     const mainApp = document.getElementById('mainApp');
-    if (mainApp.classList.contains('active') && document.getElementById('profileName')) {
+    if (mainApp && mainApp.classList.contains('active') && document.getElementById('profileName')) {
         loadProfile(currentProfileIndex);
     }
 });
