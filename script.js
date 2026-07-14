@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ============================================
-// GO TO VERIFICATION → REGISTRATION
+// GO TO REGISTRATION
 // ============================================
 
-function goToVerification() {
+function goToRegistration() {
     const welcomePage = document.getElementById('welcomePage');
     const registrationPage = document.getElementById('registrationPage');
     
@@ -47,7 +47,7 @@ function goToVerification() {
 }
 
 // ============================================
-// REGISTRATION (SAVES TO SUPABASE)
+// REGISTRATION
 // ============================================
 
 async function handleRegister(event) {
@@ -196,7 +196,7 @@ function nextProfile() {
 }
 
 // ============================================
-// COMING SOON MODAL
+// COMING SOON
 // ============================================
 
 function showComingSoon(featureName) {
