@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <!-- ===== STEP 1: FIRST LOADING (Purple) ===== -->
+    <!-- ===== FIRST LOADING ===== -->
     <div id="firstLoading">
         <div class="loading-content">
             <div class="loading-heart">❤️</div>
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <!-- ===== STEP 2: WELCOME PAGE ===== -->
+    <!-- ===== WELCOME PAGE ===== -->
     <div id="welcomePage">
         <div class="welcome-bg">
             <div class="culture-grid">
@@ -39,20 +39,19 @@
                     <div class="welcome-heart">❤️</div>
                     <h1 class="welcome-title">Welcome to Destined</h1>
                     <p class="welcome-subtitle">Where love knows no borders — connect with souls across the world</p>
-                    <button class="btn-get-started" onclick="goToVerification()">Get Started</button>
+                    <button class="btn-get-started" onclick="goToRegistration()">Get Started</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ===== STEP 3: REGISTRATION (NO OTP) ===== -->
+    <!-- ===== REGISTRATION (NO OTP) ===== -->
     <div id="registrationPage">
         <div class="register-container">
             <div class="register-content">
                 <div class="register-heart">❤️</div>
                 <h2 class="register-title">Create Your Account</h2>
                 <p class="register-sub">Join millions finding love worldwide</p>
-
                 <form id="registerForm" onsubmit="handleRegister(event)">
                     <div class="input-group">
                         <input type="text" id="fullName" placeholder="Full Name" required>
@@ -65,13 +64,12 @@
                     </div>
                     <button type="submit" class="btn-register">Create Account</button>
                 </form>
-
                 <p class="register-login">Already have an account? <a href="#" onclick="goToLogin()">Sign In</a></p>
             </div>
         </div>
     </div>
 
-    <!-- ===== STEP 4: FINAL LOADING ===== -->
+    <!-- ===== FINAL LOADING ===== -->
     <div id="finalLoading">
         <div class="final-loading-content">
             <div class="dimming-star">✦</div>
@@ -81,22 +79,14 @@
         </div>
     </div>
 
-    <!-- ===== STEP 5: MAIN APP ===== -->
+    <!-- ===== MAIN APP ===== -->
     <div id="mainApp">
         <div class="app-container">
-            <!-- Top Bar -->
             <div class="top-bar">
-                <div class="top-left">
-                    <span>🔔</span>
-                    <span>🔍</span>
-                </div>
-                <div class="top-right">
-                    <span>❤️ DESTINED</span>
-                </div>
+                <div class="top-left"><span>🔔</span><span>🔍</span></div>
+                <div class="top-right"><span>❤️ DESTINED</span></div>
             </div>
-
-            <!-- Swipe Card -->
-            <div class="swipe-card" id="swipeCard">
+            <div class="swipe-card">
                 <div class="card-image">
                     <img id="profileImage" src="https://picsum.photos/seed/1/400/500" alt="Profile">
                     <div class="card-overlay">
@@ -110,8 +100,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Swipe Buttons -->
             <div class="swipe-buttons">
                 <button class="swipe-btn rewind" onclick="rewindSwipe()">↩️</button>
                 <button class="swipe-btn pass" onclick="passSwipe()">❌</button>
@@ -119,8 +107,6 @@
                 <button class="swipe-btn like" onclick="likeSwipe()">💚</button>
                 <button class="swipe-btn boost" onclick="boostProfile()">⚡</button>
             </div>
-
-            <!-- Bottom Navigation -->
             <div class="bottom-nav">
                 <a href="#" class="nav-item active">❤️</a>
                 <a href="#" class="nav-item">💞</a>
@@ -136,21 +122,14 @@
         <div style="background:#1a1a1a; max-width:400px; width:100%; padding:30px; border-radius:20px; border:1px solid rgba(255,215,0,0.2); text-align:center; margin:20px;">
             <div style="font-size:3rem; margin-bottom:10px;">🚀</div>
             <h2 style="color:#ffd700; font-family:'Georgia',serif; font-weight:300;">Coming Soon!</h2>
-            <p style="color:rgba(255,255,255,0.7); margin:10px 0;">
-                <span id="featureName">Premium Features</span> are almost ready.
-            </p>
+            <p style="color:rgba(255,255,255,0.7); margin:10px 0;">Premium Features are almost ready.</p>
             <p style="color:rgba(255,255,255,0.4); font-size:0.9rem; margin-bottom:20px;">
                 We'll have PayPal ready in <strong style="color:#ffd700;">3 days</strong>.
             </p>
-            <button onclick="setReminder()" style="width:100%; padding:14px; background:linear-gradient(135deg,#ffd700,#ff8c00); color:#000; font-weight:700; border:none; border-radius:50px; cursor:pointer; font-size:1rem; transition:all 0.3s ease;">
+            <button onclick="setReminder()" style="width:100%; padding:14px; background:linear-gradient(135deg,#ffd700,#ff8c00); color:#000; font-weight:700; border:none; border-radius:50px; cursor:pointer; font-size:1rem;">
                 🔔 Remind Me
             </button>
-            <button onclick="closeModal()" style="width:100%; padding:12px; background:transparent; color:rgba(255,255,255,0.4); border:none; cursor:pointer; margin-top:10px; font-size:0.9rem;">
-                Later
-            </button>
-            <p style="color:rgba(255,255,255,0.2); font-size:0.7rem; margin-top:15px;">
-                💡 No charges yet. Payments will be enabled in 3 days.
-            </p>
+            <button onclick="closeModal()" style="width:100%; padding:12px; background:transparent; color:rgba(255,255,255,0.4); border:none; cursor:pointer; margin-top:10px; font-size:0.9rem;">Later</button>
         </div>
     </div>
 
