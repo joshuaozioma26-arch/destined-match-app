@@ -4,47 +4,26 @@
 
 console.log("❤️‍🔥 Destined — Connecting your fate...");
 
-// ============================================
-// STAR GENERATOR FOR LANDING PAGE
-// ============================================
-
-function createStars() {
-    const container = document.getElementById('starsContainer');
-    if (!container) return;
-
-    const starCount = 160;
-    
-    for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        
-        const size = Math.random() * 3 + 1;
-        const x = Math.random() * 100;
-        const y = Math.random() * 100;
-        const duration = Math.random() * 3 + 2;
-        const delay = Math.random() * 5;
-        
-        star.style.width = size + 'px';
-        star.style.height = size + 'px';
-        star.style.left = x + '%';
-        star.style.top = y + '%';
-        star.style.setProperty('--duration', duration + 's');
-        star.style.animationDelay = delay + 's';
-        star.style.opacity = Math.random() * 0.5 + 0.3;
-        
-        container.appendChild(star);
-    }
-}
-
-// ============================================
-// ON PAGE LOAD
-// ============================================
-
+// ===== LOADING SCREEN =====
 document.addEventListener('DOMContentLoaded', function() {
     console.log("✅ Destined loaded successfully!");
-    
-    // Create stars for landing page
-    createStars();
+
+    // After loading, dim the loading screen and show main content
+    setTimeout(function() {
+        const loadingScreen = document.getElementById('loadingScreen');
+        const mainContent = document.getElementById('mainContent');
+        
+        if (loadingScreen && mainContent) {
+            loadingScreen.classList.add('dimmed');
+            mainContent.style.display = 'block';
+            
+            // Remove loading screen after animation
+            setTimeout(function() {
+                loadingScreen.style.display = 'none';
+            }, 1000);
+        }
+        
+    }, 3500);
 
     // Check if config.js is loaded
     if (typeof BOT_TOKEN !== 'undefined') {
