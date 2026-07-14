@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destined ❤️</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -44,58 +45,7 @@
         </div>
     </div>
 
-    <!-- ===== STEP 3: SECURITY VERIFICATION ===== -->
-    <div id="verificationPage">
-        <div class="verify-container">
-            <div class="verify-content">
-                <div class="verify-icon">🛡️</div>
-                <h2 class="verify-title">Verify Your Identity</h2>
-                <p class="verify-sub">We need to make sure you're real</p>
-
-                <!-- PHONE STEP -->
-                <div id="stepPhone" class="verify-step active">
-                    <h3>Step 1: Phone Verification</h3>
-                    <div class="input-group">
-                        <input type="tel" id="verifyPhone" placeholder="Enter Phone Number">
-                    </div>
-                    <button class="btn-verify" onclick="sendOTP()">Send OTP</button>
-                </div>
-
-                <!-- OTP STEP (PERSISTENT) -->
-                <div id="stepOTP" class="verify-step" style="display:none;">
-                    <h3>Step 1: Enter OTP</h3>
-                    <p style="color:rgba(255,255,255,0.6);">OTP sent to your phone</p>
-                    <div class="input-group">
-                        <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" maxlength="6">
-                    </div>
-                    <button class="btn-verify" onclick="verifyOTP()">Verify OTP</button>
-                    <button class="btn-resend" onclick="resendOTP()">Resend OTP</button>
-                </div>
-
-                <!-- FACE STEP -->
-                <div id="stepFace" class="verify-step" style="display:none;">
-                    <h3>Step 2: Face Verification</h3>
-                    <p style="color:rgba(255,255,255,0.7);">Take a selfie to verify your face</p>
-                    <div class="face-verification">
-                        <div class="face-camera" onclick="takeSelfie()">
-                            <span>📸</span>
-                            <p>Click to take selfie</p>
-                        </div>
-                        <button class="btn-verify" onclick="verifyFace()">Verify Selfie</button>
-                        <div class="pose-verification" style="margin-top:15px; display:none;">
-                            <p style="color:rgba(255,255,255,0.7);">Copy this pose:</p>
-                            <div class="pose-example">🤳</div>
-                            <button class="btn-verify" onclick="completeVerification()">Verify Pose</button>
-                        </div>
-                    </div>
-                </div>
-
-                <p class="verify-note">🔒 Your data is encrypted and secure</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== STEP 4: REGISTRATION ===== -->
+    <!-- ===== STEP 3: REGISTRATION (NO OTP) ===== -->
     <div id="registrationPage">
         <div class="register-container">
             <div class="register-content">
@@ -121,7 +71,7 @@
         </div>
     </div>
 
-    <!-- ===== STEP 5: FINAL LOADING (Black + Dimming Star) ===== -->
+    <!-- ===== STEP 4: FINAL LOADING ===== -->
     <div id="finalLoading">
         <div class="final-loading-content">
             <div class="dimming-star">✦</div>
@@ -131,7 +81,7 @@
         </div>
     </div>
 
-    <!-- ===== STEP 6: MAIN APP ===== -->
+    <!-- ===== STEP 5: MAIN APP ===== -->
     <div id="mainApp">
         <div class="app-container">
             <!-- Top Bar -->
