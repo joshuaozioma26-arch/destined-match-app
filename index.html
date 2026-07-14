@@ -3,61 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destined ❤️‍🔥</title>
+    <title>Destined ❤️</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ===== LOADING SCREEN ===== -->
-    <div id="loadingScreen">
-        <div class="loader">
-            <!-- Logo with Glow -->
-            <div class="loader-logo">
-                <span class="loader-star">✦</span>
-                <h1 class="loader-title">DESTINED</h1>
+    <!-- ===== STEP 1: FIRST LOADING (Purple) ===== -->
+    <div id="firstLoading">
+        <div class="loading-content">
+            <div class="loading-heart">❤️</div>
+            <h1 class="loading-title">destined</h1>
+        </div>
+    </div>
+
+    <!-- ===== STEP 2: WELCOME PAGE ===== -->
+    <div id="welcomePage">
+        <div class="welcome-bg">
+            <div class="culture-grid">
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1516937941344-00b4e0337589?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1494790108373-be9c3b5c1d6c?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1514222709107-a180c68d72b4?w=400&h=400&fit=crop');"></div>
+                <div class="culture-img" style="background-image: url('https://images.unsplash.com/photo-1522199755839-a2bacb67c546?w=400&h=400&fit=crop');"></div>
             </div>
-            <p class="loader-text">Connecting your fate...</p>
-            <div class="loading-bar-container">
-                <div class="loading-bar"></div>
+            <div class="welcome-overlay">
+                <div class="welcome-content">
+                    <div class="welcome-heart">❤️</div>
+                    <h1 class="welcome-title">Welcome to Destined</h1>
+                    <p class="welcome-subtitle">Where love knows no borders — connect with souls across the world</p>
+                    <button class="btn-get-started" onclick="goToVerification()">Get Started</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ===== MAIN LANDING ===== -->
-    <div id="mainContent">
-        <div class="landing-container">
-            
-            <!-- Moving Star -->
-            <div class="moving-star">✦</div>
+    <!-- ===== STEP 3: SECURITY VERIFICATION ===== -->
+    <div id="verificationPage">
+        <div class="verify-container">
+            <div class="verify-content">
+                <div class="verify-icon">🛡️</div>
+                <h2 class="verify-title">Verify Your Identity</h2>
+                <p class="verify-sub">We need to make sure you're real</p>
 
-            <!-- Floating Particles -->
-            <div class="particle particle-1"></div>
-            <div class="particle particle-2"></div>
-            <div class="particle particle-3"></div>
-            <div class="particle particle-4"></div>
-
-            <!-- Glow Effect -->
-            <div class="glow-ring"></div>
-
-            <!-- Content -->
-            <div class="landing-content">
-                <div class="brand">
-                    <span class="brand-star">✦</span>
-                    <h1 class="brand-title">DESTINED</h1>
-                    <p class="brand-subtitle">Connecting your fate...</p>
+                <div id="stepPhone" class="verify-step active">
+                    <h3>Step 1: Phone Verification</h3>
+                    <div class="input-group">
+                        <input type="tel" id="verifyPhone" placeholder="Enter Phone Number">
+                    </div>
+                    <button class="btn-verify" onclick="sendOTP()">Send OTP</button>
+                    <div class="otp-group" style="display:none; margin-top:15px;">
+                        <input type="text" id="otpCode" placeholder="Enter 6-digit OTP">
+                        <button class="btn-verify" onclick="verifyOTP()">Verify OTP</button>
+                    </div>
                 </div>
 
-                <div class="tagline">
-                    <p class="tagline-main">Get connected to the one</p>
-                    <p class="tagline-sub">destined for you</p>
+                <div id="stepFace" class="verify-step" style="display:none;">
+                    <h3>Step 2: Face Verification</h3>
+                    <p style="color:rgba(255,255,255,0.7); margin-bottom:15px;">Take a selfie to verify your face</p>
+                    <div class="face-verification">
+                        <div class="face-camera">
+                            <span>📸</span>
+                            <p>Click to take selfie</p>
+                        </div>
+                        <button class="btn-verify" onclick="verifyFace()">Take Selfie</button>
+                        <div class="pose-verification" style="margin-top:15px; display:none;">
+                            <p style="color:rgba(255,255,255,0.7);">Copy this pose:</p>
+                            <div class="pose-example">🤳</div>
+                            <button class="btn-verify" onclick="completeVerification()">Verify Pose</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="actions">
-                    <a href="signup.html" class="btn-primary">Find the one now</a>
-                    <p class="login-link">Already have an account? <a href="login.html">Sign In</a></p>
+                <p class="verify-note">🔒 Your data is encrypted and secure</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STEP 4: REGISTRATION ===== -->
+    <div id="registrationPage">
+        <div class="register-container">
+            <div class="register-content">
+                <div class="register-heart">❤️</div>
+                <h2 class="register-title">Create Your Account</h2>
+                <p class="register-sub">Join millions finding love worldwide</p>
+
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <input type="text" id="fullName" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-register">Create Account</button>
+                </form>
+
+                <p class="register-login">Already have an account? <a href="#" onclick="goToLogin()">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STEP 5: FINAL LOADING (Black + Dimming Star) ===== -->
+    <div id="finalLoading">
+        <div class="final-loading-content">
+            <div class="dimming-star">✦</div>
+            <div class="final-heart">❤️</div>
+            <h1 class="final-title">destined</h1>
+            <p class="final-text">Loading your destiny...</p>
+        </div>
+    </div>
+
+    <!-- ===== STEP 6: MAIN APP (Profile Cards) ===== -->
+    <div id="mainApp">
+        <div class="app-container">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-left">
+                    <span>🔔</span>
+                    <span>🔍</span>
+                </div>
+                <div class="top-right">
+                    <span>❤️ DESTINED</span>
                 </div>
             </div>
 
+            <!-- Swipe Card -->
+            <div class="swipe-card" id="swipeCard">
+                <div class="card-image">
+                    <img id="profileImage" src="https://picsum.photos/seed/1/400/500" alt="Profile">
+                    <div class="card-overlay">
+                        <h2 class="card-name"><span id="profileName">Sarah</span>, <span id="profileAge">28</span></h2>
+                        <p class="card-location">📍 <span id="profileLocation">London</span></p>
+                        <div class="card-badges">
+                            <span class="badge-status">✅ Single</span>
+                            <span class="badge-looking">💍 Open to Long-term</span>
+                        </div>
+                        <p class="card-bio" id="profileBio">"Love is the greatest adventure." ❤️</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swipe Buttons -->
+            <div class="swipe-buttons">
+                <button class="swipe-btn rewind" onclick="rewindSwipe()">↩️</button>
+                <button class="swipe-btn pass" onclick="passSwipe()">❌</button>
+                <button class="swipe-btn super-like" onclick="superLike()">⭐</button>
+                <button class="swipe-btn like" onclick="likeSwipe()">💚</button>
+                <button class="swipe-btn boost" onclick="boostProfile()">⚡</button>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <a href="#" class="nav-item active">❤️</a>
+                <a href="#" class="nav-item">💞</a>
+                <a href="#" class="nav-item">✨</a>
+                <a href="#" class="nav-item">💬</a>
+                <a href="#" class="nav-item">👤</a>
+            </div>
         </div>
     </div>
 
