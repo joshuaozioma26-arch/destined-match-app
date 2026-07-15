@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Destined</title>
+    <title>Destined - Find Your Fate</title>
     
     <!-- Telegram Mini App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -58,8 +58,8 @@
         }
 
         #splash .splash-logo {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             animation: pulse 1.5s ease-in-out infinite;
         }
 
@@ -69,11 +69,11 @@
         }
 
         #splash .splash-name {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 700;
             color: #FFFFFF;
             margin-top: 16px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             font-family: 'Georgia', serif;
         }
 
@@ -115,7 +115,7 @@
             }
         }
 
-        /* ===== LANDING PAGE (Like Tinder) ===== */
+        /* ===== LANDING PAGE ===== */
         #landing {
             background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
             justify-content: center;
@@ -125,25 +125,23 @@
         }
 
         #landing .landing-logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 16px;
+            width: 90px;
+            height: 90px;
+            margin-bottom: 12px;
         }
 
         #landing h1 {
-            font-size: 42px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #FFFFFF 0%, #FF6699 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
+            font-size: 40px;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: 2px;
             font-family: 'Georgia', serif;
         }
 
         #landing .tagline {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.7);
-            margin: 8px 0 40px;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 6px 0 36px;
             font-weight: 300;
             line-height: 1.6;
             letter-spacing: 0.3px;
@@ -194,51 +192,14 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
             color: #FFFFFF;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .btn-telegram {
-            background: #0088cc;
-            color: white;
-            box-shadow: 0 4px 20px rgba(0, 136, 204, 0.3);
-        }
-
-        .btn-telegram:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 136, 204, 0.4);
-        }
-
-        .btn-social {
-            flex: 1;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: white;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-social:hover {
             background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-2px);
-        }
-
-        .btn-social svg {
-            width: 20px;
-            height: 20px;
         }
 
         .btn:disabled {
@@ -266,14 +227,14 @@
         }
 
         .terms-text {
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.25);
             font-size: 11px;
             margin-top: 24px;
             line-height: 1.6;
         }
 
         .terms-text a {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.35);
             text-decoration: none;
         }
 
@@ -285,7 +246,7 @@
         #safety {
             background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
             justify-content: flex-start;
-            padding-top: 40px;
+            padding-top: 30px;
             min-height: 100vh;
         }
 
@@ -293,11 +254,11 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
 
         #safety .safety-header .back-btn {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
             border: none;
             color: white;
             width: 44px;
@@ -312,7 +273,7 @@
         }
 
         #safety .safety-header .back-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         #safety .safety-header h2 {
@@ -321,41 +282,52 @@
             flex: 1;
             text-align: center;
             color: #FFFFFF;
+            letter-spacing: 0.5px;
+        }
+
+        .safety-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .safety-rule {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 16px 14px;
             border-radius: 14px;
-            margin-bottom: 10px;
-            border-left: 3px solid #FF3366;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            text-align: center;
             backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .safety-rule:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
         }
 
         .safety-rule .icon {
-            font-size: 18px;
-            flex-shrink: 0;
-            margin-top: 1px;
+            font-size: 28px;
+            display: block;
+            margin-bottom: 6px;
         }
 
         .safety-rule .content h4 {
-            font-size: 14px;
-            margin-bottom: 2px;
+            font-size: 13px;
             color: #FFFFFF;
             font-weight: 600;
+            margin-bottom: 2px;
         }
 
         .safety-rule .content p {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.4;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.3;
         }
 
         .safety-actions {
-            margin-top: 24px;
+            margin-top: 4px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -375,44 +347,46 @@
 
         #login .login-header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
         }
 
         #login .login-header .mini-logo {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 12px;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
         }
 
         #login .login-header h2 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: #FFFFFF;
+            font-family: 'Georgia', serif;
+            letter-spacing: 1px;
         }
 
         #login .login-header p {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            margin-top: 4px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+            margin-top: 2px;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .form-group label {
             display: block;
             font-size: 13px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 6px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
         }
 
         .form-group input {
             width: 100%;
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             color: #FFFFFF;
             font-size: 15px;
@@ -422,11 +396,11 @@
 
         .form-group input:focus {
             border-color: #FF3366;
-            box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.08);
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.2);
         }
 
         .form-options {
@@ -434,8 +408,8 @@
             justify-content: space-between;
             align-items: center;
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.6);
-            margin: 6px 0 18px;
+            color: rgba(255, 255, 255, 0.4);
+            margin: 4px 0 16px;
         }
 
         .form-options a {
@@ -450,9 +424,9 @@
 
         .login-divider {
             text-align: center;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.2);
             font-size: 13px;
-            margin: 20px 0 16px;
+            margin: 16px 0 14px;
             position: relative;
         }
 
@@ -463,7 +437,7 @@
             top: 50%;
             width: 42%;
             height: 1px;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .login-divider::after {
@@ -473,9 +447,10 @@
             top: 50%;
             width: 42%;
             height: 1px;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.04);
         }
 
+        /* ===== SOCIAL LOGIN BUTTONS (White oval boxes) ===== */
         .social-login {
             display: flex;
             flex-direction: column;
@@ -485,26 +460,64 @@
             margin: 0 auto;
         }
 
-        .social-login .btn-telegram {
-            justify-content: center;
-            font-size: 15px;
-            padding: 15px;
-        }
-
-        .social-login-row {
+        .btn-social-oval {
             display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 10px;
+            padding: 14px 20px;
+            background: #FFFFFF;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1A0A0F;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .social-login-row .btn-social {
+        .btn-social-oval:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-social-oval:active {
+            transform: scale(0.97);
+        }
+
+        .btn-social-oval svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .btn-social-oval .btn-label {
             flex: 1;
+            text-align: center;
+        }
+
+        .btn-social-oval.btn-telegram-oval {
+            background: #FFFFFF;
+            color: #1A0A0F;
+        }
+
+        .btn-social-oval.btn-google-oval {
+            background: #FFFFFF;
+            color: #1A0A0F;
+        }
+
+        .btn-social-oval.btn-apple-oval {
+            background: #FFFFFF;
+            color: #1A0A0F;
         }
 
         .signup-text {
             text-align: center;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
             font-size: 14px;
-            margin-top: 18px;
+            margin-top: 16px;
         }
 
         .signup-text a {
@@ -562,18 +575,28 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 400px) {
             #landing h1 {
-                font-size: 34px;
+                font-size: 32px;
             }
             #landing .landing-logo {
+                width: 70px;
+                height: 70px;
+            }
+            #splash .splash-logo {
                 width: 80px;
                 height: 80px;
             }
-            #splash .splash-logo {
-                width: 100px;
-                height: 100px;
-            }
             #splash .splash-name {
-                font-size: 26px;
+                font-size: 28px;
+            }
+            .safety-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .safety-rule {
+                padding: 12px 10px;
+            }
+            .safety-rule .icon {
+                font-size: 22px;
             }
         }
 
@@ -605,17 +628,48 @@
 
     <!-- ===== SPLASH SCREEN ===== -->
     <div id="splash">
+        <!-- WHITE FIRE LOGO -->
         <svg class="splash-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
-                  fill="#FFFFFF" opacity="1"/>
-            <text x="100" y="115" 
-                  font-family="Georgia, serif" 
-                  font-size="90" 
-                  font-weight="900" 
-                  fill="#0A0A0F" 
-                  text-anchor="middle" 
-                  dominant-baseline="central"
-                  letter-spacing="-5">D</text>
+            <path d="M100 190 
+                     C80 160 50 130 40 100 
+                     C30 70 35 40 55 25 
+                     C65 17 80 20 90 35 
+                     C85 25 95 10 105 10 
+                     C115 10 125 25 120 35 
+                     C130 20 145 17 155 25 
+                     C175 40 180 70 170 100 
+                     C160 130 130 160 100 190Z" 
+                  fill="#FFFFFF"/>
+            <path d="M100 180 
+                     C85 155 65 130 55 105 
+                     C48 85 52 65 65 52 
+                     C72 45 82 48 90 58 
+                     C86 50 94 38 100 38 
+                     C106 38 114 50 110 58 
+                     C118 48 128 45 135 52 
+                     C148 65 152 85 145 105 
+                     C135 130 115 155 100 180Z" 
+                  fill="#0A0A0F"/>
+            <path d="M100 170 
+                     C88 150 72 130 64 110 
+                     C58 94 60 78 70 68 
+                     C76 62 84 64 90 72 
+                     C88 66 94 56 100 56 
+                     C106 56 112 66 110 72 
+                     C116 64 124 62 130 68 
+                     C140 78 142 94 136 110 
+                     C128 130 112 150 100 170Z" 
+                  fill="#FF3366"/>
+            <path d="M100 155 
+                     C92 142 82 128 78 116 
+                     C74 104 76 92 84 86 
+                     C88 82 94 84 96 88 
+                     C94 84 98 78 100 78 
+                     C102 78 106 84 104 88 
+                     C106 84 112 82 116 86 
+                     C124 92 126 104 122 116 
+                     C118 128 108 142 100 155Z" 
+                  fill="#FFFFFF"/>
         </svg>
         <div class="splash-name">Destined</div>
         <div class="splash-loader"></div>
@@ -626,17 +680,48 @@
 
         <!-- ===== LANDING PAGE ===== -->
         <div id="landing" class="page active">
+            <!-- WHITE FIRE LOGO -->
             <svg class="landing-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
-                      fill="#FFFFFF" opacity="1"/>
-                <text x="100" y="115" 
-                      font-family="Georgia, serif" 
-                      font-size="90" 
-                      font-weight="900" 
-                      fill="#FF3366" 
-                      text-anchor="middle" 
-                      dominant-baseline="central"
-                      letter-spacing="-5">D</text>
+                <path d="M100 190 
+                         C80 160 50 130 40 100 
+                         C30 70 35 40 55 25 
+                         C65 17 80 20 90 35 
+                         C85 25 95 10 105 10 
+                         C115 10 125 25 120 35 
+                         C130 20 145 17 155 25 
+                         C175 40 180 70 170 100 
+                         C160 130 130 160 100 190Z" 
+                      fill="#FFFFFF"/>
+                <path d="M100 180 
+                         C85 155 65 130 55 105 
+                         C48 85 52 65 65 52 
+                         C72 45 82 48 90 58 
+                         C86 50 94 38 100 38 
+                         C106 38 114 50 110 58 
+                         C118 48 128 45 135 52 
+                         C148 65 152 85 145 105 
+                         C135 130 115 155 100 180Z" 
+                      fill="#0A0A0F"/>
+                <path d="M100 170 
+                         C88 150 72 130 64 110 
+                         C58 94 60 78 70 68 
+                         C76 62 84 64 90 72 
+                         C88 66 94 56 100 56 
+                         C106 56 112 66 110 72 
+                         C116 64 124 62 130 68 
+                         C140 78 142 94 136 110 
+                         C128 130 112 150 100 170Z" 
+                      fill="#FF3366"/>
+                <path d="M100 155 
+                         C92 142 82 128 78 116 
+                         C74 104 76 92 84 86 
+                         C88 82 94 84 96 88 
+                         C94 84 98 78 100 78 
+                         C102 78 106 84 104 88 
+                         C106 84 112 82 116 86 
+                         C124 92 126 104 122 116 
+                         C118 128 108 142 100 155Z" 
+                      fill="#FFFFFF"/>
             </svg>
 
             <h1>Destined</h1>
@@ -667,51 +752,53 @@
                 <h2>🛡️ Safety Rules</h2>
             </div>
 
-            <div class="safety-rule">
-                <span class="icon">🔞</span>
-                <div class="content">
-                    <h4>18+ Only</h4>
-                    <p>You must be 18 or older to use Destined.</p>
+            <div class="safety-grid">
+                <div class="safety-rule">
+                    <span class="icon">🔞</span>
+                    <div class="content">
+                        <h4>18+ Only</h4>
+                        <p>Must be 18 or older</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="safety-rule">
-                <span class="icon">🤖</span>
-                <div class="content">
-                    <h4>AI Scam Shield</h4>
-                    <p>AI scans messages for scams. 3 strikes → permanent ban.</p>
+                <div class="safety-rule">
+                    <span class="icon">🤖</span>
+                    <div class="content">
+                        <h4>AI Scam Shield</h4>
+                        <p>3 strikes → permanent ban</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="safety-rule">
-                <span class="icon">📸</span>
-                <div class="content">
-                    <h4>Face Verification</h4>
-                    <p>Selfie + pose verification ensures you're real.</p>
+                <div class="safety-rule">
+                    <span class="icon">📸</span>
+                    <div class="content">
+                        <h4>Face Verification</h4>
+                        <p>Selfie + pose verification</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="safety-rule">
-                <span class="icon">🔐</span>
-                <div class="content">
-                    <h4>2FA &amp; KYC</h4>
-                    <p>Two-factor authentication and 3-tier KYC for withdrawals.</p>
+                <div class="safety-rule">
+                    <span class="icon">🔐</span>
+                    <div class="content">
+                        <h4>2FA &amp; KYC</h4>
+                        <p>3-tier verification</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="safety-rule">
-                <span class="icon">🚫</span>
-                <div class="content">
-                    <h4>Report &amp; Block</h4>
-                    <p>Report suspicious users anytime. Moderators act within 24h.</p>
+                <div class="safety-rule">
+                    <span class="icon">🚫</span>
+                    <div class="content">
+                        <h4>Report &amp; Block</h4>
+                        <p>Moderators act in 24h</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="safety-rule">
-                <span class="icon">🧶</span>
-                <div class="content">
-                    <h4>Red Thread</h4>
-                    <p>Fate-based high-compatibility matching. Find your soulmate.</p>
+                <div class="safety-rule">
+                    <span class="icon">🧶</span>
+                    <div class="content">
+                        <h4>Red Thread</h4>
+                        <p>Find your soulmate</p>
+                    </div>
                 </div>
             </div>
 
@@ -728,12 +815,50 @@
         <!-- ===== LOGIN PAGE ===== -->
         <div id="login" class="page">
             <div class="login-header">
+                <!-- WHITE FIRE MINI LOGO -->
                 <svg class="mini-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
-                          fill="#FFFFFF" opacity="1"/>
-                    <text x="100" y="115" font-family="Georgia, serif" font-size="90" font-weight="900" fill="#FF3366" text-anchor="middle" dominant-baseline="central" letter-spacing="-5">D</text>
+                    <path d="M100 190 
+                             C80 160 50 130 40 100 
+                             C30 70 35 40 55 25 
+                             C65 17 80 20 90 35 
+                             C85 25 95 10 105 10 
+                             C115 10 125 25 120 35 
+                             C130 20 145 17 155 25 
+                             C175 40 180 70 170 100 
+                             C160 130 130 160 100 190Z" 
+                          fill="#FFFFFF"/>
+                    <path d="M100 180 
+                             C85 155 65 130 55 105 
+                             C48 85 52 65 65 52 
+                             C72 45 82 48 90 58 
+                             C86 50 94 38 100 38 
+                             C106 38 114 50 110 58 
+                             C118 48 128 45 135 52 
+                             C148 65 152 85 145 105 
+                             C135 130 115 155 100 180Z" 
+                          fill="#0A0A0F"/>
+                    <path d="M100 170 
+                             C88 150 72 130 64 110 
+                             C58 94 60 78 70 68 
+                             C76 62 84 64 90 72 
+                             C88 66 94 56 100 56 
+                             C106 56 112 66 110 72 
+                             C116 64 124 62 130 68 
+                             C140 78 142 94 136 110 
+                             C128 130 112 150 100 170Z" 
+                          fill="#FF3366"/>
+                    <path d="M100 155 
+                             C92 142 82 128 78 116 
+                             C74 104 76 92 84 86 
+                             C88 82 94 84 96 88 
+                             C94 84 98 78 100 78 
+                             C102 78 106 84 104 88 
+                             C106 84 112 82 116 86 
+                             C124 92 126 104 122 116 
+                             C118 128 108 142 100 155Z" 
+                          fill="#FFFFFF"/>
                 </svg>
-                <h2>Welcome Back</h2>
+                <h2>Destined</h2>
                 <p>Sign in to continue your journey</p>
             </div>
 
@@ -763,34 +888,36 @@
 
             <div class="login-divider">or continue with</div>
 
+            <!-- ===== SOCIAL LOGIN - WHITE OVAL BOXES ===== -->
             <div class="social-login">
-                <button class="btn btn-telegram" onclick="telegramLogin()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <!-- Telegram -->
+                <button class="btn-social-oval btn-telegram-oval" onclick="telegramLogin()">
+                    <svg viewBox="0 0 24 24" fill="none">
                         <path d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0Z" fill="#0088cc"/>
                         <path d="M5.491 11.74L11.109 14.659L17.478 8.059C17.682 7.833 17.978 7.824 18.168 8.036C18.358 8.248 18.318 8.565 18.086 8.741L11.491 15.025L11.02 15.436L10.934 15.372L5.491 17.84L6.782 12.367L5.491 11.74Z" fill="white"/>
                     </svg>
-                    <span>Login with Telegram</span>
+                    <span class="btn-label">Login with Telegram</span>
                 </button>
 
-                <div class="social-login-row">
-                    <button class="btn btn-social" onclick="socialLogin('google')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.68 15.63 16.97 16.82 15.89 17.62V20.45H19.38C21.39 18.62 22.56 15.8 22.56 12.25Z" fill="#4285F4"/>
-                            <path d="M12 23C15.01 23 17.56 21.98 19.38 20.45L15.89 17.62C14.94 18.25 13.64 18.62 12 18.62C9.1 18.62 6.65 16.7 5.75 14.1H2.14V17.03C3.94 20.56 7.64 23 12 23Z" fill="#34A853"/>
-                            <path d="M5.75 14.1C5.52 13.27 5.39 12.39 5.39 11.5C5.39 10.61 5.52 9.73 5.75 8.9V5.97H2.14C1.42 7.37 1 8.94 1 10.5C1 12.06 1.42 13.63 2.14 15.03L5.75 14.1Z" fill="#FBBC05"/>
-                            <path d="M12 4.38C13.82 4.38 15.47 5.02 16.74 6.26L19.48 3.52C17.48 1.68 14.87 0.65 12 0.65C7.64 0.65 3.94 3.08 2.14 6.6L5.75 9.53C6.65 6.93 9.1 5.02 12 4.38Z" fill="#EA4335"/>
-                        </svg>
-                        <span>Google</span>
-                    </button>
+                <!-- Google -->
+                <button class="btn-social-oval btn-google-oval" onclick="socialLogin('google')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.68 15.63 16.97 16.82 15.89 17.62V20.45H19.38C21.39 18.62 22.56 15.8 22.56 12.25Z" fill="#4285F4"/>
+                        <path d="M12 23C15.01 23 17.56 21.98 19.38 20.45L15.89 17.62C14.94 18.25 13.64 18.62 12 18.62C9.1 18.62 6.65 16.7 5.75 14.1H2.14V17.03C3.94 20.56 7.64 23 12 23Z" fill="#34A853"/>
+                        <path d="M5.75 14.1C5.52 13.27 5.39 12.39 5.39 11.5C5.39 10.61 5.52 9.73 5.75 8.9V5.97H2.14C1.42 7.37 1 8.94 1 10.5C1 12.06 1.42 13.63 2.14 15.03L5.75 14.1Z" fill="#FBBC05"/>
+                        <path d="M12 4.38C13.82 4.38 15.47 5.02 16.74 6.26L19.48 3.52C17.48 1.68 14.87 0.65 12 0.65C7.64 0.65 3.94 3.08 2.14 6.6L5.75 9.53C6.65 6.93 9.1 5.02 12 4.38Z" fill="#EA4335"/>
+                    </svg>
+                    <span class="btn-label">Login with Google</span>
+                </button>
 
-                    <button class="btn btn-social" onclick="socialLogin('apple')">
-                        <svg viewBox="0 0 24 24" fill="white">
-                            <path d="M18.71 19.5C17.88 20.74 16.96 21.97 15.67 22.01C14.38 22.04 14.03 21.21 12.58 21.21C11.13 21.21 10.72 21.99 9.5 22.02C8.28 22.05 7.23 20.67 6.4 19.43C4.72 16.56 3.56 11.29 5.3 7.92C6.17 6.26 7.85 5.17 9.68 5.14C10.95 5.11 12.15 6.01 12.96 6.01C13.77 6.01 15.25 4.93 16.76 5.07C17.59 5.13 19.07 5.45 20.01 6.82C19.86 6.92 18.16 7.94 18.18 9.98C18.2 12.35 20.33 13.27 20.39 13.3C20.34 13.39 19.83 15.02 18.71 16.5C17.74 17.85 16.75 19.23 18.71 19.5Z"/>
-                            <path d="M15.94 2.38C16.86 1.29 17.49 -0.07 17.32 1.43C17.15 2.93 16.35 4.03 15.44 5.08C14.54 6.14 13.51 6.97 12.26 6.83C12.14 5.35 12.93 4.01 15.94 2.38Z"/>
-                        </svg>
-                        <span>Apple</span>
-                    </button>
-                </div>
+                <!-- Apple -->
+                <button class="btn-social-oval btn-apple-oval" onclick="socialLogin('apple')">
+                    <svg viewBox="0 0 24 24" fill="#1A0A0F">
+                        <path d="M18.71 19.5C17.88 20.74 16.96 21.97 15.67 22.01C14.38 22.04 14.03 21.21 12.58 21.21C11.13 21.21 10.72 21.99 9.5 22.02C8.28 22.05 7.23 20.67 6.4 19.43C4.72 16.56 3.56 11.29 5.3 7.92C6.17 6.26 7.85 5.17 9.68 5.14C10.95 5.11 12.15 6.01 12.96 6.01C13.77 6.01 15.25 4.93 16.76 5.07C17.59 5.13 19.07 5.45 20.01 6.82C19.86 6.92 18.16 7.94 18.18 9.98C18.2 12.35 20.33 13.27 20.39 13.3C20.34 13.39 19.83 15.02 18.71 16.5C17.74 17.85 16.75 19.23 18.71 19.5Z"/>
+                        <path d="M15.94 2.38C16.86 1.29 17.49 -0.07 17.32 1.43C17.15 2.93 16.35 4.03 15.44 5.08C14.54 6.14 13.51 6.97 12.26 6.83C12.14 5.35 12.93 4.01 15.94 2.38Z"/>
+                    </svg>
+                    <span class="btn-label">Login with Apple</span>
+                </button>
             </div>
 
             <p class="signup-text">
@@ -936,7 +1063,7 @@
             document.getElementById('splash').style.display = 'none';
         }, 2800);
 
-        console.log('💖 Destined v3.0 — Professional');
+        console.log('🔥 Destined v4.0 — Fire Logo');
         console.log('🧶 Red Thread active — Find your fate.');
         console.log('📱 Running in Telegram Mini App');
         console.log('👑 Built by Daniel — 17-year-old founder');
