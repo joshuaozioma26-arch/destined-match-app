@@ -3,30 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Destined - Find Your Fate</title>
+    <title>Destined</title>
     
     <!-- Telegram Mini App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
-        /* ===== ROOT VARIABLES ===== */
-        :root {
-            --primary: #FF3366;
-            --primary-dark: #CC0033;
-            --primary-light: #FF6699;
-            --pink-start: #FF0066;
-            --pink-end: #FF3366;
-            --red-start: #CC0033;
-            --gold: #FFD700;
-            --text-primary: #FFFFFF;
-            --text-secondary: rgba(255,255,255,0.85);
-            --text-muted: rgba(255,255,255,0.6);
-            --shadow: 0 8px 32px rgba(255, 51, 102, 0.4);
-            --radius: 16px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* ===== RESET & BASE ===== */
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
@@ -34,44 +17,97 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #FF0066 0%, #FF3366 40%, #CC0033 100%);
-            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Roboto, sans-serif;
+            background: #0A0A0F;
+            color: #FFFFFF;
             min-height: 100vh;
             overflow-x: hidden;
-            padding: 0;
             margin: 0;
+            padding: 0;
         }
 
         /* ===== APP CONTAINER ===== */
         #app {
             max-width: 480px;
             margin: 0 auto;
-            padding: 20px 16px 40px;
-            position: relative;
             min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== SPLASH SCREEN ===== */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0A0A0F;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            z-index: 1000;
+            animation: fadeOut 2.5s ease forwards;
+            animation-delay: 1.5s;
         }
 
-        /* ===== PAGE SYSTEM ===== */
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        #splash .splash-logo {
+            width: 120px;
+            height: 120px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        #splash .splash-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-top: 16px;
+            letter-spacing: 2px;
+            font-family: 'Georgia', serif;
+        }
+
+        #splash .splash-loader {
+            margin-top: 40px;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #FF3366;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== PAGES ===== */
         .page {
             display: none;
-            animation: fadeSlide 0.5s ease;
-            width: 100%;
-            max-width: 400px;
+            min-height: 100vh;
+            padding: 20px 24px 40px;
+            animation: fadeSlide 0.4s ease;
         }
 
         .page.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes fadeSlide {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -79,54 +115,78 @@
             }
         }
 
-        /* ===== PROFESSIONAL LOGO ===== */
-        .logo-container {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-            position: relative;
-            animation: float 3s ease-in-out infinite;
+        /* ===== LANDING PAGE (Like Tinder) ===== */
+        #landing {
+            background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 100vh;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+        #landing .landing-logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 16px;
         }
 
-        .logo-svg {
+        #landing h1 {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FF6699 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            font-family: 'Georgia', serif;
+        }
+
+        #landing .tagline {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 8px 0 40px;
+            font-weight: 300;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+        }
+
+        #landing .tagline .heart {
+            color: #FF3366;
+        }
+
+        .btn-group {
             width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 8px 32px rgba(255, 51, 102, 0.5));
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 0 auto;
         }
 
-        /* ===== BUTTONS ===== */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             padding: 16px 32px;
             border: none;
             border-radius: 50px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             width: 100%;
             text-decoration: none;
-            position: relative;
-            overflow: hidden;
         }
 
         .btn-primary {
-            background: rgba(255, 255, 255, 0.95);
-            color: #FF0066;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: #FF3366;
+            color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(255, 51, 102, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 51, 102, 0.4);
         }
 
         .btn-primary:active {
@@ -134,21 +194,20 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.12);
-            color: white;
+            background: rgba(255, 255, 255, 0.08);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .btn-telegram {
             background: #0088cc;
             color: white;
             box-shadow: 0 4px 20px rgba(0, 136, 204, 0.3);
-            gap: 10px;
         }
 
         .btn-telegram:hover {
@@ -159,31 +218,27 @@
         .btn-social {
             flex: 1;
             padding: 14px;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: white;
-            backdrop-filter: blur(10px);
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         .btn-social:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.12);
             transform: translateY(-2px);
         }
 
         .btn-social svg {
-            width: 22px;
-            height: 22px;
-            flex-shrink: 0;
-        }
-
-        .btn-social span {
-            font-size: 14px;
-            font-weight: 500;
+            width: 20px;
+            height: 20px;
         }
 
         .btn:disabled {
@@ -196,7 +251,7 @@
             width: 20px;
             height: 20px;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: #FF0066;
+            border-top-color: #FF3366;
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
             display: none;
@@ -210,78 +265,15 @@
             display: none;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ===== TYPOGRAPHY ===== */
-        h1 {
-            font-size: 36px;
-            font-weight: 800;
-            color: #FFB3CC;
-            text-align: center;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-            letter-spacing: -0.5px;
-            margin-bottom: 4px;
-        }
-
-        h2 {
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
-            text-align: center;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .subtitle {
-            color: rgba(255, 255, 255, 0.85);
-            text-align: center;
-            font-size: 16px;
-            line-height: 1.8;
-            margin-top: 8px;
-            font-weight: 300;
-            letter-spacing: 0.3px;
-        }
-
-        .subtitle .heart-icon {
-            color: #FFB3CC;
-        }
-
-        /* ===== LANDING PAGE ===== */
-        #landing {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        #landing .tagline {
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.7);
-            margin: 0 0 30px 0;
-            font-weight: 300;
-            letter-spacing: 0.3px;
-            line-height: 1.8;
-        }
-
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 40px;
-        }
-
-        .btn-group .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
         .terms-text {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.3);
             font-size: 11px;
             margin-top: 24px;
             line-height: 1.6;
         }
 
         .terms-text a {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.4);
             text-decoration: none;
         }
 
@@ -291,18 +283,21 @@
 
         /* ===== SAFETY RULES ===== */
         #safety {
-            padding: 20px 0;
+            background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
+            justify-content: flex-start;
+            padding-top: 40px;
+            min-height: 100vh;
         }
 
         #safety .safety-header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         #safety .safety-header .back-btn {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
             border: none;
             color: white;
             width: 44px;
@@ -313,42 +308,50 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
 
         #safety .safety-header .back-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        #safety .safety-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            color: #FFFFFF;
         }
 
         .safety-rule {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 16px;
-            border-radius: var(--radius);
-            margin-bottom: 12px;
-            border-left: 3px solid white;
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px 18px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            border-left: 3px solid #FF3366;
             display: flex;
             align-items: flex-start;
             gap: 12px;
+            backdrop-filter: blur(10px);
         }
 
         .safety-rule .icon {
-            font-size: 20px;
+            font-size: 18px;
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .safety-rule .content h4 {
-            font-size: 15px;
-            margin-bottom: 4px;
-            color: white;
+            font-size: 14px;
+            margin-bottom: 2px;
+            color: #FFFFFF;
+            font-weight: 600;
         }
 
         .safety-rule .content p {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.4;
         }
 
         .safety-actions {
@@ -356,11 +359,18 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            width: 100%;
+            max-width: 340px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* ===== LOGIN PAGE ===== */
         #login {
-            padding: 20px 0;
+            background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
+            justify-content: center;
+            padding-top: 20px;
+            min-height: 100vh;
         }
 
         #login .login-header {
@@ -369,56 +379,67 @@
         }
 
         #login .login-header .mini-logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 16px;
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 12px;
+        }
+
+        #login .login-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        #login .login-header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-top: 4px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 6px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 16px 18px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 14px;
-            color: white;
-            font-size: 16px;
-            transition: var(--transition);
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #FFFFFF;
+            font-size: 15px;
+            transition: all 0.3s ease;
             outline: none;
-            backdrop-filter: blur(10px);
         }
 
         .form-group input:focus {
-            border-color: white;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+            border-color: #FF3366;
+            box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.1);
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.3);
         }
 
         .form-options {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            margin: 8px 0 20px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 6px 0 18px;
         }
 
         .form-options a {
-            color: white;
+            color: #FF6699;
             text-decoration: none;
             font-weight: 500;
         }
@@ -429,9 +450,9 @@
 
         .login-divider {
             text-align: center;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-            margin: 20px 0;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+            margin: 20px 0 16px;
             position: relative;
         }
 
@@ -442,7 +463,7 @@
             top: 50%;
             width: 42%;
             height: 1px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .login-divider::after {
@@ -452,28 +473,56 @@
             top: 50%;
             width: 42%;
             height: 1px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .social-login {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
+            width: 100%;
+            max-width: 340px;
+            margin: 0 auto;
         }
 
         .social-login .btn-telegram {
             justify-content: center;
-            font-size: 16px;
-            padding: 16px;
+            font-size: 15px;
+            padding: 15px;
         }
 
         .social-login-row {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
 
         .social-login-row .btn-social {
             flex: 1;
+        }
+
+        .signup-text {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            margin-top: 18px;
+        }
+
+        .signup-text a {
+            color: #FF6699;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+
+        .back-safety {
+            margin-top: 12px;
+            width: 100%;
+            max-width: 340px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* ===== TOAST ===== */
@@ -482,13 +531,13 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: rgba(0, 0, 0, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             padding: 14px 24px;
             border-radius: 14px;
-            color: white;
+            color: #FFFFFF;
             font-size: 14px;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
             opacity: 0;
             transition: all 0.4s ease;
             z-index: 999;
@@ -512,53 +561,40 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 400px) {
-            h1 {
-                font-size: 28px;
+            #landing h1 {
+                font-size: 34px;
             }
-            .logo-container {
+            #landing .landing-logo {
+                width: 80px;
+                height: 80px;
+            }
+            #splash .splash-logo {
                 width: 100px;
                 height: 100px;
             }
-            .social-login-row {
-                flex-direction: column;
-            }
-            .subtitle {
-                font-size: 14px;
+            #splash .splash-name {
+                font-size: 26px;
             }
         }
 
         /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
-            width: 4px;
+            width: 3px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 51, 102, 0.3);
             border-radius: 4px;
         }
 
-        /* ===== TGMINI APP SAFE AREA ===== */
+        /* ===== SAFE AREA ===== */
         .tg-safe-top {
             padding-top: env(safe-area-inset-top, 20px);
         }
         .tg-safe-bottom {
             padding-bottom: env(safe-area-inset-bottom, 20px);
-        }
-
-        /* ===== HEART DECORATIONS ===== */
-        .heart-bg {
-            position: fixed;
-            font-size: 40px;
-            opacity: 0.04;
-            pointer-events: none;
-            animation: floatHeart 20s linear infinite;
-        }
-
-        @keyframes floatHeart {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.04; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0.02; }
         }
     </style>
 </head>
@@ -567,45 +603,46 @@
     <!-- ===== TOAST ===== -->
     <div id="toast" class="toast"></div>
 
-    <!-- ===== HEART BACKGROUND ===== -->
-    <div class="heart-bg" style="left:5%;">❤️</div>
-    <div class="heart-bg" style="right:10%;animation-delay:5s;">❤️</div>
-    <div class="heart-bg" style="left:20%;animation-delay:10s;">❤️</div>
-    <div class="heart-bg" style="right:25%;animation-delay:15s;">❤️</div>
+    <!-- ===== SPLASH SCREEN ===== -->
+    <div id="splash">
+        <svg class="splash-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
+                  fill="#FFFFFF" opacity="1"/>
+            <text x="100" y="115" 
+                  font-family="Georgia, serif" 
+                  font-size="90" 
+                  font-weight="900" 
+                  fill="#0A0A0F" 
+                  text-anchor="middle" 
+                  dominant-baseline="central"
+                  letter-spacing="-5">D</text>
+        </svg>
+        <div class="splash-name">Destined</div>
+        <div class="splash-loader"></div>
+    </div>
 
     <!-- ===== APP ===== -->
     <div id="app" class="tg-safe-top">
 
         <!-- ===== LANDING PAGE ===== -->
         <div id="landing" class="page active">
-            <!-- PROFESSIONAL SVG LOGO -->
-            <div class="logo-container">
-                <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Heart Shape -->
-                    <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
-                          fill="white" 
-                          opacity="1"/>
-                    <!-- D Letter Inside -->
-                    <text x="100" y="115" 
-                          font-family="Georgia, serif" 
-                          font-size="90" 
-                          font-weight="900" 
-                          fill="#FF0066" 
-                          text-anchor="middle" 
-                          dominant-baseline="central"
-                          letter-spacing="-5">D</text>
-                    <!-- Subtle Glow -->
-                    <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
-                          fill="none" 
-                          stroke="rgba(255,255,255,0.3)" 
-                          stroke-width="2"/>
-                </svg>
-            </div>
+            <svg class="landing-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
+                      fill="#FFFFFF" opacity="1"/>
+                <text x="100" y="115" 
+                      font-family="Georgia, serif" 
+                      font-size="90" 
+                      font-weight="900" 
+                      fill="#FF3366" 
+                      text-anchor="middle" 
+                      dominant-baseline="central"
+                      letter-spacing="-5">D</text>
+            </svg>
 
             <h1>Destined</h1>
             
-            <p class="subtitle">
-                <span class="heart-icon">❤️</span> Where fate meets connection<br>
+            <p class="tagline">
+                <span class="heart">❤️</span> Where fate meets connection<br>
                 Swipe. Match. Spark. Find your soulmate.
             </p>
 
@@ -627,14 +664,14 @@
         <div id="safety" class="page">
             <div class="safety-header">
                 <button class="back-btn" onclick="showPage('landing')">←</button>
-                <h2 style="flex:1;text-align:center;font-size:20px;">🛡️ Safety Rules</h2>
+                <h2>🛡️ Safety Rules</h2>
             </div>
 
             <div class="safety-rule">
                 <span class="icon">🔞</span>
                 <div class="content">
                     <h4>18+ Only</h4>
-                    <p>You must be 18 or older to use Destined. Age verification required.</p>
+                    <p>You must be 18 or older to use Destined.</p>
                 </div>
             </div>
 
@@ -642,7 +679,7 @@
                 <span class="icon">🤖</span>
                 <div class="content">
                     <h4>AI Scam Shield</h4>
-                    <p>Our AI scans every message for scams. 3 strikes → permanent ban.</p>
+                    <p>AI scans messages for scams. 3 strikes → permanent ban.</p>
                 </div>
             </div>
 
@@ -650,14 +687,14 @@
                 <span class="icon">📸</span>
                 <div class="content">
                     <h4>Face Verification</h4>
-                    <p>Selfie + pose verification ensures you're a real person.</p>
+                    <p>Selfie + pose verification ensures you're real.</p>
                 </div>
             </div>
 
             <div class="safety-rule">
                 <span class="icon">🔐</span>
                 <div class="content">
-                    <h4>2FA & KYC</h4>
+                    <h4>2FA &amp; KYC</h4>
                     <p>Two-factor authentication and 3-tier KYC for withdrawals.</p>
                 </div>
             </div>
@@ -665,8 +702,8 @@
             <div class="safety-rule">
                 <span class="icon">🚫</span>
                 <div class="content">
-                    <h4>Report & Block</h4>
-                    <p>Report suspicious users anytime. Our moderators act within 24h.</p>
+                    <h4>Report &amp; Block</h4>
+                    <p>Report suspicious users anytime. Moderators act within 24h.</p>
                 </div>
             </div>
 
@@ -674,13 +711,13 @@
                 <span class="icon">🧶</span>
                 <div class="content">
                     <h4>Red Thread</h4>
-                    <p>Fate-based high-compatibility matching. Find your destined soulmate.</p>
+                    <p>Fate-based high-compatibility matching. Find your soulmate.</p>
                 </div>
             </div>
 
             <div class="safety-actions">
                 <button class="btn btn-primary" onclick="showPage('login')">
-                    <span class="btn-text">✅ I Understand & Agree</span>
+                    <span class="btn-text">✅ I Understand &amp; Agree</span>
                 </button>
                 <button class="btn btn-secondary" onclick="showPage('landing')">
                     <span class="btn-text">← Back</span>
@@ -691,18 +728,16 @@
         <!-- ===== LOGIN PAGE ===== -->
         <div id="login" class="page">
             <div class="login-header">
-                <div class="mini-logo">
-                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
-                              fill="white" opacity="1"/>
-                        <text x="100" y="115" font-family="Georgia, serif" font-size="90" font-weight="900" fill="#FF0066" text-anchor="middle" dominant-baseline="central" letter-spacing="-5">D</text>
-                    </svg>
-                </div>
+                <svg class="mini-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 180 C40 140 0 100 0 60 C0 25 30 0 60 0 C75 0 90 10 100 25 C110 10 125 0 140 0 C170 0 200 25 200 60 C200 100 160 140 100 180Z" 
+                          fill="#FFFFFF" opacity="1"/>
+                    <text x="100" y="115" font-family="Georgia, serif" font-size="90" font-weight="900" fill="#FF3366" text-anchor="middle" dominant-baseline="central" letter-spacing="-5">D</text>
+                </svg>
                 <h2>Welcome Back</h2>
-                <p class="subtitle">Sign in to continue your journey</p>
+                <p>Sign in to continue your journey</p>
             </div>
 
-            <form id="loginForm" onsubmit="handleLogin(event)">
+            <form id="loginForm" onsubmit="handleLogin(event)" style="width:100%;max-width:340px;margin:0 auto;">
                 <div class="form-group">
                     <label>📱 Phone Number or Email</label>
                     <input type="text" id="loginEmail" placeholder="Enter phone or email" required>
@@ -714,8 +749,8 @@
                 </div>
 
                 <div class="form-options">
-                    <label style="display:flex;align-items:center;gap:8px;">
-                        <input type="checkbox" checked style="accent-color:white;"> Remember me
+                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                        <input type="checkbox" checked style="accent-color:#FF3366;"> Remember me
                     </label>
                     <a href="#" onclick="showToast('📧 Password reset link sent to your email.')">Forgot password?</a>
                 </div>
@@ -728,9 +763,7 @@
 
             <div class="login-divider">or continue with</div>
 
-            <!-- ===== PROFESSIONAL SOCIAL LOGINS ===== -->
             <div class="social-login">
-                <!-- Telegram Login -->
                 <button class="btn btn-telegram" onclick="telegramLogin()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0Z" fill="#0088cc"/>
@@ -739,10 +772,9 @@
                     <span>Login with Telegram</span>
                 </button>
 
-                <!-- Google & Apple Row -->
                 <div class="social-login-row">
                     <button class="btn btn-social" onclick="socialLogin('google')">
-                        <svg width="22" height="22" viewBox="0 0 24 24">
+                        <svg viewBox="0 0 24 24">
                             <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.68 15.63 16.97 16.82 15.89 17.62V20.45H19.38C21.39 18.62 22.56 15.8 22.56 12.25Z" fill="#4285F4"/>
                             <path d="M12 23C15.01 23 17.56 21.98 19.38 20.45L15.89 17.62C14.94 18.25 13.64 18.62 12 18.62C9.1 18.62 6.65 16.7 5.75 14.1H2.14V17.03C3.94 20.56 7.64 23 12 23Z" fill="#34A853"/>
                             <path d="M5.75 14.1C5.52 13.27 5.39 12.39 5.39 11.5C5.39 10.61 5.52 9.73 5.75 8.9V5.97H2.14C1.42 7.37 1 8.94 1 10.5C1 12.06 1.42 13.63 2.14 15.03L5.75 14.1Z" fill="#FBBC05"/>
@@ -752,7 +784,7 @@
                     </button>
 
                     <button class="btn btn-social" onclick="socialLogin('apple')">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+                        <svg viewBox="0 0 24 24" fill="white">
                             <path d="M18.71 19.5C17.88 20.74 16.96 21.97 15.67 22.01C14.38 22.04 14.03 21.21 12.58 21.21C11.13 21.21 10.72 21.99 9.5 22.02C8.28 22.05 7.23 20.67 6.4 19.43C4.72 16.56 3.56 11.29 5.3 7.92C6.17 6.26 7.85 5.17 9.68 5.14C10.95 5.11 12.15 6.01 12.96 6.01C13.77 6.01 15.25 4.93 16.76 5.07C17.59 5.13 19.07 5.45 20.01 6.82C19.86 6.92 18.16 7.94 18.18 9.98C18.2 12.35 20.33 13.27 20.39 13.3C20.34 13.39 19.83 15.02 18.71 16.5C17.74 17.85 16.75 19.23 18.71 19.5Z"/>
                             <path d="M15.94 2.38C16.86 1.29 17.49 -0.07 17.32 1.43C17.15 2.93 16.35 4.03 15.44 5.08C14.54 6.14 13.51 6.97 12.26 6.83C12.14 5.35 12.93 4.01 15.94 2.38Z"/>
                         </svg>
@@ -761,13 +793,15 @@
                 </div>
             </div>
 
-            <p style="text-align:center;color:rgba(255,255,255,0.6);font-size:14px;margin-top:20px;">
-                Don't have an account? <a href="#" onclick="showToast('📝 Sign up coming soon!')" style="color:white;text-decoration:none;font-weight:600;">Sign Up</a>
+            <p class="signup-text">
+                Don't have an account? <a href="#" onclick="showToast('📝 Sign up coming soon!')">Sign Up</a>
             </p>
 
-            <button class="btn btn-secondary" style="margin-top:12px;" onclick="showPage('safety')">
-                <span class="btn-text">← Back to Safety</span>
-            </button>
+            <div class="back-safety">
+                <button class="btn btn-secondary" onclick="showPage('safety')">
+                    <span class="btn-text">← Back to Safety</span>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -897,13 +931,16 @@
             });
         }
 
-        // ===== LOG =====
-        console.log('💖 Destined v2.0 — Professional');
+        // ===== REMOVE SPLASH AFTER ANIMATION =====
+        setTimeout(() => {
+            document.getElementById('splash').style.display = 'none';
+        }, 2800);
+
+        console.log('💖 Destined v3.0 — Professional');
         console.log('🧶 Red Thread active — Find your fate.');
         console.log('📱 Running in Telegram Mini App');
         console.log('👑 Built by Daniel — 17-year-old founder');
 
-        // ===== PREVENT ZOOM =====
         document.addEventListener('gesturestart', function(e) {
             e.preventDefault();
         });
