@@ -1,0 +1,15 @@
+{
+  "name": "destined",
+  "version": "1.0.0",
+  "description": "Destined - Where Fate Meets Connection",
+  "main": "index.html",
+  "scripts": {
+    "dev": "serve .",
+    "build": "echo 'No build needed'",
+    "start": "serve ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
