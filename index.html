@@ -3,1314 +3,445 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Destined - Find Your Fate</title>
-    
-    <!-- Telegram Mini App SDK -->
+    <title>Destined</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <style>
-        /* ===== RESET ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Roboto, sans-serif;
-            background: #0A0A0F;
-            color: #FFFFFF;
-            min-height: 100vh;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* ===== APP CONTAINER ===== */
-        #app {
-            max-width: 480px;
-            margin: 0 auto;
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ===== SPLASH SCREEN ===== */
-        #splash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #0A0A0F;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            animation: fadeOut 2.5s ease forwards;
-            animation-delay: 1.5s;
-        }
-
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; }
-        }
-
-        #splash .splash-logo {
-            width: 100px;
-            height: 100px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        #splash .splash-name {
-            font-size: 36px;
-            font-weight: 700;
-            color: #FFFFFF;
-            margin-top: 16px;
-            letter-spacing: 3px;
-            font-family: 'Georgia', serif;
-        }
-
-        #splash .splash-loader {
-            margin-top: 40px;
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #FF3366;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ===== PAGES ===== */
-        .page {
-            display: none;
-            min-height: 100vh;
-            padding: 20px 24px 40px;
-            animation: fadeSlide 0.4s ease;
-        }
-
-        .page.active {
-            display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes fadeSlide {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ===== WELCOME PAGE (Like Tinder) ===== */
-        #welcome {
-            background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            min-height: 100vh;
-        }
-
-        #welcome .welcome-logo {
-            width: 90px;
-            height: 90px;
-            margin-bottom: 12px;
-        }
-
-        #welcome h1 {
-            font-size: 40px;
-            font-weight: 700;
-            color: #FFFFFF;
-            letter-spacing: 2px;
-            font-family: 'Georgia', serif;
-        }
-
-        #welcome .tagline {
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.6);
-            margin: 6px 0 10px;
-            font-weight: 300;
-            line-height: 1.6;
-            letter-spacing: 0.3px;
-        }
-
-        #welcome .tagline .heart {
-            color: #FF3366;
-        }
-
-        /* ===== WELCOME RULES (Like Tinder) ===== */
-        .welcome-rules {
-            width: 100%;
-            max-width: 340px;
-            margin: 20px auto 28px;
-            text-align: left;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-            padding: 20px 20px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .welcome-rules .rule-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 14px;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
-
-        .welcome-rule {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .welcome-rule .check {
-            color: #FF3366;
-            font-size: 16px;
-            margin-top: 1px;
-            flex-shrink: 0;
-        }
-
-        .welcome-rule .rule-text {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.4;
-        }
-
-        .welcome-rule .rule-text strong {
-            color: #FFFFFF;
-            font-weight: 600;
-        }
-
-        .btn-group {
-            width: 100%;
-            max-width: 340px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 0 auto;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 16px 32px;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: #FF3366;
-            color: #FFFFFF;
-            box-shadow: 0 4px 20px rgba(255, 51, 102, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255, 51, 102, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.06);
-            color: #FFFFFF;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .btn-agree {
-            background: #FF3366;
-            color: #FFFFFF;
-            box-shadow: 0 4px 20px rgba(255, 51, 102, 0.3);
-            font-size: 18px;
-            letter-spacing: 1px;
-            padding: 18px;
-        }
-
-        .btn-agree:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255, 51, 102, 0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .btn .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: #FF3366;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            display: none;
-        }
-
-        .btn.loading .spinner {
-            display: block;
-        }
-
-        .btn.loading .btn-text {
-            display: none;
-        }
-
-        .terms-text {
-            color: rgba(255, 255, 255, 0.25);
-            font-size: 11px;
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-
-        .terms-text a {
-            color: rgba(255, 255, 255, 0.35);
-            text-decoration: none;
-        }
-
-        .terms-text a:hover {
-            text-decoration: underline;
-        }
-
-        /* ===== RULES PAGE (Tinder Style - I AGREE) ===== */
-        #rules {
-            background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            min-height: 100vh;
-        }
-
-        #rules .rules-header {
-            margin-bottom: 24px;
-        }
-
-        #rules .rules-header .mini-logo {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 10px;
-        }
-
-        #rules .rules-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #FFFFFF;
-            font-family: 'Georgia', serif;
-            letter-spacing: 1px;
-        }
-
-        #rules .rules-header p {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 13px;
-            margin-top: 2px;
-        }
-
-        .rules-list {
-            width: 100%;
-            max-width: 340px;
-            margin: 0 auto 24px;
-            text-align: left;
-        }
-
-        .rules-list .rule-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: all 0.3s ease;
-        }
-
-        .rules-list .rule-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .rules-list .rule-item .icon {
-            font-size: 22px;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-
-        .rules-list .rule-item .content h4 {
-            font-size: 14px;
-            color: #FFFFFF;
-            font-weight: 600;
-            margin-bottom: 1px;
-        }
-
-        .rules-list .rule-item .content p {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-            line-height: 1.3;
-        }
-
-        .rules-agree-text {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 12px;
-            margin: 16px 0 20px;
-            line-height: 1.6;
-            max-width: 340px;
-        }
-
-        .rules-agree-text a {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-        }
-
-        .rules-agree-text a:hover {
-            text-decoration: underline;
-        }
-
-        /* ===== LOGIN PAGE ===== */
-        #login {
-            background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
-            justify-content: center;
-            padding-top: 20px;
-            min-height: 100vh;
-        }
-
-        #login .login-header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        #login .login-header .mini-logo {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 10px;
-        }
-
-        #login .login-header h2 {
-            font-size: 26px;
-            font-weight: 700;
-            color: #FFFFFF;
-            font-family: 'Georgia', serif;
-            letter-spacing: 1px;
-        }
-
-        #login .login-header p {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 13px;
-            margin-top: 2px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 4px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            color: #FFFFFF;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .form-group input:focus {
-            border-color: #FF3366;
-            box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.08);
-        }
-
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-        }
-
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.4);
-            margin: 4px 0 16px;
-        }
-
-        .form-options a {
-            color: #FF6699;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .form-options a:hover {
-            text-decoration: underline;
-        }
-
-        .login-divider {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 13px;
-            margin: 16px 0 14px;
-            position: relative;
-        }
-
-        .login-divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 42%;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .login-divider::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 50%;
-            width: 42%;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        /* ===== SOCIAL LOGIN BUTTONS (White oval boxes) ===== */
-        .social-login {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-            max-width: 340px;
-            margin: 0 auto;
-        }
-
-        .btn-social-oval {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 20px;
-            background: #FFFFFF;
-            border: none;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #1A0A0F;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-social-oval:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-social-oval:active {
-            transform: scale(0.97);
-        }
-
-        .btn-social-oval svg {
-            width: 22px;
-            height: 22px;
-            flex-shrink: 0;
-        }
-
-        .btn-social-oval .btn-label {
-            flex: 1;
-            text-align: center;
-        }
-
-        .signup-text {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 14px;
-            margin-top: 16px;
-        }
-
-        .signup-text a {
-            color: #FF6699;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .signup-text a:hover {
-            text-decoration: underline;
-        }
-
-        .back-rules {
-            margin-top: 12px;
-            width: 100%;
-            max-width: 340px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* ===== VERIFICATION PAGE ===== */
-        #verification {
-            background: linear-gradient(160deg, #1A0A0F 0%, #2D0A15 30%, #4A0A20 60%, #660025 100%);
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            min-height: 100vh;
-        }
-
-        #verification .verification-icon {
-            font-size: 72px;
-            margin-bottom: 16px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        #verification h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #FFFFFF;
-            font-family: 'Georgia', serif;
-            letter-spacing: 1px;
-        }
-
-        #verification p {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 14px;
-            margin: 4px 0 24px;
-            line-height: 1.6;
-            max-width: 320px;
-        }
-
-        .verification-steps {
-            width: 100%;
-            max-width: 340px;
-            margin: 0 auto 28px;
-            text-align: left;
-        }
-
-        .verification-steps .step {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .verification-steps .step .num {
-            width: 28px;
-            height: 28px;
-            background: #FF3366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 700;
-            color: #FFFFFF;
-            flex-shrink: 0;
-        }
-
-        .verification-steps .step .step-text {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .verification-steps .step .step-text strong {
-            color: #FFFFFF;
-        }
-
-        .btn-verify {
-            background: linear-gradient(135deg, #FF3366, #CC0033);
-            color: #FFFFFF;
-            box-shadow: 0 4px 20px rgba(255, 51, 102, 0.3);
-        }
-
-        .btn-verify:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255, 51, 102, 0.4);
-        }
-
-        /* ===== TOAST ===== */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 14px 24px;
-            border-radius: 14px;
-            color: #FFFFFF;
-            font-size: 14px;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
-            opacity: 0;
-            transition: all 0.4s ease;
-            z-index: 999;
-            max-width: 90%;
-            text-align: center;
-            backdrop-filter: blur(20px);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast.error {
-            border-color: #FF4444;
-        }
-
-        .toast.success {
-            border-color: #44FF88;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 400px) {
-            #welcome h1 {
-                font-size: 32px;
-            }
-            #welcome .welcome-logo {
-                width: 70px;
-                height: 70px;
-            }
-            #splash .splash-logo {
-                width: 80px;
-                height: 80px;
-            }
-            #splash .splash-name {
-                font-size: 28px;
-            }
-            .welcome-rules {
-                padding: 16px;
-            }
-            #verification .verification-icon {
-                font-size: 56px;
-            }
-        }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 3px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 51, 102, 0.3);
-            border-radius: 4px;
-        }
-
-        /* ===== SAFE AREA ===== */
-        .tg-safe-top {
-            padding-top: env(safe-area-inset-top, 20px);
-        }
-        .tg-safe-bottom {
-            padding-bottom: env(safe-area-inset-bottom, 20px);
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0A0F;color:#fff;min-height:100vh;overflow-x:hidden}
+        #app{max-width:480px;margin:0 auto;min-height:100vh;position:relative;overflow:hidden}
+        .page{display:none;min-height:100vh;padding:20px 24px 40px;animation:fadeSlide .4s ease}
+        .page.active{display:flex;flex-direction:column}
+        @keyframes fadeSlide{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+        /* Splash */
+        #splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0A0A0F;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;animation:fadeOut 2.5s ease forwards;animation-delay:1.5s}
+        @keyframes fadeOut{0%{opacity:1}100%{opacity:0;visibility:hidden}}
+        #splash .logo{width:100px;height:100px;animation:pulse 1.5s ease-in-out infinite}
+        #splash .name{font-size:36px;font-weight:700;color:#fff;margin-top:16px;letter-spacing:3px;font-family:Georgia,serif}
+        #splash .loader{margin-top:40px;width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#FF3366;border-radius:50%;animation:spin .8s linear infinite}
+
+        /* Buttons */
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;border:none;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;width:100%;text-decoration:none}
+        .btn-primary{background:#FF3366;color:#fff;box-shadow:0 4px 20px rgba(255,51,102,0.3)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,51,102,0.4)}
+        .btn-primary:active{transform:scale(.97)}
+        .btn-secondary{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px)}
+        .btn-secondary:hover{background:rgba(255,255,255,0.12)}
+        .btn-agree{background:#FF3366;color:#fff;box-shadow:0 4px 20px rgba(255,51,102,0.3);font-size:18px;letter-spacing:1px;padding:18px}
+        .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+        .btn .spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#FF3366;border-radius:50%;animation:spin .6s linear infinite;display:none}
+        .btn.loading .spinner{display:block}
+        .btn.loading .btn-text{display:none}
+
+        .btn-social-oval{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 20px;background:#fff;border:none;border-radius:50px;font-size:15px;font-weight:600;color:#1A0A0F;cursor:pointer;transition:all .3s ease;width:100%;box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+        .btn-social-oval:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.2)}
+        .btn-social-oval svg{width:22px;height:22px;flex-shrink:0}
+        .btn-social-oval .btn-label{flex:1;text-align:center}
+
+        /* Form */
+        .form-group{margin-bottom:18px}
+        .form-group label{display:block;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);margin-bottom:4px}
+        .form-group input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;transition:all .3s ease;outline:none}
+        .form-group input:focus{border-color:#FF3366;box-shadow:0 0 0 3px rgba(255,51,102,0.08)}
+        .form-group input::placeholder{color:rgba(255,255,255,0.2)}
+
+        /* Colors */
+        .bg-gradient{background:linear-gradient(160deg,#1A0A0F 0%,#2D0A15 30%,#4A0A20 60%,#660025 100%)}
+
+        /* Toast */
+        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,0.9);border:1px solid rgba(255,255,255,0.06);padding:14px 24px;border-radius:14px;color:#fff;font-size:14px;box-shadow:0 8px 40px rgba(0,0,0,0.6);opacity:0;transition:all .4s ease;z-index:999;max-width:90%;text-align:center;backdrop-filter:blur(20px)}
+        .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+        .toast.error{border-color:#FF4444}
+        .toast.success{border-color:#44FF88}
+
+        .terms-text{color:rgba(255,255,255,0.25);font-size:11px;margin-top:20px;line-height:1.6}
+        .terms-text a{color:rgba(255,255,255,0.35);text-decoration:none}
+        .subtitle{color:rgba(255,255,255,0.6);text-align:center;font-size:14px;margin-top:4px;line-height:1.6}
+        h1{font-size:36px;font-weight:700;color:#fff;text-align:center;font-family:Georgia,serif;letter-spacing:2px}
+        h2{font-size:24px;font-weight:700;color:#fff;text-align:center;font-family:Georgia,serif;letter-spacing:1px}
+        .tg-safe-top{padding-top:env(safe-area-inset-top,20px)}
+        .tg-safe-bottom{padding-bottom:env(safe-area-inset-bottom,20px)}
     </style>
 </head>
 <body>
 
-    <!-- ===== TOAST ===== -->
-    <div id="toast" class="toast"></div>
+<div id="toast" class="toast"></div>
 
-    <!-- ===== SPLASH SCREEN ===== -->
-    <div id="splash">
-        <!-- WHITE FIRE LOGO -->
-        <svg class="splash-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100 190 
-                     C80 160 50 130 40 100 
-                     C30 70 35 40 55 25 
-                     C65 17 80 20 90 35 
-                     C85 25 95 10 105 10 
-                     C115 10 125 25 120 35 
-                     C130 20 145 17 155 25 
-                     C175 40 180 70 170 100 
-                     C160 130 130 160 100 190Z" 
-                  fill="#FFFFFF"/>
-            <path d="M100 180 
-                     C85 155 65 130 55 105 
-                     C48 85 52 65 65 52 
-                     C72 45 82 48 90 58 
-                     C86 50 94 38 100 38 
-                     C106 38 114 50 110 58 
-                     C118 48 128 45 135 52 
-                     C148 65 152 85 145 105 
-                     C135 130 115 155 100 180Z" 
-                  fill="#0A0A0F"/>
-            <path d="M100 170 
-                     C88 150 72 130 64 110 
-                     C58 94 60 78 70 68 
-                     C76 62 84 64 90 72 
-                     C88 66 94 56 100 56 
-                     C106 56 112 66 110 72 
-                     C116 64 124 62 130 68 
-                     C140 78 142 94 136 110 
-                     C128 130 112 150 100 170Z" 
-                  fill="#FF3366"/>
-            <path d="M100 155 
-                     C92 142 82 128 78 116 
-                     C74 104 76 92 84 86 
-                     C88 82 94 84 96 88 
-                     C94 84 98 78 100 78 
-                     C102 78 106 84 104 88 
-                     C106 84 112 82 116 86 
-                     C124 92 126 104 122 116 
-                     C118 128 108 142 100 155Z" 
-                  fill="#FFFFFF"/>
-        </svg>
-        <div class="splash-name">Destined</div>
-        <div class="splash-loader"></div>
+<!-- SPLASH -->
+<div id="splash">
+    <svg class="logo" viewBox="0 0 200 200"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
+    <div class="name">Destined</div>
+    <div class="loader"></div>
+</div>
+
+<!-- APP -->
+<div id="app" class="tg-safe-top">
+
+<!-- ========== PAGE 1: WELCOME ========== -->
+<div id="page-welcome" class="page active bg-gradient">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
+        <svg width="90" height="90" viewBox="0 0 200 200"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
+        <h1 style="margin-top:8px">Destined</h1>
+        <p style="color:rgba(255,255,255,0.6);font-size:16px;margin-top:4px">❤️ Where fate meets connection</p>
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-top:2px">Swipe. Match. Spark. Find your soulmate.</p>
+
+        <div style="width:100%;max-width:340px;margin:24px auto;text-align:left;background:rgba(255,255,255,0.03);border-radius:16px;padding:20px;border:1px solid rgba(255,255,255,0.04)">
+            <p style="color:rgba(255,255,255,0.7);font-size:14px;font-weight:600;margin-bottom:14px;text-align:center">📋 Please follow these house rules</p>
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px"><span style="color:#FF3366;font-size:16px">✅</span><span style="font-size:13px;color:rgba(255,255,255,0.7)"><strong style="color:#fff">Be yourself.</strong> Make sure your photos, age and bio are true.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px"><span style="color:#FF3366;font-size:16px">✅</span><span style="font-size:13px;color:rgba(255,255,255,0.7)"><strong style="color:#fff">Stay safe.</strong> Don't give out personal info too quickly.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px"><span style="color:#FF3366;font-size:16px">✅</span><span style="font-size:13px;color:rgba(255,255,255,0.7)"><strong style="color:#fff">Play it cool.</strong> Respect others as you'd like to be treated.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><span style="color:#FF3366;font-size:16px">✅</span><span style="font-size:13px;color:rgba(255,255,255,0.7)"><strong style="color:#fff">Be proactive.</strong> Always report bad behaviour.</span></div>
+        </div>
+
+        <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;margin-top:8px">
+            <button class="btn btn-primary" onclick="showPage('page-rules')"><span class="btn-text">Get Started 🌺</span></button>
+            <button class="btn btn-secondary" onclick="showToast('🔐 Secure & Private — Your data is safe with us.')"><span class="btn-text">🔒 Privacy First</span></button>
+        </div>
+        <p class="terms-text">By continuing, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
     </div>
+</div>
 
-    <!-- ===== APP ===== -->
-    <div id="app" class="tg-safe-top">
-
-        <!-- ===== WELCOME PAGE ===== -->
-        <div id="welcome" class="page active">
-            <!-- WHITE FIRE LOGO -->
-            <svg class="welcome-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100 190 
-                         C80 160 50 130 40 100 
-                         C30 70 35 40 55 25 
-                         C65 17 80 20 90 35 
-                         C85 25 95 10 105 10 
-                         C115 10 125 25 120 35 
-                         C130 20 145 17 155 25 
-                         C175 40 180 70 170 100 
-                         C160 130 130 160 100 190Z" 
-                      fill="#FFFFFF"/>
-                <path d="M100 180 
-                         C85 155 65 130 55 105 
-                         C48 85 52 65 65 52 
-                         C72 45 82 48 90 58 
-                         C86 50 94 38 100 38 
-                         C106 38 114 50 110 58 
-                         C118 48 128 45 135 52 
-                         C148 65 152 85 145 105 
-                         C135 130 115 155 100 180Z" 
-                      fill="#0A0A0F"/>
-                <path d="M100 170 
-                         C88 150 72 130 64 110 
-                         C58 94 60 78 70 68 
-                         C76 62 84 64 90 72 
-                         C88 66 94 56 100 56 
-                         C106 56 112 66 110 72 
-                         C116 64 124 62 130 68 
-                         C140 78 142 94 136 110 
-                         C128 130 112 150 100 170Z" 
-                      fill="#FF3366"/>
-                <path d="M100 155 
-                         C92 142 82 128 78 116 
-                         C74 104 76 92 84 86 
-                         C88 82 94 84 96 88 
-                         C94 84 98 78 100 78 
-                         C102 78 106 84 104 88 
-                         C106 84 112 82 116 86 
-                         C124 92 126 104 122 116 
-                         C118 128 108 142 100 155Z" 
-                      fill="#FFFFFF"/>
-            </svg>
-
-            <h1>Destined</h1>
-            
-            <p class="tagline">
-                <span class="heart">❤️</span> Where fate meets connection<br>
-                Swipe. Match. Spark. Find your soulmate.
-            </p>
-
-            <!-- ===== WELCOME RULES ===== -->
-            <div class="welcome-rules">
-                <div class="rule-title">📋 Please follow these house rules</div>
-                
-                <div class="welcome-rule">
-                    <span class="check">✅</span>
-                    <span class="rule-text"><strong>Be yourself.</strong> Make sure your photos, age and bio are true to who you are.</span>
-                </div>
-
-                <div class="welcome-rule">
-                    <span class="check">✅</span>
-                    <span class="rule-text"><strong>Stay safe.</strong> Don't be too quick to give out personal information. Date safely.</span>
-                </div>
-
-                <div class="welcome-rule">
-                    <span class="check">✅</span>
-                    <span class="rule-text"><strong>Play it cool.</strong> Respect others and treat them as you would like to be treated.</span>
-                </div>
-
-                <div class="welcome-rule">
-                    <span class="check">✅</span>
-                    <span class="rule-text"><strong>Be proactive.</strong> Always report bad behaviour.</span>
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="showPage('rules')">
-                    <span class="btn-text">Get Started 🌺</span>
-                </button>
-                <button class="btn btn-secondary" onclick="showToast('🔐 Secure & Private — Your data is safe with us.')">
-                    <span class="btn-text">🔒 Privacy First</span>
-                </button>
-            </div>
-
-            <p class="terms-text">
-                By continuing, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>
-            </p>
+<!-- ========== PAGE 2: RULES ========== -->
+<div id="page-rules" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-welcome')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Safety Rules</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center">
+        <div style="width:100%;max-width:340px;text-align:left">
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔞</span><div><h4 style="font-size:14px;color:#fff">18+ Only</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">You must be 18 or older to use Destined</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🤖</span><div><h4 style="font-size:14px;color:#fff">AI Scam Shield</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">AI scans messages for scams. 3 strikes → permanent ban</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">📸</span><div><h4 style="font-size:14px;color:#fff">Face Verification</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Selfie + pose verification ensures you're real</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔐</span><div><h4 style="font-size:14px;color:#fff">2FA &amp; KYC</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Two-factor authentication and 3-tier KYC</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🚫</span><div><h4 style="font-size:14px;color:#fff">Report &amp; Block</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Report suspicious users. Moderators act within 24h</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🧶</span><div><h4 style="font-size:14px;color:#fff">Red Thread</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Fate-based high-compatibility matching</p></div></div>
         </div>
-
-        <!-- ===== RULES PAGE ===== -->
-        <div id="rules" class="page">
-            <div class="rules-header">
-                <svg class="mini-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M100 190 
-                             C80 160 50 130 40 100 
-                             C30 70 35 40 55 25 
-                             C65 17 80 20 90 35 
-                             C85 25 95 10 105 10 
-                             C115 10 125 25 120 35 
-                             C130 20 145 17 155 25 
-                             C175 40 180 70 170 100 
-                             C160 130 130 160 100 190Z" 
-                          fill="#FFFFFF"/>
-                    <path d="M100 180 
-                             C85 155 65 130 55 105 
-                             C48 85 52 65 65 52 
-                             C72 45 82 48 90 58 
-                             C86 50 94 38 100 38 
-                             C106 38 114 50 110 58 
-                             C118 48 128 45 135 52 
-                             C148 65 152 85 145 105 
-                             C135 130 115 155 100 180Z" 
-                          fill="#0A0A0F"/>
-                    <path d="M100 170 
-                             C88 150 72 130 64 110 
-                             C58 94 60 78 70 68 
-                             C76 62 84 64 90 72 
-                             C88 66 94 56 100 56 
-                             C106 56 112 66 110 72 
-                             C116 64 124 62 130 68 
-                             C140 78 142 94 136 110 
-                             C128 130 112 150 100 170Z" 
-                          fill="#FF3366"/>
-                    <path d="M100 155 
-                             C92 142 82 128 78 116 
-                             C74 104 76 92 84 86 
-                             C88 82 94 84 96 88 
-                             C94 84 98 78 100 78 
-                             C102 78 106 84 104 88 
-                             C106 84 112 82 116 86 
-                             C124 92 126 104 122 116 
-                             C118 128 108 142 100 155Z" 
-                          fill="#FFFFFF"/>
-                </svg>
-                <h2>Destined</h2>
-                <p>Please follow these safety rules</p>
-            </div>
-
-            <div class="rules-list">
-                <div class="rule-item">
-                    <span class="icon">🔞</span>
-                    <div class="content">
-                        <h4>18+ Only</h4>
-                        <p>You must be 18 or older to use Destined</p>
-                    </div>
-                </div>
-
-                <div class="rule-item">
-                    <span class="icon">🤖</span>
-                    <div class="content">
-                        <h4>AI Scam Shield</h4>
-                        <p>AI scans messages for scams. 3 strikes → permanent ban</p>
-                    </div>
-                </div>
-
-                <div class="rule-item">
-                    <span class="icon">📸</span>
-                    <div class="content">
-                        <h4>Face Verification</h4>
-                        <p>Selfie + pose verification ensures you're real</p>
-                    </div>
-                </div>
-
-                <div class="rule-item">
-                    <span class="icon">🔐</span>
-                    <div class="content">
-                        <h4>2FA &amp; KYC</h4>
-                        <p>Two-factor authentication and 3-tier KYC for withdrawals</p>
-                    </div>
-                </div>
-
-                <div class="rule-item">
-                    <span class="icon">🚫</span>
-                    <div class="content">
-                        <h4>Report &amp; Block</h4>
-                        <p>Report suspicious users. Moderators act within 24h</p>
-                    </div>
-                </div>
-
-                <div class="rule-item">
-                    <span class="icon">🧶</span>
-                    <div class="content">
-                        <h4>Red Thread</h4>
-                        <p>Fate-based high-compatibility matching. Find your soulmate</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- I AGREE BUTTON -->
-            <button class="btn btn-agree" onclick="showPage('login')" style="max-width:340px;margin:0 auto;">
-                <span class="btn-text">✅ I AGREE</span>
-            </button>
-
-            <p class="rules-agree-text" style="margin-top:12px;">
-                By continuing you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>
-            </p>
-
-            <button class="btn btn-secondary" onclick="showPage('welcome')" style="max-width:340px;margin:16px auto 0;">
-                <span class="btn-text">← Back</span>
-            </button>
+        <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;margin-top:16px">
+            <button class="btn btn-primary" onclick="showPage('page-signup')"><span class="btn-text">✅ I Understand &amp; Agree</span></button>
+            <button class="btn btn-secondary" onclick="showPage('page-welcome')"><span class="btn-text">← Back</span></button>
         </div>
-
-        <!-- ===== LOGIN PAGE ===== -->
-        <div id="login" class="page">
-            <div class="login-header">
-                <svg class="mini-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M100 190 
-                             C80 160 50 130 40 100 
-                             C30 70 35 40 55 25 
-                             C65 17 80 20 90 35 
-                             C85 25 95 10 105 10 
-                             C115 10 125 25 120 35 
-                             C130 20 145 17 155 25 
-                             C175 40 180 70 170 100 
-                             C160 130 130 160 100 190Z" 
-                          fill="#FFFFFF"/>
-                    <path d="M100 180 
-                             C85 155 65 130 55 105 
-                             C48 85 52 65 65 52 
-                             C72 45 82 48 90 58 
-                             C86 50 94 38 100 38 
-                             C106 38 114 50 110 58 
-                             C118 48 128 45 135 52 
-                             C148 65 152 85 145 105 
-                             C135 130 115 155 100 180Z" 
-                          fill="#0A0A0F"/>
-                    <path d="M100 170 
-                             C88 150 72 130 64 110 
-                             C58 94 60 78 70 68 
-                             C76 62 84 64 90 72 
-                             C88 66 94 56 100 56 
-                             C106 56 112 66 110 72 
-                             C116 64 124 62 130 68 
-                             C140 78 142 94 136 110 
-                             C128 130 112 150 100 170Z" 
-                          fill="#FF3366"/>
-                    <path d="M100 155 
-                             C92 142 82 128 78 116 
-                             C74 104 76 92 84 86 
-                             C88 82 94 84 96 88 
-                             C94 84 98 78 100 78 
-                             C102 78 106 84 104 88 
-                             C106 84 112 82 116 86 
-                             C124 92 126 104 122 116 
-                             C118 128 108 142 100 155Z" 
-                          fill="#FFFFFF"/>
-                </svg>
-                <h2>Destined</h2>
-                <p>Sign in to continue your journey</p>
-            </div>
-
-            <form id="loginForm" onsubmit="handleLogin(event)" style="width:100%;max-width:340px;margin:0 auto;">
-                <div class="form-group">
-                    <label>📱 Phone Number or Email</label>
-                    <input type="text" id="loginEmail" placeholder="Enter phone or email" required>
-                </div>
-
-                <div class="form-group">
-                    <label>🔑 Password</label>
-                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
-                </div>
-
-                <div class="form-options">
-                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;">
-                        <input type="checkbox" checked style="accent-color:#FF3366;"> Remember me
-                    </label>
-                    <a href="#" onclick="showToast('📧 Password reset link sent to your email.')">Forgot password?</a>
-                </div>
-
-                <button type="submit" class="btn btn-primary" id="loginBtn">
-                    <span class="spinner"></span>
-                    <span class="btn-text">🚀 Sign In</span>
-                </button>
-            </form>
-
-            <div class="login-divider">or continue with</div>
-
-            <!-- ===== SOCIAL LOGIN ===== -->
-            <div class="social-login">
-                <button class="btn-social-oval" onclick="telegramLogin()">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0Z" fill="#0088cc"/>
-                        <path d="M5.491 11.74L11.109 14.659L17.478 8.059C17.682 7.833 17.978 7.824 18.168 8.036C18.358 8.248 18.318 8.565 18.086 8.741L11.491 15.025L11.02 15.436L10.934 15.372L5.491 17.84L6.782 12.367L5.491 11.74Z" fill="white"/>
-                    </svg>
-                    <span class="btn-label">Login with Telegram</span>
-                </button>
-
-                <button class="btn-social-oval" onclick="socialLogin('google')">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.68 15.63 16.97 16.82 15.89 17.62V20.45H19.38C21.39 18.62 22.56 15.8 22.56 12.25Z" fill="#4285F4"/>
-                        <path d="M12 23C15.01 23 17.56 21.98 19.38 20.45L15.89 17.62C14.94 18.25 13.64 18.62 12 18.62C9.1 18.62 6.65 16.7 5.75 14.1H2.14V17.03C3.94 20.56 7.64 23 12 23Z" fill="#34A853"/>
-                        <path d="M5.75 14.1C5.52 13.27 5.39 12.39 5.39 11.5C5.39 10.61 5.52 9.73 5.75 8.9V5.97H2.14C1.42 7.37 1 8.94 1 10.5C1 12.06 1.42 13.63 2.14 15.03L5.75 14.1Z" fill="#FBBC05"/>
-                        <path d="M12 4.38C13.82 4.38 15.47 5.02 16.74 6.26L19.48 3.52C17.48 1.68 14.87 0.65 12 0.65C7.64 0.65 3.94 3.08 2.14 6.6L5.75 9.53C6.65 6.93 9.1 5.02 12 4.38Z" fill="#EA4335"/>
-                    </svg>
-                    <span class="btn-label">Login with Google</span>
-                </button>
-
-                <button class="btn-social-oval" onclick="socialLogin('apple')">
-                    <svg viewBox="0 0 24 24" fill="#1A0A0F">
-                        <path d="M18.71 19.5C17.88 20.74 16.96 21.97 15.67 22.01C14.38 22.04 14.03 21.21 12.58 21.21C11.13 21.21 10.72 21.99 9.5 22.02C8.28 22.05 7.23 20.67 6.4 19.43C4.72 16.56 3.56 11.29 5.3 7.92C6.17 6.26 7.85 5.17 9.68 5.14C10.95 5.11 12.15 6.01 12.96 6.01C13.77 6.01 15.25 4.93 16.76 5.07C17.59 5.13 19.07 5.45 20.01 6.82C19.86 6.92 18.16 7.94 18.18 9.98C18.2 12.35 20.33 13.27 20.39 13.3C20.34 13.39 19.83 15.02 18.71 16.5C17.74 17.85 16.75 19.23 18.71 19.5Z"/>
-                        <path d="M15.94 2.38C16.86 1.29 17.49 -0.07 17.32 1.43C17.15 2.93 16.35 4.03 15.44 5.08C14.54 6.14 13.51 6.97 12.26 6.83C12.14 5.35 12.93 4.01 15.94 2.38Z"/>
-                    </svg>
-                    <span class="btn-label">Login with Apple</span>
-                </button>
-            </div>
-
-            <p class="signup-text">
-                Don't have an account? <a href="#" onclick="showToast('📝 Sign up coming soon!')">Sign Up</a>
-            </p>
-
-            <div class="back-rules">
-                <button class="btn btn-secondary" onclick="showPage('rules')">
-                    <span class="btn-text">← Back to Rules</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- ===== VERIFICATION PAGE ===== -->
-        <div id="verification" class="page">
-            <div class="verification-icon">📸</div>
-            <h2>Verify Your Identity</h2>
-            <p>Complete these steps to verify your account and unlock all features</p>
-
-            <div class="verification-steps">
-                <div class="step">
-                    <span class="num">1</span>
-                    <span class="step-text"><strong>Take a Selfie</strong> — Smile and look at the camera</span>
-                </div>
-                <div class="step">
-                    <span class="num">2</span>
-                    <span class="step-text"><strong>Pose Verification</strong> — Follow the pose instructions</span>
-                </div>
-                <div class="step">
-                    <span class="num">3</span>
-                    <span class="step-text"><strong>Face Match</strong> — We'll verify your identity</span>
-                </div>
-                <div class="step">
-                    <span class="num">4</span>
-                    <span class="step-text"><strong>Account Ready</strong> — All features unlocked!</span>
-                </div>
-            </div>
-
-            <button class="btn btn-verify" onclick="startVerification()" style="max-width:340px;margin:0 auto;">
-                <span class="btn-text">📸 Start Verification</span>
-            </button>
-
-            <button class="btn btn-secondary" onclick="showPage('login')" style="max-width:340px;margin:12px auto 0;">
-                <span class="btn-text">← Back to Login</span>
-            </button>
-        </div>
-
     </div>
+</div>
 
-    <!-- ===== JAVASCRIPT ===== -->
-    <script>
-        // ===== TELEGRAM INIT =====
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.enableClosingConfirmation();
+<!-- ========== PAGE 3: SIGN UP / SIGN IN ========== -->
+<div id="page-signup" class="page bg-gradient">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+        <div style="width:100%;max-width:340px">
+            <svg width="60" height="60" viewBox="0 0 200 200" style="margin:0 auto 12px;display:block"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
+            <h2>Welcome</h2>
+            <p class="subtitle">Create your account or sign in</p>
+            <div style="display:flex;gap:12px;margin:20px 0">
+                <button class="btn btn-primary" style="flex:1;padding:12px;font-size:14px" onclick="showPage('page-register')">Create Account</button>
+                <button class="btn btn-secondary" style="flex:1;padding:12px;font-size:14px" onclick="showPage('page-login')">Sign In</button>
+            </div>
+            <p style="color:rgba(255,255,255,0.3);font-size:13px">Already have an account? <a href="#" onclick="showPage('page-login')" style="color:#FF6699;text-decoration:none">Sign In</a></p>
+            <p style="color:rgba(255,255,255,0.3);font-size:13px;margin-top:4px">Don't have an account? <a href="#" onclick="showPage('page-register')" style="color:#FF6699;text-decoration:none">Sign Up</a></p>
+            <button class="btn btn-secondary" style="margin-top:16px" onclick="showPage('page-rules')"><span class="btn-text">← Back</span></button>
+        </div>
+    </div>
+</div>
 
-        // ===== PAGE NAVIGATION =====
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const page = document.getElementById(pageId);
-            if (page) {
-                page.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                if (tg.HapticFeedback) {
-                    tg.HapticFeedback.impactOccurred('light');
-                }
-            }
-        }
+<!-- ========== PAGE 4: LOGIN ========== -->
+<div id="page-login" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-signup')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔐 Sign In</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:20px">Enter your Dest ID to continue</p>
+        <div class="form-group"><label>Dest ID</label><input type="text" id="loginDestId" placeholder="DEST12345100"></div>
+        <div style="margin:8px 0 16px;text-align:center"><p style="color:rgba(255,255,255,0.3);font-size:13px">Forgot your Dest ID? <a href="#" onclick="showPage('page-forgot')" style="color:#FF6699;text-decoration:none">Click here</a></p></div>
+        <button class="btn btn-primary" onclick="handleLogin()"><span class="btn-text">🔓 Sign In</span></button>
+        <p style="color:rgba(255,255,255,0.3);font-size:13px;text-align:center;margin-top:16px">Don't have an account? <a href="#" onclick="showPage('page-register')" style="color:#FF6699;text-decoration:none">Sign Up</a></p>
+        <button class="btn btn-secondary" style="margin-top:12px" onclick="showPage('page-signup')"><span class="btn-text">← Back</span></button>
+    </div>
+</div>
 
-        // ===== TOAST SYSTEM =====
-        let toastTimeout;
+<!-- ========== PAGE 5: FORGOT DEST ID ========== -->
+<div id="page-forgot" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-login')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Find Your Dest ID</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:20px">To recover your Dest ID, we need to verify you.</p>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px"><p style="color:rgba(255,255,255,0.6);font-size:13px">📸 Face Verification required</p><button class="btn btn-primary" style="margin-top:8px;padding:12px;font-size:14px" onclick="showToast('📸 Face verification started!')"><span class="btn-text">Begin Face Verification</span></button></div>
+        <div class="form-group"><label>📱 Registered Telegram Number</label><input type="text" placeholder="+234 801 234 5678"></div>
+        <button class="btn btn-primary" onclick="showToast('✅ Verification successful! Your Dest ID has been sent to your Telegram.')"><span class="btn-text">Continue</span></button>
+        <button class="btn btn-secondary" style="margin-top:12px" onclick="showPage('page-login')"><span class="btn-text">← Back</span></button>
+    </div>
+</div>
 
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast';
-            if (type === 'error') toast.classList.add('error');
-            if (type === 'success') toast.classList.add('success');
-            toast.classList.add('show');
+<!-- ========== PAGE 6: REGISTER ========== -->
+<div id="page-register" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-signup')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">✏️ Create Profile</h2></div>
+    <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%;padding-bottom:20px">
+        <div class="form-group"><label>👤 Full Name</label><input type="text" placeholder="Sarah Johnson" id="regName"></div>
+        <div class="form-group"><label>🎂 Age (18+)</label><input type="number" placeholder="28" id="regAge"></div>
+        <div class="form-group"><label>📍 Country / City</label><input type="text" placeholder="London, UK" id="regLocation"></div>
+        <div class="form-group"><label>👤 Gender</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectGender(this)">Male</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;cursor:pointer;border-color:#FF3366;background:rgba(255,51,102,0.1)" onclick="selectGender(this)">Female</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectGender(this)">Other</button></div></div>
+        <div class="form-group"><label>📝 Bio (20-1000 characters)</label><input type="text" placeholder="Love is the greatest adventure..." id="regBio"></div>
+        <div class="form-group"><label>📸 Photos (3 max)</label><div style="display:flex;gap:8px"><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+ Add Photo</button><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+ Add Photo</button><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+ Add Photo</button></div></div>
+        <div class="form-group" style="margin-bottom:8px"><label>🏷️ Interests</label><div style="display:flex;flex-wrap:wrap;gap:8px"><button style="padding:6px 14px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Travel</button><button style="padding:6px 14px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Music</button><button style="padding:6px 14px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Food</button><button style="padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Photography</button><button style="padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Gaming</button></div></div>
+        <button class="btn btn-primary" onclick="handleRegister()"><span class="btn-text">Continue →</span></button>
+        <button class="btn btn-secondary" style="margin-top:8px" onclick="showPage('page-signup')"><span class="btn-text">← Back</span></button>
+    </div>
+</div>
 
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3500);
-        }
+<!-- ========== PAGE 7: PREFERENCES ========== -->
+<div id="page-preferences" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-register')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Your Preferences</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
+        <div class="form-group"><label>👥 Show Me</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">Men</button><button style="flex:1;padding:10px;background:rgba(255,51,102,0.1);border:1px solid #FF3366;border-radius:12px;color:#fff;cursor:pointer" onclick="selectPref(this)">Women</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">Everyone</button></div></div>
+        <div class="form-group"><label>🎂 Age Range</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">18-25</button><button style="flex:1;padding:10px;background:rgba(255,51,102,0.1);border:1px solid #FF3366;border-radius:12px;color:#fff;cursor:pointer" onclick="selectPref(this)">26-35</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">36-50</button></div></div>
+        <div class="form-group"><label>🌍 Location</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,51,102,0.1);border:1px solid #FF3366;border-radius:12px;color:#fff;cursor:pointer" onclick="selectPref(this)">Local</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">Global</button></div></div>
+        <div class="form-group"><label>💍 Looking For</label><div style="display:flex;flex-wrap:wrap;gap:8px"><button style="padding:8px 16px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Friendship</button><button style="padding:8px 16px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Long-term</button><button style="padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Short-term</button><button style="padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Marriage</button><button style="padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Casual</button></div></div>
+        <button class="btn btn-primary" onclick="showPage('page-verify')"><span class="btn-text">Continue →</span></button>
+        <button class="btn btn-secondary" style="margin-top:8px" onclick="showPage('page-register')"><span class="btn-text">← Back</span></button>
+    </div>
+</div>
 
-        // ===== TELEGRAM LOGIN =====
-        function telegramLogin() {
-            showToast('📱 Connecting to Telegram...', 'info');
-            
-            const user = tg.initDataUnsafe?.user;
-            
-            if (user) {
-                setTimeout(() => {
-                    showToast('✅ Welcome ' + user.first_name + '! 🎉', 'success');
-                    showPage('verification');
-                }, 1000);
-            } else {
-                tg.sendData(JSON.stringify({ action: 'telegram_login', type: 'verification' }));
-                setTimeout(() => {
-                    showToast('✅ Login successful! 🎉', 'success');
-                    showPage('verification');
-                }, 1500);
-            }
-        }
+<!-- ========== PAGE 8: VERIFICATION ========== -->
+<div id="page-verify" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-preferences')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">📸 Verify Identity</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;max-width:340px;margin:0 auto;width:100%">
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-bottom:20px">Almost there! Let's verify you're real.</p>
+        <div style="background:rgba(255,255,255,0.03);border-radius:16px;padding:24px;border:1px solid rgba(255,255,255,0.04);width:100%;margin-bottom:16px">
+            <div style="font-size:64px;margin-bottom:8px">📸</div>
+            <p style="color:#fff;font-weight:600;font-size:16px">Face Verification</p>
+            <p style="color:rgba(255,255,255,0.4);font-size:13px">Take a selfie and copy a pose</p>
+            <button class="btn btn-primary" style="margin-top:12px;padding:12px;font-size:14px" onclick="startVerification()"><span class="btn-text">Begin Verification</span></button>
+        </div>
+        <button class="btn btn-secondary" onclick="showPage('page-preferences')"><span class="btn-text">← Back</span></button>
+    </div>
+</div>
 
-        // ===== SOCIAL LOGIN =====
-        function socialLogin(provider) {
-            showToast(`🔐 Connecting to ${provider}...`, 'info');
-            setTimeout(() => {
-                showToast(`✅ ${provider} login successful! 🎉`, 'success');
-                showPage('verification');
-            }, 1200);
-        }
+<!-- ========== PAGE 9: WELCOME BACK ========== -->
+<div id="page-welcomeback" class="page bg-gradient">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
+        <div style="font-size:64px;margin-bottom:8px">👋</div>
+        <h1 style="font-size:28px">Welcome Back, Sarah!</h1>
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-top:4px">While you were gone...</p>
+        <div style="width:100%;max-width:340px;margin:20px auto;text-align:left">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:18px">🔥</span><span style="color:rgba(255,255,255,0.7);font-size:13px">12 new people liked you!</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:18px">💬</span><span style="color:rgba(255,255,255,0.7);font-size:13px">5 new messages waiting!</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:18px">🎁</span><span style="color:rgba(255,255,255,0.7);font-size:13px">You received 2 gifts!</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:18px">🏆</span><span style="color:rgba(255,255,255,0.7);font-size:13px">Global Challenge starts tomorrow!</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0"><span style="font-size:18px">🐾</span><span style="color:rgba(255,255,255,0.7);font-size:13px">Your pet is waiting for you!</span></div>
+        </div>
+        <button class="btn btn-primary" style="max-width:340px" onclick="showPage('page-main')"><span class="btn-text">🚀 Continue</span></button>
+    </div>
+</div>
 
-        // ===== LOGIN HANDLER =====
-        function handleLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('loginBtn');
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
+<!-- ========== PAGE 10: MAIN SCREEN ========== -->
+<div id="page-main" class="page" style="padding:0;background:#0A0A0F">
+    <!-- Top Bar -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#0A0A0F;border-bottom:1px solid rgba(255,255,255,0.04)">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🔥</span><span style="font-weight:700;font-size:18px;color:#FF3366">DESTINED</span></div>
+        <div style="display:flex;gap:12px"><span style="font-size:20px;cursor:pointer" onclick="showToast('🔔 Notifications')">🔔</span><span style="font-size:20px;cursor:pointer" onclick="showPage('page-search')">🔍</span></div>
+    </div>
+    <!-- Content Area -->
+    <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh">
+        <div style="background:linear-gradient(135deg,#14141E,#1A1A2E);border-radius:20px;padding:24px;width:100%;max-width:380px;text-align:center;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 32px rgba(0,0,0,0.3)">
+            <div style="width:100%;height:200px;background:linear-gradient(135deg,#2A0A15,#4A0A20);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative">
+                <span style="font-size:64px">👤</span>
+                <div style="position:absolute;bottom:8px;right:8px;display:flex;gap:4px"><span style="background:#FF3366;color:#fff;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700">ELITE</span><span style="background:#4488FF;color:#fff;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700">✓</span></div>
+            </div>
+            <h3 style="color:#fff;font-size:20px">Sarah J. <span style="color:#4488FF;font-size:14px">✅</span></h3>
+            <p style="color:rgba(255,255,255,0.4);font-size:14px">28 📍 London</p>
+            <div style="display:flex;gap:8px;justify-content:center;margin:8px 0"><span style="background:rgba(255,255,255,0.04);padding:4px 12px;border-radius:12px;font-size:12px;color:rgba(255,255,255,0.6)">💍 Single</span><span style="background:rgba(255,255,255,0.04);padding:4px 12px;border-radius:12px;font-size:12px;color:rgba(255,255,255,0.6)">💍 Long-term</span></div>
+            <p style="color:rgba(255,255,255,0.5);font-size:14px;font-style:italic">"Love is the greatest adventure." ❤️‍🔥</p>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:8px"><span style="font-size:12px">🐉 +12 Badges</span></div>
+        </div>
+        <!-- Swipe Buttons -->
+        <div style="display:flex;gap:16px;margin-top:20px;align-items:center">
+            <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#FFB800;font-size:20px;cursor:pointer" onclick="showToast('↩️ Rewind (3 left today)')">↩️</button>
+            <button style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,68,68,0.3);background:rgba(255,68,68,0.1);color:#FF4444;font-size:24px;cursor:pointer" onclick="showToast('❌ Passed!')">✕</button>
+            <button style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(68,136,255,0.3);background:rgba(68,136,255,0.1);color:#4488FF;font-size:20px;cursor:pointer" onclick="showToast('⭐ Super Liked! (1 left today)')">⭐</button>
+            <button style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(68,255,136,0.3);background:rgba(68,255,136,0.1);color:#44FF88;font-size:24px;cursor:pointer" onclick="showToast('❤️ Liked!')">❤️</button>
+            <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,51,102,0.3);background:rgba(255,51,102,0.1);color:#FF3366;font-size:16px;cursor:pointer" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
+        </div>
+    </div>
+    <!-- Bottom Tabs -->
+    <div style="display:flex;justify-content:space-around;padding:10px 0 14px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F">
+        <button style="background:transparent;border:none;color:#FF3366;font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showPage('page-main')"><span>❤️‍🔥</span><span style="font-size:9px;color:#FF3366">Home</span></button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('💞 Likes coming soon!')"><span>💞</span><span style="font-size:9px;color:rgba(255,255,255,0.3)">Likes</span></button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('✨ Spark coming soon!')"><span>✨</span><span style="font-size:9px;color:rgba(255,255,255,0.3)">Spark</span></button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('💬 Chat coming soon!')"><span>💬</span><span style="font-size:9px;color:rgba(255,255,255,0.3)">Chat</span></button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showPage('page-profile')"><span>👤</span><span style="font-size:9px;color:rgba(255,255,255,0.3)">Profile</span></button>
+    </div>
+</div>
 
-            if (!email || !password) {
-                showToast('⚠️ Please fill in all fields.', 'error');
-                return;
-            }
+<!-- ========== PAGE 11: PROFILE ========== -->
+<div id="page-profile" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👤 My Profile</h2></div>
+    <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%">
+        <div style="text-align:center;margin-bottom:16px">
+            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:36px;border:3px solid #FF3366">👤</div>
+            <h3 style="color:#fff;margin-top:8px">Sarah Johnson</h3>
+            <p style="color:rgba(255,255,255,0.4);font-size:13px">🔱 Elite  |  ✅ Verified  |  📍 London</p>
+            <p style="color:rgba(255,255,255,0.4);font-size:13px">💍 Single  |  🎂 28</p>
+            <p style="color:rgba(255,255,255,0.5);font-size:13px;font-style:italic;margin-top:4px">"Love is the greatest adventure." ❤️‍🔥</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px">🔑 DEST ID: <span style="color:#fff">DEST12345100</span></p>
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-top:4px">💳 ACCOUNT: <span style="color:#fff">0123-4567-8910-1112</span></p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🏅 BADGE SHOWCASE</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:28px">📸👑</span><span style="font-size:28px">🌍🏆</span><span style="font-size:28px">🎁👑</span><span style="font-size:28px">🐉🔥</span></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🐾 MY PET</p>
+            <div style="display:flex;align-items:center;gap:12px"><span style="font-size:32px">🐉</span><div><p style="color:#fff;font-weight:600">Draco</p><p style="color:rgba(255,255,255,0.4);font-size:12px">Legendary Dragon</p></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-secondary" onclick="showToast('✏️ Edit Profile coming soon!')"><span class="btn-text">✏️ Edit Profile</span></button>
+            <button class="btn btn-secondary" onclick="showToast('⚙️ Settings coming soon!')"><span class="btn-text">⚙️ Settings</span></button>
+            <button class="btn btn-secondary" onclick="showPage('page-admin')"><span class="btn-text">👑 Admin Panel</span></button>
+            <button class="btn btn-secondary" onclick="showToast('🚪 Logging out...')"><span class="btn-text">🚪 Logout</span></button>
+        </div>
+    </div>
+</div>
 
-            btn.classList.add('loading');
-            btn.disabled = true;
+<!-- ========== PAGE 12: ADMIN PANEL ========== -->
+<div id="page-admin" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-profile')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👑 Admin Panel</h2></div>
+    <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%">
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">📊 DASHBOARD</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;text-align:center"><p style="color:#fff;font-size:20px;font-weight:700">1,247</p><p style="color:rgba(255,255,255,0.3);font-size:10px">Users</p></div>
+                <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;text-align:center"><p style="color:#44FF88;font-size:20px;font-weight:700">456</p><p style="color:rgba(255,255,255,0.3);font-size:10px">Online</p></div>
+                <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;text-align:center"><p style="color:#FFD700;font-size:20px;font-weight:700">$45,234</p><p style="color:rgba(255,255,255,0.3);font-size:10px">Revenue</p></div>
+                <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;text-align:center"><p style="color:#4488FF;font-size:20px;font-weight:700">1.2M</p><p style="color:rgba(255,255,255,0.3);font-size:10px">Diamonds</p></div>
+            </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">⚡ QUICK ACTIONS</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('👥 User management')">👥 Users</button>
+                <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('🛡️ Security')">🛡️ Security</button>
+                <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('🏆 Competitions')">🏆 Comps</button>
+                <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('🎛️ Feature Toggles')">🎛️ Toggles</button>
+            </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px;border-color:rgba(255,51,102,0.2)">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🛡️ DESTINED CORE (Secret)</p>
+            <button class="btn btn-primary" style="padding:12px;font-size:14px" onclick="showPage('page-core')"><span class="btn-text">🔐 Access Core</span></button>
+        </div>
+        <button class="btn btn-secondary" onclick="showPage('page-profile')"><span class="btn-text">← Back</span></button>
+    </div>
+</div>
 
-            setTimeout(() => {
-                btn.classList.remove('loading');
-                btn.disabled = false;
+<!-- ========== PAGE 13: DESTINED CORE ========== -->
+<div id="page-core" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-admin')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Destined Core</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
+        <div style="text-align:center;margin-bottom:20px"><span style="font-size:48px">🔒</span><p style="color:rgba(255,255,255,0.4);font-size:13px;margin-top:4px">⚠️ CEO ONLY — Full System Control</p></div>
+        <div class="form-group"><label>🔑 Password 1</label><input type="password" placeholder="••••••••"></div>
+        <div class="form-group"><label>🔑 Password 2</label><input type="password" placeholder="••••••••"></div>
+        <button class="btn btn-primary" onclick="showToast('✅ Core Unlocked! Full system control granted.')"><span class="btn-text">🔓 Unlock Core</span></button>
+        <div style="margin-top:16px;text-align:center"><p style="color:rgba(255,255,255,0.2);font-size:12px">💡 Hint: Both passwords are different</p></div>
+        <button class="btn btn-secondary" style="margin-top:12px" onclick="showPage('page-admin')"><span class="btn-text">← Back</span></button>
+    </div>
+</div>
 
-                if (email.includes('@') && password.length >= 4) {
-                    showToast('✅ Welcome back, ' + email.split('@')[0] + '! 🎉', 'success');
-                    showPage('verification');
-                } else {
-                    showToast('❌ Invalid credentials. Try again.', 'error');
-                }
-            }, 1500);
-        }
+<!-- ========== PAGE 14: SEARCH ========== -->
+<div id="page-search" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Search</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:16px">Find users by Dest ID</p>
+        <div style="display:flex;gap:8px;margin-bottom:16px"><input type="text" placeholder="DEST12345100" style="flex:1;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none"><button style="padding:14px 20px;background:#FF3366;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer" onclick="showToast('🔍 Searching...')">Search</button></div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);text-align:center">
+            <p style="color:rgba(255,255,255,0.3);font-size:13px">📋 Your Dest ID</p>
+            <p style="color:#fff;font-weight:600;font-size:18px;margin:4px 0">DEST12345100</p>
+            <button style="padding:6px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer" onclick="showToast('📋 Copied!')">📋 Copy</button>
+        </div>
+    </div>
+</div>
 
-        // ===== VERIFICATION =====
-        function startVerification() {
-            showToast('📸 Starting verification process...', 'info');
-            setTimeout(() => {
-                showToast('✅ Verification complete! Welcome to Destined! 🎉', 'success');
-                tg.close();
-            }, 2500);
-        }
+</div><!-- end app -->
 
-        // ===== KEYBOARD SHORTCUTS =====
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const activePage = document.querySelector('.page.active');
-                if (activePage && activePage.id === 'login') {
-                    document.getElementById('loginForm').dispatchEvent(new Event('submit'));
-                }
-            }
-            if (e.key === 'Escape') {
-                const activePage = document.querySelector('.page.active');
-                if (activePage && activePage.id !== 'welcome') {
-                    if (activePage && activePage.id === 'rules') {
-                        showPage('welcome');
-                    } else if (activePage && activePage.id === 'login') {
-                        showPage('rules');
-                    } else if (activePage && activePage.id === 'verification') {
-                        showPage('login');
-                    }
-                }
-            }
+<script>
+let tg = window.Telegram.WebApp;
+tg.expand();
+tg.enableClosingConfirmation();
+
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById(id);
+    if (page) {
+        page.classList.add('active');
+        window.scrollTo(0, 0);
+        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+    }
+}
+
+let toastTimeout;
+function showToast(msg, type = 'info') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast';
+    if (type === 'error') t.classList.add('error');
+    if (type === 'success') t.classList.add('success');
+    t.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function handleLogin() {
+    const id = document.getElementById('loginDestId').value.trim();
+    if (!id) { showToast('⚠️ Please enter your Dest ID', 'error'); return; }
+    showToast('✅ Welcome back!', 'success');
+    setTimeout(() => showPage('page-welcomeback'), 500);
+}
+
+function handleRegister() {
+    const name = document.getElementById('regName').value.trim();
+    const age = document.getElementById('regAge').value.trim();
+    if (!name || !age) { showToast('⚠️ Please fill in all fields', 'error'); return; }
+    if (parseInt(age) < 18) { showToast('⚠️ You must be 18+', 'error'); return; }
+    showToast('✅ Account created!', 'success');
+    setTimeout(() => showPage('page-preferences'), 500);
+}
+
+function startVerification() {
+    showToast('📸 Camera opening...', 'info');
+    setTimeout(() => {
+        showToast('✅ Face Verified! You are REAL! 🎉', 'success');
+        setTimeout(() => showPage('page-welcomeback'), 500);
+    }, 2000);
+}
+
+function selectGender(btn) {
+    document.querySelectorAll('#page-register .form-group .gender-btn').forEach(b => {
+        b.style.background = 'rgba(255,255,255,0.04)';
+        b.style.borderColor = 'rgba(255,255,255,0.06)';
+        b.style.color = 'rgba(255,255,255,0.5)';
+    });
+    btn.style.background = 'rgba(255,51,102,0.1)';
+    btn.style.borderColor = '#FF3366';
+    btn.style.color = '#fff';
+}
+
+function selectPref(btn) {
+    const parent = btn.closest('.form-group');
+    if (parent) {
+        parent.querySelectorAll('button').forEach(b => {
+            b.style.background = 'rgba(255,255,255,0.04)';
+            b.style.borderColor = 'rgba(255,255,255,0.06)';
+            b.style.color = 'rgba(255,255,255,0.5)';
         });
+    }
+    btn.style.background = 'rgba(255,51,102,0.1)';
+    btn.style.borderColor = '#FF3366';
+    btn.style.color = '#fff';
+}
 
-        // ===== TG BOTTOM BUTTON =====
-        if (tg.MainButton) {
-            tg.MainButton.setText('🚀 Continue');
-            tg.MainButton.onClick(() => {
-                const activePage = document.querySelector('.page.active');
-                if (activePage && activePage.id === 'welcome') {
-                    showPage('rules');
-                } else if (activePage && activePage.id === 'rules') {
-                    showPage('login');
-                } else if (activePage && activePage.id === 'login') {
-                    document.getElementById('loginForm').dispatchEvent(new Event('submit'));
-                } else if (activePage && activePage.id === 'verification') {
-                    startVerification();
-                }
-            });
-        }
+setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+}, 2800);
 
-        // ===== REMOVE SPLASH AFTER ANIMATION =====
-        setTimeout(() => {
-            document.getElementById('splash').style.display = 'none';
-        }, 2800);
+document.addEventListener('gesturestart', e => e.preventDefault());
 
-        console.log('🔥 Destined v5.0 — Complete Flow');
-        console.log('🧶 Red Thread active — Find your fate.');
-        console.log('📱 Running in Telegram Mini App');
-        console.log('👑 Built by Daniel — 17-year-old founder');
-
-        document.addEventListener('gesturestart', function(e) {
-            e.preventDefault();
-        });
-    </script>
+console.log('🔥 Destined MVP — Complete');
+console.log('👑 Built for Daniel — 17-year-old CEO');
+</script>
 
 </body>
 </html>
