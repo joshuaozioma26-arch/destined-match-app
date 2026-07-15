@@ -34,6 +34,9 @@
         .login-link a { color: #ffd700; text-decoration: none; }
         .loading-star { font-size: 5rem; color: #fff; animation: dimStar 3s ease-in-out infinite; }
         @keyframes dimStar { 0%, 100% { opacity: 0.2; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
+        /* ADDED: Force show */
+        #welcomeScreen { display: block !important; }
+        #loadingScreen { display: none !important; }
     </style>
 </head>
 <body>
@@ -49,7 +52,7 @@
     </div>
 
     <!-- WELCOME -->
-    <div id="welcomeScreen" class="hidden">
+    <div id="welcomeScreen">
         <div class="container" style="text-align:center;">
             <div class="heart">❤️</div>
             <h1 class="title">destined</h1>
@@ -167,10 +170,8 @@ function showScreen(screenId) {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    showScreen('loadingScreen');
-    setTimeout(() => {
-        showScreen('welcomeScreen');
-    }, 2500);
+    // Show welcome screen immediately (skip loading)
+    showScreen('welcomeScreen');
 });
 
 // ============================================
