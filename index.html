@@ -8,16 +8,16 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .container { max-width: 420px; width: 100%; padding: 20px; }
+        .container { max-width: 420px; width: 100%; padding: 20px; text-align: center; }
         .hidden { display: none !important; }
-        .heart { font-size: 4rem; color: #ff6b6b; animation: pulse 1.5s ease-in-out infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } }
-        .title { font-size: 3rem; font-weight: 300; color: #fff; letter-spacing: 8px; margin-top: 10px; font-family: Georgia, serif; }
-        .sub { color: rgba(255,255,255,0.3); font-size: 0.9rem; letter-spacing: 4px; margin-top: 5px; }
-        .tagline { color: rgba(255,255,255,0.7); font-size: 1.1rem; margin: 20px 0; }
-        .btn-primary { padding: 16px 50px; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 700; border: none; border-radius: 50px; font-size: 1.1rem; cursor: pointer; }
-        .btn-primary:hover { transform: scale(1.05); }
-        .register-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,215,0,0.1); padding: 30px; border-radius: 20px; }
+        .burning-heart { font-size: 5rem; display: inline-block; animation: burn 0.8s ease-in-out infinite alternate; text-shadow: 0 0 50px rgba(255, 69, 0, 0.6), 0 0 100px rgba(255, 69, 0, 0.3); filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.5)); margin-bottom: 5px; }
+        @keyframes burn { 0% { transform: scale(1); text-shadow: 0 0 30px rgba(255, 69, 0, 0.4), 0 0 60px rgba(255, 0, 0, 0.2); } 100% { transform: scale(1.1); text-shadow: 0 0 60px rgba(255, 69, 0, 0.8), 0 0 120px rgba(255, 0, 0, 0.4); } }
+        .title { font-size: 3.5rem; font-weight: 300; color: #fff; letter-spacing: 10px; margin-top: 5px; font-family: Georgia, serif; }
+        .sub { color: rgba(255,255,255,0.3); font-size: 0.9rem; letter-spacing: 5px; margin-top: 5px; }
+        .tagline { color: rgba(255,255,255,0.7); font-size: 1.1rem; margin: 25px 0 35px 0; letter-spacing: 2px; }
+        .btn-primary { display: inline-block; padding: 16px 50px; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 700; border: none; border-radius: 50px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,215,0,0.3); }
+        .register-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,215,0,0.1); padding: 30px; border-radius: 20px; text-align: left; }
         .register-title { color: #ffd700; font-weight: 300; font-size: 1.8rem; text-align: center; font-family: Georgia, serif; }
         .register-sub { color: rgba(255,255,255,0.4); text-align: center; font-size: 0.9rem; margin-bottom: 20px; }
         .input-group { margin-bottom: 15px; }
@@ -34,7 +34,6 @@
         .login-link a { color: #ffd700; text-decoration: none; }
         .loading-star { font-size: 5rem; color: #fff; animation: dimStar 3s ease-in-out infinite; }
         @keyframes dimStar { 0%, 100% { opacity: 0.2; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
-        /* ADDED: Force show */
         #welcomeScreen { display: block !important; }
         #loadingScreen { display: none !important; }
     </style>
@@ -42,27 +41,27 @@
 <body>
 
 <div id="app">
-    <!-- LOADING -->
+    <!-- LOADING (SKIP) -->
     <div id="loadingScreen">
-        <div class="container" style="text-align:center;">
+        <div class="container">
             <div class="heart">❤️</div>
             <h1 class="title">destined</h1>
             <p class="sub">Connecting your fate...</p>
         </div>
     </div>
 
-    <!-- WELCOME -->
+    <!-- ===== WELCOME SCREEN ===== -->
     <div id="welcomeScreen">
-        <div class="container" style="text-align:center;">
-            <div class="heart">❤️</div>
+        <div class="container">
+            <div class="burning-heart">❤️‍🔥</div>
             <h1 class="title">destined</h1>
             <p class="sub">Connecting your fate</p>
             <p class="tagline">Find the one meant for you</p>
-            <button class="btn-primary" onclick="showRegister()">Begin Your Journey</button>
+            <button class="btn-primary" onclick="showRegister()" type="button">Begin Your Journey</button>
         </div>
     </div>
 
-    <!-- REGISTER -->
+    <!-- ===== REGISTER SCREEN ===== -->
     <div id="registerScreen" class="hidden">
         <div class="container">
             <div class="register-box">
@@ -129,14 +128,14 @@
         </div>
     </div>
 
-    <!-- SUCCESS -->
+    <!-- ===== SUCCESS SCREEN ===== -->
     <div id="successScreen" class="hidden">
         <div class="container" style="text-align:center;">
             <div class="loading-star">✦</div>
             <div style="font-size:2.5rem; margin-top:15px;">❤️</div>
             <h1 class="title" style="font-size:2rem;">destined</h1>
             <p style="color:rgba(255,255,255,0.5); letter-spacing:4px; margin-top:10px;">Welcome to Destined!</p>
-            <button class="btn-primary" style="margin-top:20px;" onclick="goHome()">Continue</button>
+            <button class="btn-primary" style="margin-top:20px;" onclick="goHome()" type="button">Continue</button>
         </div>
     </div>
 </div>
@@ -170,7 +169,6 @@ function showScreen(screenId) {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Show welcome screen immediately (skip loading)
     showScreen('welcomeScreen');
 });
 
@@ -179,7 +177,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================
 
 function showRegister() {
-    showScreen('registerScreen');
+    alert('🔄 Going to registration...');
+    document.getElementById('welcomeScreen').classList.add('hidden');
+    document.getElementById('registerScreen').classList.remove('hidden');
 }
 
 // ============================================
