@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destined ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .container { max-width: 420px; width: 100%; padding: 20px; }
+        .hidden { display: none !important; }
+        .heart { font-size: 4rem; color: #ff6b6b; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } }
+        .title { font-size: 3rem; font-weight: 300; color: #fff; letter-spacing: 8px; margin-top: 10px; font-family: Georgia, serif; }
+        .sub { color: rgba(255,255,255,0.3); font-size: 0.9rem; letter-spacing: 4px; margin-top: 5px; }
+        .tagline { color: rgba(255,255,255,0.7); font-size: 1.1rem; margin: 20px 0; }
+        .btn-primary { padding: 16px 50px; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 700; border: none; border-radius: 50px; font-size: 1.1rem; cursor: pointer; }
+        .btn-primary:hover { transform: scale(1.05); }
+        .register-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,215,0,0.1); padding: 30px; border-radius: 20px; }
+        .register-title { color: #ffd700; font-weight: 300; font-size: 1.8rem; text-align: center; font-family: Georgia, serif; }
+        .register-sub { color: rgba(255,255,255,0.4); text-align: center; font-size: 0.9rem; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group input, .input-group select { width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; font-size: 1rem; }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: #ffd700; }
+        .input-group select option { background: #1a1a1a; color: #fff; }
+        .btn-register { width: 100%; padding: 14px; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 700; border: none; border-radius: 50px; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
+        .btn-register:hover { transform: scale(1.02); }
+        .interests-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .interest-item { padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #aaa; cursor: pointer; text-align: center; transition: all 0.3s ease; font-size: 0.9rem; }
+        .interest-item.selected { background: rgba(255,215,0,0.15); border-color: #ffd700; color: #ffd700; }
+        .interests-label { color: rgba(255,255,255,0.5); font-size: 0.8rem; text-align: center; margin-top: 10px; }
+        .login-link { text-align: center; color: rgba(255,255,255,0.3); margin-top: 15px; font-size: 0.9rem; }
+        .login-link a { color: #ffd700; text-decoration: none; }
+        .loading-star { font-size: 5rem; color: #fff; animation: dimStar 3s ease-in-out infinite; }
+        @keyframes dimStar { 0%, 100% { opacity: 0.2; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- LOADING -->
+    <div id="loadingScreen">
+        <div class="container" style="text-align:center;">
+            <div class="heart">❤️</div>
+            <h1 class="title">destined</h1>
+            <p class="sub">Connecting your fate...</p>
+        </div>
+    </div>
+
+    <!-- WELCOME -->
+    <div id="welcomeScreen" class="hidden">
+        <div class="container" style="text-align:center;">
+            <div class="heart">❤️</div>
+            <h1 class="title">destined</h1>
+            <p class="sub">Connecting your fate</p>
+            <p class="tagline">Find the one meant for you</p>
+            <button class="btn-primary" onclick="showRegister()">Begin Your Journey</button>
+        </div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="registerScreen" class="hidden">
+        <div class="container">
+            <div class="register-box">
+                <div style="text-align:center; font-size:2.5rem;">❤️</div>
+                <h2 class="register-title">Create Account</h2>
+                <p class="register-sub">Find your perfect match</p>
+                <form onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <input type="text" id="fullName" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="input-group">
+                        <select id="gender" required>
+                            <option value="">Select your gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Non-binary">Non-binary</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <select id="lookingFor" required>
+                            <option value="">Looking for</option>
+                            <option value="Male">Men</option>
+                            <option value="Female">Women</option>
+                            <option value="Everyone">Everyone</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <select id="relationshipType" required>
+                            <option value="">Relationship type</option>
+                            <option value="Long-term">Long-term</option>
+                            <option value="Short-term">Short-term</option>
+                            <option value="Friendship">Friendship</option>
+                            <option value="Fun">Fun</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p style="color:rgba(255,255,255,0.5); font-size:0.8rem; margin-bottom:8px;">Select your interests:</p>
+                        <div class="interests-grid" id="interestsGrid">
+                            <div class="interest-item" onclick="toggleInterest(this)">✈️ Travel</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🎵 Music</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">📸 Photography</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🍣 Food</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🎮 Gaming</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">📚 Books</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🎨 Art</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🏋️ Fitness</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🎭 Theatre</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🌍 Culture</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🧘 Yoga</div>
+                            <div class="interest-item" onclick="toggleInterest(this)">🎤 Singing</div>
+                        </div>
+                        <p class="interests-label" id="interestCount">0 interests selected (min 3)</p>
+                    </div>
+                    <button type="submit" class="btn-register">Create Account</button>
+                </form>
+                <p class="login-link">Already have an account? <a href="#" onclick="alert('Login coming soon!')">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div id="successScreen" class="hidden">
+        <div class="container" style="text-align:center;">
+            <div class="loading-star">✦</div>
+            <div style="font-size:2.5rem; margin-top:15px;">❤️</div>
+            <h1 class="title" style="font-size:2rem;">destined</h1>
+            <p style="color:rgba(255,255,255,0.5); letter-spacing:4px; margin-top:10px;">Welcome to Destined!</p>
+            <button class="btn-primary" style="margin-top:20px;" onclick="goHome()">Continue</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================
+// DESTINED — COMPLETE APP
+// ============================================
+
+console.log("❤️ Destined — Loading...");
+
+// ============================================
+// SUPABASE CONFIGURATION
+// ============================================
+
+const supabaseUrl = 'https://kmhyvrhvhaqbzdyaalprk.supabase.co';
+const supabaseKey = 'sb_publishable_3g3ybut4pJDS54DitwtzeA_3l3z6RRR';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// ============================================
+// SCREEN NAVIGATION
+// ============================================
+
+function showScreen(screenId) {
+    document.querySelectorAll('#app > div').forEach(el => el.classList.add('hidden'));
+    document.getElementById(screenId).classList.remove('hidden');
+}
+
+// ============================================
+// PAGE LOAD
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    showScreen('loadingScreen');
+    setTimeout(() => {
+        showScreen('welcomeScreen');
+    }, 2500);
+});
+
+// ============================================
+// REGISTER
+// ============================================
+
+function showRegister() {
+    showScreen('registerScreen');
+}
+
+// ============================================
+// INTERESTS
+// ============================================
+
+function toggleInterest(element) {
+    element.classList.toggle('selected');
+    updateInterestCount();
+}
+
+function updateInterestCount() {
+    const selected = document.querySelectorAll('.interest-item.selected').length;
+    document.getElementById('interestCount').textContent = selected + ' interests selected (min 3)';
+}
+
+// ============================================
+// REGISTRATION HANDLER
+// ============================================
+
+async function handleRegister(event) {
+    event.preventDefault();
+
+    const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const gender = document.getElementById('gender').value;
+    const lookingFor = document.getElementById('lookingFor').value;
+    const relationshipType = document.getElementById('relationshipType').value;
+
+    const interests = [];
+    document.querySelectorAll('.interest-item.selected').forEach(el => {
+        interests.push(el.textContent.trim());
+    });
+
+    if (!fullName || !email || !password || !gender || !lookingFor || !relationshipType) {
+        alert('⚠️ Please fill in all fields.');
+        return;
+    }
+
+    if (interests.length < 3) {
+        alert('⚠️ Please select at least 3 interests.');
+        return;
+    }
+
+    try {
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+        });
+
+        if (authError) {
+            alert('⚠️ ' + authError.message);
+            return;
+        }
+
+        const { error: profileError } = await supabase
+            .from('profiles')
+            .insert([{
+                id: authData.user?.id,
+                full_name: fullName,
+                email: email,
+                gender: gender,
+                looking_for: lookingFor,
+                relationship_type: relationshipType,
+                interests: interests,
+                verified: true,
+                tier: 'FREE',
+                created_at: new Date().toISOString()
+            }]);
+
+        if (profileError) {
+            alert('⚠️ Failed to save profile.');
+            return;
+        }
+
+        alert('✅ Account created! Welcome to Destined!');
+        showScreen('successScreen');
+
+    } catch (error) {
+        alert('⚠️ Something went wrong. Please try again.');
+    }
+}
+
+// ============================================
+// GO HOME
+// ============================================
+
+function goHome() {
+    alert('🏠 Welcome to Destined!');
+}
+</script>
+</body>
+</html>
