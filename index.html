@@ -4,139 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destined ❤️</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* ===== RESET ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .container { max-width: 420px; width: 100%; padding: 20px; text-align: center; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
         .hidden { display: none !important; }
-        .burning-heart { font-size: 5rem; display: inline-block; animation: burn 0.8s ease-in-out infinite alternate; text-shadow: 0 0 50px rgba(255, 69, 0, 0.6), 0 0 100px rgba(255, 69, 0, 0.3); filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.5)); margin-bottom: 5px; }
-        @keyframes burn { 0% { transform: scale(1); text-shadow: 0 0 30px rgba(255, 69, 0, 0.4), 0 0 60px rgba(255, 0, 0, 0.2); } 100% { transform: scale(1.1); text-shadow: 0 0 60px rgba(255, 69, 0, 0.8), 0 0 120px rgba(255, 0, 0, 0.4); } }
-        .title { font-size: 3.5rem; font-weight: 300; color: #fff; letter-spacing: 10px; margin-top: 5px; font-family: Georgia, serif; }
-        .sub { color: rgba(255,255,255,0.3); font-size: 0.9rem; letter-spacing: 5px; margin-top: 5px; }
-        .tagline { color: rgba(255,255,255,0.7); font-size: 1.1rem; margin: 25px 0 35px 0; letter-spacing: 2px; }
-        .btn-primary { display: inline-block; padding: 16px 50px; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 700; border: none; border-radius: 50px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; }
-        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,215,0,0.3); }
-        .register-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,215,0,0.1); padding: 30px; border-radius: 20px; text-align: left; }
-        .register-title { color: #ffd700; font-weight: 300; font-size: 1.8rem; text-align: center; font-family: Georgia, serif; }
-        .register-sub { color: rgba(255,255,255,0.4); text-align: center; font-size: 0.9rem; margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; }
-        .input-group input, .input-group select { width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; font-size: 1rem; }
-        .input-group input:focus, .input-group select:focus { outline: none; border-color: #ffd700; }
-        .input-group select option { background: #1a1a1a; color: #fff; }
-        .btn-register { width: 100%; padding: 14px; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 700; border: none; border-radius: 50px; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
-        .btn-register:hover { transform: scale(1.02); }
-        .interests-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .interest-item { padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #aaa; cursor: pointer; text-align: center; transition: all 0.3s ease; font-size: 0.9rem; }
-        .interest-item.selected { background: rgba(255,215,0,0.15); border-color: #ffd700; color: #ffd700; }
-        .interests-label { color: rgba(255,255,255,0.5); font-size: 0.8rem; text-align: center; margin-top: 10px; }
-        .login-link { text-align: center; color: rgba(255,255,255,0.3); margin-top: 15px; font-size: 0.9rem; }
-        .login-link a { color: #ffd700; text-decoration: none; }
-        .loading-star { font-size: 5rem; color: #fff; animation: dimStar 3s ease-in-out infinite; }
-        @keyframes dimStar { 0%, 100% { opacity: 0.2; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
-        #welcomeScreen { display: block !important; }
-        #loadingScreen { display: none !important; }
+        .page { width: 100%; max-width: 420px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+
+        /* ===== PAGE 1: LOADING ===== */
+        #page1 { background: linear-gradient(135deg, #ff6b6b, #ffd93d); }
+        .loading-heart { font-size: 4rem; color: #fff; animation: gentleBeat 1.5s ease-in-out infinite; }
+        @keyframes gentleBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .loading-title { font-size: 3rem; font-weight: 300; color: #fff; letter-spacing: 6px; margin-top: 10px; font-family: Georgia, serif; text-shadow: 0 2px 20px rgba(0,0,0,0.1); }
+
+        /* ===== PAGE 2: RULES ===== */
+        #page2 { background: linear-gradient(135deg, #fff5f5, #fff0f0); }
+        .rules-heart { font-size: 3rem; color: #ff6b6b; }
+        .rules-title { font-size: 1.8rem; color: #1a1a1a; font-weight: 600; margin-top: 5px; font-family: Georgia, serif; }
+        .rules-sub { font-size: 0.9rem; color: #666; font-style: italic; margin-bottom: 15px; font-family: 'Georgia', serif; }
+        .rules-list { text-align: left; width: 100%; max-width: 320px; margin: 0 auto; }
+        .rule-item { background: rgba(255,255,255,0.7); padding: 10px 15px; margin-bottom: 8px; border-radius: 10px; color: #1a1a1a; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; }
+        .rule-number { background: #ff6b6b; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+        .btn-agree { background: #ff6b6b; color: #fff; border: none; padding: 14px 50px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 20px; box-shadow: 0 4px 15px rgba(255,107,107,0.3); }
+        .btn-agree:hover { transform: scale(1.02); box-shadow: 0 6px 25px rgba(255,107,107,0.4); }
+
+        /* ===== PAGE 3: LOGIN ===== */
+        #page3 { background: linear-gradient(135deg, #ff6b6b, #ffd93d); }
+        .login-heart { font-size: 3.5rem; color: #fff; }
+        .login-title { font-size: 3rem; font-weight: 300; color: #fff; letter-spacing: 6px; font-family: Georgia, serif; margin-top: 5px; }
+        .login-terms { color: rgba(255,255,255,0.7); font-size: 0.8rem; margin: 10px 0 25px 0; max-width: 280px; }
+        .btn-login { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 320px; padding: 14px 20px; background: #fff; color: #1a1a1a; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-bottom: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .btn-login:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .btn-login .icon { font-size: 1.3rem; }
+        .login-divider { color: rgba(255,255,255,0.4); font-size: 0.8rem; margin: 10px 0; }
+        .login-footer { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 15px; }
+        .login-footer a { color: #fff; font-weight: 600; text-decoration: none; }
+
+        /* ===== REGISTRATION PAGE ===== */
+        #page4 { background: linear-gradient(135deg, #ff6b6b, #ffd93d); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .register-box { background: rgba(255,255,255,0.95); padding: 30px; border-radius: 20px; width: 100%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .register-title { color: #1a1a1a; font-size: 1.8rem; font-weight: 300; text-align: center; font-family: Georgia, serif; margin-bottom: 5px; }
+        .register-sub { color: #888; text-align: center; font-size: 0.9rem; margin-bottom: 20px; }
+        .input-group { margin-bottom: 14px; }
+        .input-group input, .input-group select { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; background: #f9f9f9; transition: all 0.3s ease; }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: #ff6b6b; background: #fff; }
+        .input-group select { appearance: none; }
+        .interests-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+        .interest-item { padding: 10px; background: #f5f5f5; border: 1px solid #eee; border-radius: 8px; color: #333; cursor: pointer; text-align: center; transition: all 0.3s ease; font-size: 0.85rem; }
+        .interest-item.selected { background: #ff6b6b; color: #fff; border-color: #ff6b6b; }
+        .interests-label { color: #888; font-size: 0.75rem; text-align: center; margin-top: 8px; }
+        .btn-register { width: 100%; padding: 14px; background: #ff6b6b; color: #fff; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; }
+        .btn-register:hover { background: #ff5252; transform: scale(1.02); }
+        .register-footer { text-align: center; color: #888; font-size: 0.85rem; margin-top: 12px; }
+        .register-footer a { color: #ff6b6b; text-decoration: none; font-weight: 600; }
+        .back-btn { background: none; border: none; color: #888; font-size: 0.9rem; cursor: pointer; margin-top: 10px; }
+        .back-btn:hover { color: #ff6b6b; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 400px) {
+            .loading-title { font-size: 2.2rem; letter-spacing: 4px; }
+            .login-title { font-size: 2.2rem; letter-spacing: 4px; }
+            .rules-title { font-size: 1.4rem; }
+            .btn-login { font-size: 0.9rem; padding: 12px 16px; }
+            .register-box { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-<div id="app">
-    <!-- LOADING (SKIP) -->
-    <div id="loadingScreen">
-        <div class="container">
-            <div class="heart">❤️</div>
-            <h1 class="title">destined</h1>
-            <p class="sub">Connecting your fate...</p>
-        </div>
+<!-- ============================================ -->
+<!-- PAGE 1: LOADING SCREEN (3 seconds)            -->
+<!-- ============================================ -->
+<div id="page1" class="page">
+    <div class="loading-heart">❤️</div>
+    <h1 class="loading-title">Destined</h1>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 2: WELCOME + SAFETY RULES                -->
+<!-- ============================================ -->
+<div id="page2" class="page hidden">
+    <div class="rules-heart">❤️</div>
+    <h1 class="rules-title">Welcome to Destined</h1>
+    <p class="rules-sub">Please follow these safety rules:</p>
+
+    <div class="rules-list">
+        <div class="rule-item"><span class="rule-number">1</span> Never share your password with anyone</div>
+        <div class="rule-item"><span class="rule-number">2</span> Report suspicious users immediately</div>
+        <div class="rule-item"><span class="rule-number">3</span> Keep personal info private</div>
+        <div class="rule-item"><span class="rule-number">4</span> Be respectful to all members</div>
+        <div class="rule-item"><span class="rule-number">5</span> Trust your instincts — stay safe</div>
     </div>
 
-    <!-- ===== WELCOME SCREEN ===== -->
-    <div id="welcomeScreen">
-        <div class="container">
-            <div class="burning-heart">❤️‍🔥</div>
-            <h1 class="title">destined</h1>
-            <p class="sub">Connecting your fate</p>
-            <p class="tagline">Find the one meant for you</p>
-            <button class="btn-primary" onclick="showRegister()" type="button">Begin Your Journey</button>
-        </div>
-    </div>
+    <button class="btn-agree" onclick="goToLogin()">I AGREE</button>
+</div>
 
-    <!-- ===== REGISTER SCREEN ===== -->
-    <div id="registerScreen" class="hidden">
-        <div class="container">
-            <div class="register-box">
-                <div style="text-align:center; font-size:2.5rem;">❤️</div>
-                <h2 class="register-title">Create Account</h2>
-                <p class="register-sub">Find your perfect match</p>
-                <form onsubmit="handleRegister(event)">
-                    <div class="input-group">
-                        <input type="text" id="fullName" placeholder="Full Name" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="email" placeholder="Email Address" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="password" id="password" placeholder="Password" required>
-                    </div>
-                    <div class="input-group">
-                        <select id="gender" required>
-                            <option value="">Select your gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Non-binary">Non-binary</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <select id="lookingFor" required>
-                            <option value="">Looking for</option>
-                            <option value="Male">Men</option>
-                            <option value="Female">Women</option>
-                            <option value="Everyone">Everyone</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <select id="relationshipType" required>
-                            <option value="">Relationship type</option>
-                            <option value="Long-term">Long-term</option>
-                            <option value="Short-term">Short-term</option>
-                            <option value="Friendship">Friendship</option>
-                            <option value="Fun">Fun</option>
-                        </select>
-                    </div>
-                    <div>
-                        <p style="color:rgba(255,255,255,0.5); font-size:0.8rem; margin-bottom:8px;">Select your interests:</p>
-                        <div class="interests-grid" id="interestsGrid">
-                            <div class="interest-item" onclick="toggleInterest(this)">✈️ Travel</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🎵 Music</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">📸 Photography</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🍣 Food</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🎮 Gaming</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">📚 Books</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🎨 Art</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🏋️ Fitness</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🎭 Theatre</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🌍 Culture</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🧘 Yoga</div>
-                            <div class="interest-item" onclick="toggleInterest(this)">🎤 Singing</div>
-                        </div>
-                        <p class="interests-label" id="interestCount">0 interests selected (min 3)</p>
-                    </div>
-                    <button type="submit" class="btn-register">Create Account</button>
-                </form>
-                <p class="login-link">Already have an account? <a href="#" onclick="alert('Login coming soon!')">Sign In</a></p>
+<!-- ============================================ -->
+<!-- PAGE 3: LOGIN/REGISTER OPTIONS               -->
+<!-- ============================================ -->
+<div id="page3" class="page hidden">
+    <div class="login-heart">❤️</div>
+    <h1 class="login-title">Destined</h1>
+    <p class="login-terms">By signing in, you agree to our Terms and Privacy Policy</p>
+
+    <button class="btn-login" onclick="goToRegister()">
+        <span class="icon">🔵</span> Sign in with Google
+    </button>
+
+    <button class="btn-login" onclick="goToRegister()">
+        <span class="icon">🟣</span> Sign in with Apple
+    </button>
+
+    <button class="btn-login" onclick="goToRegister()">
+        <span class="icon">📱</span> Sign in with Phone
+    </button>
+
+    <p class="login-divider">or</p>
+
+    <p class="login-footer">Already have an account? <a href="#" onclick="goToRegister()">LOGIN</a></p>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 4: REGISTRATION FORM                    -->
+<!-- ============================================ -->
+<div id="page4" class="hidden" style="background: linear-gradient(135deg, #ff6b6b, #ffd93d); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div class="register-box">
+        <h2 class="register-title">Create Account</h2>
+        <p class="register-sub">Find your perfect match</p>
+
+        <form onsubmit="handleRegister(event)">
+            <div class="input-group">
+                <input type="text" id="fullName" placeholder="Full Name" required>
             </div>
-        </div>
-    </div>
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email Address" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <div class="input-group">
+                <select id="gender" required>
+                    <option value="">Select your gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Non-binary">Non-binary</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <select id="lookingFor" required>
+                    <option value="">Looking for</option>
+                    <option value="Male">Men</option>
+                    <option value="Female">Women</option>
+                    <option value="Everyone">Everyone</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <select id="relationshipType" required>
+                    <option value="">Relationship type</option>
+                    <option value="Long-term">Long-term</option>
+                    <option value="Short-term">Short-term</option>
+                    <option value="Friendship">Friendship</option>
+                    <option value="Fun">Fun</option>
+                </select>
+            </div>
 
-    <!-- ===== SUCCESS SCREEN ===== -->
-    <div id="successScreen" class="hidden">
-        <div class="container" style="text-align:center;">
-            <div class="loading-star">✦</div>
-            <div style="font-size:2.5rem; margin-top:15px;">❤️</div>
-            <h1 class="title" style="font-size:2rem;">destined</h1>
-            <p style="color:rgba(255,255,255,0.5); letter-spacing:4px; margin-top:10px;">Welcome to Destined!</p>
-            <button class="btn-primary" style="margin-top:20px;" onclick="goHome()" type="button">Continue</button>
-        </div>
+            <div>
+                <p style="color:#888; font-size:0.8rem; margin-bottom:8px;">Select your interests:</p>
+                <div class="interests-grid" id="interestsGrid">
+                    <div class="interest-item" onclick="toggleInterest(this)">✈️ Travel</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🎵 Music</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">📸 Photography</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🍣 Food</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🎮 Gaming</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">📚 Books</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🎨 Art</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🏋️ Fitness</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🎭 Theatre</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🌍 Culture</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🧘 Yoga</div>
+                    <div class="interest-item" onclick="toggleInterest(this)">🎤 Singing</div>
+                </div>
+                <p class="interests-label" id="interestCount">0 interests selected (min 3)</p>
+            </div>
+
+            <button type="submit" class="btn-register">Create Account</button>
+        </form>
+
+        <p class="register-footer">Already have an account? <a href="#" onclick="goToLoginPage()">Sign In</a></p>
+        <button class="back-btn" onclick="goToLoginPage()">← Back</button>
     </div>
 </div>
 
@@ -145,41 +200,30 @@
 // DESTINED — COMPLETE APP
 // ============================================
 
-console.log("❤️ Destined — Loading...");
-
-// ============================================
-// SUPABASE CONFIGURATION
-// ============================================
-
-const supabaseUrl = 'https://kmhyvrhvhaqbzdyaalprk.supabase.co';
-const supabaseKey = 'sb_publishable_3g3ybut4pJDS54DitwtzeA_3l3z6RRR';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-// ============================================
-// SCREEN NAVIGATION
-// ============================================
-
-function showScreen(screenId) {
-    document.querySelectorAll('#app > div').forEach(el => el.classList.add('hidden'));
-    document.getElementById(screenId).classList.remove('hidden');
-}
-
-// ============================================
-// PAGE LOAD
-// ============================================
-
+// ===== PAGE 1 → PAGE 2 (3 seconds) =====
 document.addEventListener('DOMContentLoaded', function() {
-    showScreen('welcomeScreen');
+    setTimeout(function() {
+        document.getElementById('page1').classList.add('hidden');
+        document.getElementById('page2').classList.remove('hidden');
+    }, 3000);
 });
 
-// ============================================
-// REGISTER
-// ============================================
+// ===== PAGE 2 → PAGE 3 (I AGREE) =====
+function goToLogin() {
+    document.getElementById('page2').classList.add('hidden');
+    document.getElementById('page3').classList.remove('hidden');
+}
 
-function showRegister() {
-    alert('🔄 Going to registration...');
-    document.getElementById('welcomeScreen').classList.add('hidden');
-    document.getElementById('registerScreen').classList.remove('hidden');
+// ===== PAGE 3 → PAGE 4 (REGISTER) =====
+function goToRegister() {
+    document.getElementById('page3').classList.add('hidden');
+    document.getElementById('page4').classList.remove('hidden');
+}
+
+// ===== BACK TO PAGE 3 =====
+function goToLoginPage() {
+    document.getElementById('page4').classList.add('hidden');
+    document.getElementById('page3').classList.remove('hidden');
 }
 
 // ============================================
@@ -193,14 +237,17 @@ function toggleInterest(element) {
 
 function updateInterestCount() {
     const selected = document.querySelectorAll('.interest-item.selected').length;
-    document.getElementById('interestCount').textContent = selected + ' interests selected (min 3)';
+    const countEl = document.getElementById('interestCount');
+    if (countEl) {
+        countEl.textContent = selected + ' interests selected (min 3)';
+    }
 }
 
 // ============================================
 // REGISTRATION HANDLER
 // ============================================
 
-async function handleRegister(event) {
+function handleRegister(event) {
     event.preventDefault();
 
     const fullName = document.getElementById('fullName').value;
@@ -225,52 +272,9 @@ async function handleRegister(event) {
         return;
     }
 
-    try {
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-        });
-
-        if (authError) {
-            alert('⚠️ ' + authError.message);
-            return;
-        }
-
-        const { error: profileError } = await supabase
-            .from('profiles')
-            .insert([{
-                id: authData.user?.id,
-                full_name: fullName,
-                email: email,
-                gender: gender,
-                looking_for: lookingFor,
-                relationship_type: relationshipType,
-                interests: interests,
-                verified: true,
-                tier: 'FREE',
-                created_at: new Date().toISOString()
-            }]);
-
-        if (profileError) {
-            alert('⚠️ Failed to save profile.');
-            return;
-        }
-
-        alert('✅ Account created! Welcome to Destined!');
-        showScreen('successScreen');
-
-    } catch (error) {
-        alert('⚠️ Something went wrong. Please try again.');
-    }
-}
-
-// ============================================
-// GO HOME
-// ============================================
-
-function goHome() {
-    alert('🏠 Welcome to Destined!');
+    alert('✅ Account created! Welcome to Destined!');
 }
 </script>
+
 </body>
 </html>
