@@ -15,6 +15,11 @@
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
         @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        @keyframes petIdle{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+        @keyframes petHappy{0%,100%{transform:scale(1)}50%{transform:scale(1.1) rotate(-3deg)}}
+        @keyframes heartFloat{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-60px) scale(0);opacity:0}}
+
+        .bg-gradient{background:linear-gradient(160deg,#1A0A0F 0%,#2D0A15 30%,#4A0A20 60%,#660025 100%)}
 
         /* Splash */
         #splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0A0A0F;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;animation:fadeOut 2.5s ease forwards;animation-delay:1.5s}
@@ -26,12 +31,11 @@
         /* Buttons */
         .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;border:none;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;width:100%;text-decoration:none}
         .btn-primary{background:#FF3366;color:#fff;box-shadow:0 4px 20px rgba(255,51,102,0.3)}
-        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,51,102,0.4)}
         .btn-primary:active{transform:scale(.97)}
-        .btn-secondary{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px)}
+        .btn-secondary{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08)}
         .btn-secondary:hover{background:rgba(255,255,255,0.12)}
         .btn-agree{background:#FF3366;color:#fff;box-shadow:0 4px 20px rgba(255,51,102,0.3);font-size:18px;letter-spacing:1px;padding:18px}
-        .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+        .btn:disabled{opacity:.5;cursor:not-allowed}
         .btn .spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#FF3366;border-radius:50%;animation:spin .6s linear infinite;display:none}
         .btn.loading .spinner{display:block}
         .btn.loading .btn-text{display:none}
@@ -48,9 +52,6 @@
         .form-group input:focus{border-color:#FF3366;box-shadow:0 0 0 3px rgba(255,51,102,0.08)}
         .form-group input::placeholder{color:rgba(255,255,255,0.2)}
 
-        /* Colors */
-        .bg-gradient{background:linear-gradient(160deg,#1A0A0F 0%,#2D0A15 30%,#4A0A20 60%,#660025 100%)}
-
         /* Toast */
         .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,0.9);border:1px solid rgba(255,255,255,0.06);padding:14px 24px;border-radius:14px;color:#fff;font-size:14px;box-shadow:0 8px 40px rgba(0,0,0,0.6);opacity:0;transition:all .4s ease;z-index:999;max-width:90%;text-align:center;backdrop-filter:blur(20px)}
         .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -64,6 +65,16 @@
         h2{font-size:24px;font-weight:700;color:#fff;text-align:center;font-family:Georgia,serif;letter-spacing:1px}
         .tg-safe-top{padding-top:env(safe-area-inset-top,20px)}
         .tg-safe-bottom{padding-bottom:env(safe-area-inset-bottom,20px)}
+
+        /* Verified Badge */
+        .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#4488FF;border-radius:50%;font-size:12px;color:#fff;font-weight:700;margin-left:4px;flex-shrink:0}
+        .verified-badge-lg{width:24px;height:24px;font-size:14px}
+
+        /* Pet Animation */
+        .pet-container{display:inline-block;animation:petIdle 2s ease-in-out infinite;cursor:pointer}
+        .pet-container:hover{animation:petHappy 0.5s ease-in-out}
+        .pet-container .pet-emoji{font-size:48px;display:block}
+        .pet-container .pet-name{font-size:12px;color:rgba(255,255,255,0.4);text-align:center;margin-top:2px}
     </style>
 </head>
 <body>
@@ -80,7 +91,7 @@
 <!-- APP -->
 <div id="app" class="tg-safe-top">
 
-<!-- ========== PAGE 1: WELCOME ========== -->
+<!-- ===== PAGE 1: WELCOME ===== -->
 <div id="page-welcome" class="page active bg-gradient">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
         <svg width="90" height="90" viewBox="0 0 200 200"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
@@ -104,7 +115,7 @@
     </div>
 </div>
 
-<!-- ========== PAGE 2: RULES ========== -->
+<!-- ===== PAGE 2: RULES ===== -->
 <div id="page-rules" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-welcome')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Safety Rules</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center">
@@ -123,7 +134,7 @@
     </div>
 </div>
 
-<!-- ========== PAGE 3: SIGN UP / SIGN IN ========== -->
+<!-- ===== PAGE 3: SIGN UP / SIGN IN ===== -->
 <div id="page-signup" class="page bg-gradient">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
         <div style="width:100%;max-width:340px">
@@ -141,7 +152,7 @@
     </div>
 </div>
 
-<!-- ========== PAGE 4: LOGIN ========== -->
+<!-- ===== PAGE 4: LOGIN ===== -->
 <div id="page-login" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-signup')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔐 Sign In</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
@@ -154,7 +165,7 @@
     </div>
 </div>
 
-<!-- ========== PAGE 5: FORGOT DEST ID ========== -->
+<!-- ===== PAGE 5: FORGOT DEST ID ===== -->
 <div id="page-forgot" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-login')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Find Your Dest ID</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
@@ -166,23 +177,22 @@
     </div>
 </div>
 
-<!-- ========== PAGE 6: REGISTER ========== -->
+<!-- ===== PAGE 6: REGISTER ===== -->
 <div id="page-register" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-signup')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">✏️ Create Profile</h2></div>
     <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%;padding-bottom:20px">
         <div class="form-group"><label>👤 Full Name</label><input type="text" placeholder="Sarah Johnson" id="regName"></div>
         <div class="form-group"><label>🎂 Age (18+)</label><input type="number" placeholder="28" id="regAge"></div>
         <div class="form-group"><label>📍 Country / City</label><input type="text" placeholder="London, UK" id="regLocation"></div>
-        <div class="form-group"><label>👤 Gender</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectGender(this)">Male</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;cursor:pointer;border-color:#FF3366;background:rgba(255,51,102,0.1)" onclick="selectGender(this)">Female</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectGender(this)">Other</button></div></div>
+        <div class="form-group"><label>👤 Gender</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectGender(this)">Male</button><button style="flex:1;padding:10px;background:rgba(255,51,102,0.1);border:1px solid #FF3366;border-radius:12px;color:#fff;cursor:pointer" onclick="selectGender(this)">Female</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectGender(this)">Other</button></div></div>
         <div class="form-group"><label>📝 Bio (20-1000 characters)</label><input type="text" placeholder="Love is the greatest adventure..." id="regBio"></div>
-        <div class="form-group"><label>📸 Photos (3 max)</label><div style="display:flex;gap:8px"><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+ Add Photo</button><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+ Add Photo</button><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+ Add Photo</button></div></div>
-        <div class="form-group" style="margin-bottom:8px"><label>🏷️ Interests</label><div style="display:flex;flex-wrap:wrap;gap:8px"><button style="padding:6px 14px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Travel</button><button style="padding:6px 14px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Music</button><button style="padding:6px 14px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Food</button><button style="padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Photography</button><button style="padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Gaming</button></div></div>
+        <div class="form-group"><label>📸 Photos (3 max)</label><div style="display:flex;gap:8px"><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+</button><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+</button><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+</button></div></div>
         <button class="btn btn-primary" onclick="handleRegister()"><span class="btn-text">Continue →</span></button>
         <button class="btn btn-secondary" style="margin-top:8px" onclick="showPage('page-signup')"><span class="btn-text">← Back</span></button>
     </div>
 </div>
 
-<!-- ========== PAGE 7: PREFERENCES ========== -->
+<!-- ===== PAGE 7: PREFERENCES ===== -->
 <div id="page-preferences" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-register')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Your Preferences</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
@@ -195,7 +205,7 @@
     </div>
 </div>
 
-<!-- ========== PAGE 8: VERIFICATION ========== -->
+<!-- ===== PAGE 8: VERIFICATION ===== -->
 <div id="page-verify" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-preferences')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">📸 Verify Identity</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;max-width:340px;margin:0 auto;width:100%">
@@ -210,7 +220,7 @@
     </div>
 </div>
 
-<!-- ========== PAGE 9: WELCOME BACK ========== -->
+<!-- ===== PAGE 9: WELCOME BACK ===== -->
 <div id="page-welcomeback" class="page bg-gradient">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
         <div style="font-size:64px;margin-bottom:8px">👋</div>
@@ -227,69 +237,141 @@
     </div>
 </div>
 
-<!-- ========== PAGE 10: MAIN SCREEN ========== -->
+<!-- ===== PAGE 10: MAIN SCREEN (REDESIGNED) ===== -->
 <div id="page-main" class="page" style="padding:0;background:#0A0A0F">
     <!-- Top Bar -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#0A0A0F;border-bottom:1px solid rgba(255,255,255,0.04)">
-        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🔥</span><span style="font-weight:700;font-size:18px;color:#FF3366">DESTINED</span></div>
-        <div style="display:flex;gap:12px"><span style="font-size:20px;cursor:pointer" onclick="showToast('🔔 Notifications')">🔔</span><span style="font-size:20px;cursor:pointer" onclick="showPage('page-search')">🔍</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#0A0A0F;border-bottom:1px solid rgba(255,255,255,0.04)">
+        <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:22px">🔥</span>
+            <span style="font-weight:700;font-size:20px;color:#FF3366;letter-spacing:1px">DESTINED</span>
+        </div>
+        <div style="display:flex;gap:16px">
+            <span style="font-size:22px;cursor:pointer" onclick="showToast('🔔 Notifications')">🔔</span>
+            <span style="font-size:22px;cursor:pointer" onclick="showPage('page-search')">🔍</span>
+        </div>
     </div>
-    <!-- Content Area -->
-    <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh">
-        <div style="background:linear-gradient(135deg,#14141E,#1A1A2E);border-radius:20px;padding:24px;width:100%;max-width:380px;text-align:center;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 32px rgba(0,0,0,0.3)">
-            <div style="width:100%;height:200px;background:linear-gradient(135deg,#2A0A15,#4A0A20);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative">
-                <span style="font-size:64px">👤</span>
-                <div style="position:absolute;bottom:8px;right:8px;display:flex;gap:4px"><span style="background:#FF3366;color:#fff;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700">ELITE</span><span style="background:#4488FF;color:#fff;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700">✓</span></div>
+    
+    <!-- Profile Card - BIGGER AND CLEAN -->
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 20px 10px">
+        <div style="width:100%;max-width:380px;background:linear-gradient(145deg,#14141E,#1A1A2E);border-radius:24px;padding:28px 24px 24px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.4)">
+            <!-- Photo Area -->
+            <div style="width:100%;height:240px;background:linear-gradient(135deg,#2A0A15,#4A0A20);border-radius:16px;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:16px">
+                <span style="font-size:72px">👤</span>
+                <!-- Badges on photo -->
+                <div style="position:absolute;bottom:12px;right:12px;display:flex;gap:6px;align-items:center">
+                    <span style="background:#FF0033;color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px">ELITE</span>
+                    <span class="verified-badge verified-badge-lg" style="background:#4488FF;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700">✓</span>
+                </div>
+                <!-- Pet on photo - ALIVE! -->
+                <div class="pet-container" style="position:absolute;bottom:12px;left:12px">
+                    <span class="pet-emoji" style="font-size:36px">🐉</span>
+                </div>
             </div>
-            <h3 style="color:#fff;font-size:20px">Sarah J. <span style="color:#4488FF;font-size:14px">✅</span></h3>
-            <p style="color:rgba(255,255,255,0.4);font-size:14px">28 📍 London</p>
-            <div style="display:flex;gap:8px;justify-content:center;margin:8px 0"><span style="background:rgba(255,255,255,0.04);padding:4px 12px;border-radius:12px;font-size:12px;color:rgba(255,255,255,0.6)">💍 Single</span><span style="background:rgba(255,255,255,0.04);padding:4px 12px;border-radius:12px;font-size:12px;color:rgba(255,255,255,0.6)">💍 Long-term</span></div>
-            <p style="color:rgba(255,255,255,0.5);font-size:14px;font-style:italic">"Love is the greatest adventure." ❤️‍🔥</p>
-            <div style="display:flex;gap:8px;justify-content:center;margin-top:8px"><span style="font-size:12px">🐉 +12 Badges</span></div>
-        </div>
-        <!-- Swipe Buttons -->
-        <div style="display:flex;gap:16px;margin-top:20px;align-items:center">
-            <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#FFB800;font-size:20px;cursor:pointer" onclick="showToast('↩️ Rewind (3 left today)')">↩️</button>
-            <button style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,68,68,0.3);background:rgba(255,68,68,0.1);color:#FF4444;font-size:24px;cursor:pointer" onclick="showToast('❌ Passed!')">✕</button>
-            <button style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(68,136,255,0.3);background:rgba(68,136,255,0.1);color:#4488FF;font-size:20px;cursor:pointer" onclick="showToast('⭐ Super Liked! (1 left today)')">⭐</button>
-            <button style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(68,255,136,0.3);background:rgba(68,255,136,0.1);color:#44FF88;font-size:24px;cursor:pointer" onclick="showToast('❤️ Liked!')">❤️</button>
-            <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,51,102,0.3);background:rgba(255,51,102,0.1);color:#FF3366;font-size:16px;cursor:pointer" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
+            
+            <!-- Name + Verified -->
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+                <h3 style="color:#fff;font-size:22px;font-weight:700">Sarah J.</h3>
+                <span class="verified-badge" style="background:#4488FF;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700">✓</span>
+            </div>
+            
+            <!-- Age + Location -->
+            <p style="color:rgba(255,255,255,0.4);font-size:15px;margin-bottom:10px">28 · London</p>
+            
+            <!-- Tags -->
+            <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+                <span style="background:rgba(255,255,255,0.04);padding:4px 14px;border-radius:20px;font-size:13px;color:rgba(255,255,255,0.6)">💍 Single</span>
+                <span style="background:rgba(255,255,255,0.04);padding:4px 14px;border-radius:20px;font-size:13px;color:rgba(255,255,255,0.6)">💍 Long-term</span>
+            </div>
+            
+            <!-- Bio -->
+            <p style="color:rgba(255,255,255,0.5);font-size:15px;font-style:italic;margin-bottom:12px">"Love is the greatest adventure." ❤️‍🔥</p>
+            
+            <!-- Badge Count -->
+            <div style="display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.04)">
+                <span style="font-size:14px">🏅</span>
+                <span style="color:rgba(255,255,255,0.3);font-size:13px">12 Badges</span>
+                <span style="color:rgba(255,255,255,0.15);font-size:13px;margin-left:auto">✨ +3</span>
+            </div>
         </div>
     </div>
+    
+    <!-- Swipe Buttons - TOGETHER LIKE TINDER -->
+    <div style="display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 20px 8px">
+        <button style="width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#FFB800;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('↩️ Rewind (3 left)')">↩️</button>
+        <button style="width:60px;height:60px;border-radius:50%;border:2px solid rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('❌ Passed!')">✕</button>
+        <button style="width:60px;height:60px;border-radius:50%;border:2px solid rgba(68,136,255,0.2);background:rgba(68,136,255,0.08);color:#4488FF;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('⭐ Super Liked! (1 left)')">⭐</button>
+        <button style="width:60px;height:60px;border-radius:50%;border:2px solid rgba(68,255,136,0.2);background:rgba(68,255,136,0.08);color:#44FF88;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('❤️ Liked!')">❤️</button>
+        <button style="width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,51,102,0.2);background:rgba(255,51,102,0.08);color:#FF3366;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
+    </div>
+
     <!-- Bottom Tabs -->
-    <div style="display:flex;justify-content:space-around;padding:10px 0 14px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F">
+    <div style="display:flex;justify-content:space-around;padding:10px 0 16px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F;margin-top:auto">
         <button style="background:transparent;border:none;color:#FF3366;font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showPage('page-main')"><span>❤️‍🔥</span><span style="font-size:9px;color:#FF3366">Home</span></button>
-        <button style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('💞 Likes coming soon!')"><span>💞</span><span style="font-size:9px;color:rgba(255,255,255,0.3)">Likes</span></button>
-        <button style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('✨ Spark coming soon!')"><span>✨</span><span style="font-size:9px;color:rgba(255,255,255,0.3)">Spark</span></button>
-        <button style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('💬 Chat coming soon!')"><span>💬</span><span style="font-size:9px;color:rgba(255,255,255,0.3)">Chat</span></button>
-        <button style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showPage('page-profile')"><span>👤</span><span style="font-size:9px;color:rgba(255,255,255,0.3)">Profile</span></button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('💞 Likes coming soon!')"><span>💞</span><span style="font-size:9px;color:rgba(255,255,255,0.25)">Likes</span></button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('✨ Spark coming soon!')"><span>✨</span><span style="font-size:9px;color:rgba(255,255,255,0.25)">Spark</span></button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('💬 Chat coming soon!')"><span>💬</span><span style="font-size:9px;color:rgba(255,255,255,0.25)">Chat</span></button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showPage('page-profile')"><span>👤</span><span style="font-size:9px;color:rgba(255,255,255,0.25)">Profile</span></button>
     </div>
 </div>
 
-<!-- ========== PAGE 11: PROFILE ========== -->
+<!-- ===== PAGE 11: PROFILE (REDESIGNED) ===== -->
 <div id="page-profile" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👤 My Profile</h2></div>
-    <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%">
-        <div style="text-align:center;margin-bottom:16px">
-            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:36px;border:3px solid #FF3366">👤</div>
-            <h3 style="color:#fff;margin-top:8px">Sarah Johnson</h3>
-            <p style="color:rgba(255,255,255,0.4);font-size:13px">🔱 Elite  |  ✅ Verified  |  📍 London</p>
-            <p style="color:rgba(255,255,255,0.4);font-size:13px">💍 Single  |  🎂 28</p>
-            <p style="color:rgba(255,255,255,0.5);font-size:13px;font-style:italic;margin-top:4px">"Love is the greatest adventure." ❤️‍🔥</p>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👤 My Profile</h2></div>
+    <div style="flex:1;overflow-y:auto;max-width:380px;margin:0 auto;width:100%;padding-bottom:20px">
+        <!-- Profile Header -->
+        <div style="text-align:center;margin-bottom:20px">
+            <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:44px;border:3px solid #FF3366">👤</div>
+            <h3 style="color:#fff;font-size:22px;margin-top:10px">Sarah Johnson</h3>
+            <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;flex-wrap:wrap">
+                <span style="color:#FF0033;font-size:13px;font-weight:600">🔱 Elite</span>
+                <span class="verified-badge" style="background:#4488FF;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">✓</span>
+                <span style="color:rgba(255,255,255,0.3);font-size:13px">·</span>
+                <span style="color:rgba(255,255,255,0.4);font-size:13px">📍 London</span>
+            </div>
+            <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-top:2px">💍 Single · 🎂 28</p>
+            <p style="color:rgba(255,255,255,0.5);font-size:14px;font-style:italic;margin-top:6px">"Love is the greatest adventure." ❤️‍🔥</p>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px">🔑 DEST ID: <span style="color:#fff">DEST12345100</span></p>
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-top:4px">💳 ACCOUNT: <span style="color:#fff">0123-4567-8910-1112</span></p>
+
+        <!-- Dest ID + Account -->
+        <div style="background:rgba(255,255,255,0.03);border-radius:14px;padding:16px 18px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:6px">🔑 DEST ID</p>
+            <p style="color:#fff;font-weight:600;font-size:16px;letter-spacing:1px">DEST12345100</p>
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin:8px 0 4px">💳 ACCOUNT NUMBER</p>
+            <p style="color:rgba(255,255,255,0.6);font-size:14px;letter-spacing:1px">0123-4567-8910-1112</p>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
+
+        <!-- Badge Showcase -->
+        <div style="background:rgba(255,255,255,0.03);border-radius:14px;padding:16px 18px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
             <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🏅 BADGE SHOWCASE</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:28px">📸👑</span><span style="font-size:28px">🌍🏆</span><span style="font-size:28px">🎁👑</span><span style="font-size:28px">🐉🔥</span></div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span style="font-size:32px">📸👑</span>
+                <span style="font-size:32px">🌍🏆</span>
+                <span style="font-size:32px">🎁👑</span>
+                <span style="font-size:32px">🐉🔥</span>
+            </div>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
+
+        <!-- Pet - ALIVE! -->
+        <div style="background:rgba(255,255,255,0.03);border-radius:14px;padding:16px 18px;border:1px solid rgba(255,255,255,0.04);margin-bottom:16px">
             <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🐾 MY PET</p>
-            <div style="display:flex;align-items:center;gap:12px"><span style="font-size:32px">🐉</span><div><p style="color:#fff;font-weight:600">Draco</p><p style="color:rgba(255,255,255,0.4);font-size:12px">Legendary Dragon</p></div></div>
+            <div style="display:flex;align-items:center;gap:14px">
+                <div class="pet-container" style="animation:petIdle 2.5s ease-in-out infinite">
+                    <span class="pet-emoji" style="font-size:44px">🐉</span>
+                </div>
+                <div>
+                    <p style="color:#fff;font-weight:600;font-size:16px">Draco</p>
+                    <p style="color:rgba(255,255,255,0.4);font-size:13px">Legendary Dragon</p>
+                    <div style="display:flex;gap:6px;margin-top:4px">
+                        <span style="font-size:10px;color:rgba(255,255,255,0.2)">❤️ 95%</span>
+                        <span style="font-size:10px;color:rgba(255,255,255,0.2)">⚡ 80%</span>
+                        <span style="font-size:10px;color:rgba(255,255,255,0.2)">🍔 60%</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
+
+        <!-- Buttons -->
+        <div style="display:flex;flex-direction:column;gap:10px">
             <button class="btn btn-secondary" onclick="showToast('✏️ Edit Profile coming soon!')"><span class="btn-text">✏️ Edit Profile</span></button>
             <button class="btn btn-secondary" onclick="showToast('⚙️ Settings coming soon!')"><span class="btn-text">⚙️ Settings</span></button>
             <button class="btn btn-secondary" onclick="showPage('page-admin')"><span class="btn-text">👑 Admin Panel</span></button>
@@ -298,7 +380,7 @@
     </div>
 </div>
 
-<!-- ========== PAGE 12: ADMIN PANEL ========== -->
+<!-- ===== PAGE 12: ADMIN PANEL ===== -->
 <div id="page-admin" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-profile')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👑 Admin Panel</h2></div>
     <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%">
@@ -320,15 +402,15 @@
                 <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('🎛️ Feature Toggles')">🎛️ Toggles</button>
             </div>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px;border-color:rgba(255,51,102,0.2)">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🛡️ DESTINED CORE (Secret)</p>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,51,102,0.15);margin-bottom:12px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🛡️ DESTINED CORE</p>
             <button class="btn btn-primary" style="padding:12px;font-size:14px" onclick="showPage('page-core')"><span class="btn-text">🔐 Access Core</span></button>
         </div>
         <button class="btn btn-secondary" onclick="showPage('page-profile')"><span class="btn-text">← Back</span></button>
     </div>
 </div>
 
-<!-- ========== PAGE 13: DESTINED CORE ========== -->
+<!-- ===== PAGE 13: DESTINED CORE ===== -->
 <div id="page-core" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-admin')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Destined Core</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
@@ -341,16 +423,16 @@
     </div>
 </div>
 
-<!-- ========== PAGE 14: SEARCH ========== -->
+<!-- ===== PAGE 14: SEARCH ===== -->
 <div id="page-search" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Search</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
         <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:16px">Find users by Dest ID</p>
-        <div style="display:flex;gap:8px;margin-bottom:16px"><input type="text" placeholder="DEST12345100" style="flex:1;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none"><button style="padding:14px 20px;background:#FF3366;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer" onclick="showToast('🔍 Searching...')">Search</button></div>
+        <div style="display:flex;gap:8px;margin-bottom:20px"><input type="text" placeholder="DEST12345100" style="flex:1;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none"><button style="padding:14px 24px;background:#FF3366;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer" onclick="showToast('🔍 Searching...')">Search</button></div>
         <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);text-align:center">
             <p style="color:rgba(255,255,255,0.3);font-size:13px">📋 Your Dest ID</p>
-            <p style="color:#fff;font-weight:600;font-size:18px;margin:4px 0">DEST12345100</p>
-            <button style="padding:6px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer" onclick="showToast('📋 Copied!')">📋 Copy</button>
+            <p style="color:#fff;font-weight:600;font-size:20px;margin:6px 0;letter-spacing:1px">DEST12345100</p>
+            <button style="padding:6px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer" onclick="showToast('📋 Copied!')">📋 Copy</button>
         </div>
     </div>
 </div>
@@ -409,11 +491,14 @@ function startVerification() {
 }
 
 function selectGender(btn) {
-    document.querySelectorAll('#page-register .form-group .gender-btn').forEach(b => {
-        b.style.background = 'rgba(255,255,255,0.04)';
-        b.style.borderColor = 'rgba(255,255,255,0.06)';
-        b.style.color = 'rgba(255,255,255,0.5)';
-    });
+    const parent = btn.closest('.form-group');
+    if (parent) {
+        parent.querySelectorAll('button').forEach(b => {
+            b.style.background = 'rgba(255,255,255,0.04)';
+            b.style.borderColor = 'rgba(255,255,255,0.06)';
+            b.style.color = 'rgba(255,255,255,0.5)';
+        });
+    }
     btn.style.background = 'rgba(255,51,102,0.1)';
     btn.style.borderColor = '#FF3366';
     btn.style.color = '#fff';
@@ -439,8 +524,12 @@ setTimeout(() => {
 
 document.addEventListener('gesturestart', e => e.preventDefault());
 
-console.log('🔥 Destined MVP — Complete');
+console.log('🔥 Destined MVP — Redesigned & Professional');
 console.log('👑 Built for Daniel — 17-year-old CEO');
+console.log('✅ Verified Badge: Blue circle with white checkmark');
+console.log('✅ Pet: Alive with animation!');
+console.log('✅ Clean spacing, no jampack');
+console.log('✅ Swipe buttons together like Tinder');
 </script>
 
 </body>
