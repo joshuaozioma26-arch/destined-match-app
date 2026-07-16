@@ -50,77 +50,73 @@
         .tg-safe-top{padding-top:env(safe-area-inset-top,20px)}
         .tg-safe-bottom{padding-bottom:env(safe-area-inset-bottom,20px)}
 
-        .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#4488FF;border-radius:50%;font-size:10px;color:#fff;font-weight:700;margin-left:4px;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.15)}
+        /* Verified Badge - BLUE CHECKMARK BESIDE NAME */
+        .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#4488FF;border-radius:50%;font-size:11px;color:#fff;font-weight:700;margin-left:6px;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.15)}
 
-        /* ========== TINDER CLONE CARD ========== */
-        .tinder-card{flex:1;display:flex;flex-direction:column;padding:12px 16px 8px;background:#0A0A0F}
-        .tinder-card .card{flex:1;border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#14141E,#1A1A2E);border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.5);display:flex;flex-direction:column;position:relative}
+        /* ===== TOP BAR ===== */
+        .top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;background:#0A0A0F;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.04)}
+        .top-bar .brand{display:flex;align-items:center;gap:8px}
+        .top-bar .brand .fire{font-size:20px}
+        .top-bar .brand .name{font-weight:700;font-size:18px;color:#FF3366;letter-spacing:1px}
+        .top-bar .icons{display:flex;gap:16px;font-size:20px;cursor:pointer}
+        .top-bar .icons span{color:rgba(255,255,255,0.4);transition:all .2s}
+        .top-bar .icons span:hover{color:#fff}
 
-        /* PHOTO AREA - Takes most of the card */
-        .tinder-card .card-photo{flex:1;min-height:300px;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-        .tinder-card .card-photo .photo-icon{font-size:100px;opacity:0.6}
+        /* ===== CARD ===== */
+        .card-container{flex:1;display:flex;flex-direction:column;padding:8px 16px 4px;background:#0A0A0F}
+        .card-container .card{flex:1;border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#14141E,#1A1A2E);border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.5);display:flex;flex-direction:column}
 
-        /* Verified Badge on Photo - TOP RIGHT like Tinder */
-        .tinder-card .card-photo .verified-badge-photo{position:absolute;top:16px;right:16px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;background:#4488FF;border-radius:50%;font-size:15px;color:#fff;font-weight:700;border:2px solid rgba(255,255,255,0.2);box-shadow:0 2px 12px rgba(68,136,255,0.4)}
-        /* Tier Badge on Photo - TOP LEFT */
-        .tinder-card .card-photo .tier-badge{position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:4px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.05)}
-        .tinder-card .card-photo .tier-badge.elite{color:#FF0033;border-color:rgba(255,0,51,0.3)}
-        .tinder-card .card-photo .tier-badge.vip{color:#C0C0C0;border-color:rgba(192,192,192,0.3)}
-        .tinder-card .card-photo .tier-badge.premium{color:#FFD700;border-color:rgba(255,215,0,0.3)}
-        .tinder-card .card-photo .tier-badge.free{color:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.05)}
+        .card-container .card-photo{flex:1;min-height:280px;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+        .card-container .card-photo .photo-icon{font-size:100px;opacity:0.5}
 
-        /* Online Status on Photo - BOTTOM LEFT */
-        .tinder-card .card-photo .online-status{position:absolute;bottom:16px;left:16px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.5);padding:4px 12px;border-radius:20px;backdrop-filter:blur(10px)}
-        .tinder-card .card-photo .online-status .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-        .tinder-card .card-photo .online-status .dot.online{background:#44FF88}
-        .tinder-card .card-photo .online-status .dot.offline{background:#FF4444}
-        .tinder-card .card-photo .online-status .label{font-size:12px;color:rgba(255,255,255,0.7)}
+        /* Tier Badge - TOP LEFT */
+        .card-container .card-photo .tier-badge{position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:4px;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.5px;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.05)}
+        .card-container .card-photo .tier-badge.elite{color:#FF0033;border-color:rgba(255,0,51,0.3)}
+        .card-container .card-photo .tier-badge.vip{color:#C0C0C0;border-color:rgba(192,192,192,0.3)}
+        .card-container .card-photo .tier-badge.premium{color:#FFD700;border-color:rgba(255,215,0,0.3)}
+        .card-container .card-photo .tier-badge.free{color:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.05)}
 
-        /* INFO AREA - Bottom of card */
-        .tinder-card .card-info{padding:16px 20px 12px;flex-shrink:0}
-        .tinder-card .card-info .name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-        .tinder-card .card-info .name-row .name{font-size:24px;font-weight:700;color:#fff}
-        .tinder-card .card-info .name-row .age{font-size:20px;font-weight:400;color:rgba(255,255,255,0.4)}
-        .tinder-card .card-info .location{font-size:14px;color:rgba(255,255,255,0.4);margin-top:2px}
-        .tinder-card .card-info .looking-for{font-size:14px;color:rgba(255,255,255,0.6);margin-top:6px}
-        .tinder-card .card-info .looking-for span{color:#FF3366}
+        /* Online Status - BOTTOM LEFT */
+        .card-container .card-photo .online-status{position:absolute;bottom:16px;left:16px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.6);padding:4px 14px;border-radius:20px;backdrop-filter:blur(10px)}
+        .card-container .card-photo .online-status .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+        .card-container .card-photo .online-status .dot.online{background:#44FF88}
+        .card-container .card-photo .online-status .dot.offline{background:#FF4444}
+        .card-container .card-photo .online-status .label{font-size:12px;color:rgba(255,255,255,0.7)}
 
-        /* INTERESTS - Like Tinder's icons inside card */
-        .tinder-card .card-info .interests{display:flex;gap:14px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.04)}
-        .tinder-card .card-info .interests .interest{display:flex;flex-direction:column;align-items:center;gap:4px;color:rgba(255,255,255,0.3);font-size:11px;cursor:pointer;transition:all .2s}
-        .tinder-card .card-info .interests .interest:hover{color:#fff}
-        .tinder-card .card-info .interests .interest .icon{font-size:22px}
-        .tinder-card .card-info .interests .interest.active{color:#FF3366}
-        .tinder-card .card-info .interests .interest.active .icon{color:#FF3366}
+        /* Card Info */
+        .card-container .card-info{padding:16px 20px 12px;flex-shrink:0}
+        .card-container .card-info .name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+        .card-container .card-info .name-row .name{font-size:24px;font-weight:700;color:#fff}
+        .card-container .card-info .name-row .age{font-size:20px;font-weight:400;color:rgba(255,255,255,0.4)}
+        .card-container .card-info .location{font-size:14px;color:rgba(255,255,255,0.4);margin-top:2px}
+        .card-container .card-info .looking-for{font-size:14px;color:rgba(255,255,255,0.6);margin-top:6px}
+        .card-container .card-info .looking-for span{color:#FF3366}
+        .card-container .card-info .bio{font-size:14px;color:rgba(255,255,255,0.5);margin-top:4px;font-style:italic}
 
-        /* SWIPE BUTTONS - At bottom of card like Tinder */
-        .tinder-card .swipe-actions{display:flex;justify-content:center;align-items:center;gap:16px;padding:8px 0 6px;flex-shrink:0;background:#0A0A0F;border-top:1px solid rgba(255,255,255,0.04)}
-        .tinder-card .swipe-actions .swipe-btn{width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .2s;color:#FFB800}
-        .tinder-card .swipe-actions .swipe-btn:hover{transform:scale(1.05)}
-        .tinder-card .swipe-actions .swipe-btn.pass{width:58px;height:58px;border-color:rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:24px}
-        .tinder-card .swipe-actions .swipe-btn.pass:hover{background:rgba(255,68,68,0.15);border-color:rgba(255,68,68,0.4)}
-        .tinder-card .swipe-actions .swipe-btn.super{width:58px;height:58px;border-color:rgba(68,136,255,0.2);background:rgba(68,136,255,0.08);color:#4488FF;font-size:18px}
-        .tinder-card .swipe-actions .swipe-btn.super:hover{background:rgba(68,136,255,0.15);border-color:rgba(68,136,255,0.4)}
-        .tinder-card .swipe-actions .swipe-btn.like{width:58px;height:58px;border-color:rgba(68,255,136,0.2);background:rgba(68,255,136,0.08);color:#44FF88;font-size:24px}
-        .tinder-card .swipe-actions .swipe-btn.like:hover{background:rgba(68,255,136,0.15);border-color:rgba(68,255,136,0.4)}
-        .tinder-card .swipe-actions .swipe-btn.boost{width:52px;height:52px;border-color:rgba(255,51,102,0.2);background:rgba(255,51,102,0.08);color:#FF3366;font-size:14px}
-        .tinder-card .swipe-actions .swipe-btn.boost:hover{background:rgba(255,51,102,0.15);border-color:rgba(255,51,102,0.4)}
+        /* ===== SWIPE BUTTONS ===== */
+        .swipe-actions{display:flex;justify-content:center;align-items:center;gap:14px;padding:8px 0 6px;flex-shrink:0;background:#0A0A0F}
+        .swipe-actions .swipe-btn{width:50px;height:50px;border-radius:50%;border:2px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .2s;color:#FFB800}
+        .swipe-actions .swipe-btn:hover{transform:scale(1.05)}
+        .swipe-actions .swipe-btn.pass{width:58px;height:58px;border-color:rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:24px}
+        .swipe-actions .swipe-btn.pass:hover{background:rgba(255,68,68,0.15)}
+        .swipe-actions .swipe-btn.super{width:58px;height:58px;border-color:rgba(68,136,255,0.2);background:rgba(68,136,255,0.08);color:#4488FF;font-size:18px}
+        .swipe-actions .swipe-btn.super:hover{background:rgba(68,136,255,0.15)}
+        .swipe-actions .swipe-btn.like{width:58px;height:58px;border-color:rgba(68,255,136,0.2);background:rgba(68,255,136,0.08);color:#44FF88;font-size:24px}
+        .swipe-actions .swipe-btn.like:hover{background:rgba(68,255,136,0.15)}
+        .swipe-actions .swipe-btn.boost{width:50px;height:50px;border-color:rgba(255,51,102,0.2);background:rgba(255,51,102,0.08);color:#FF3366;font-size:14px}
+        .swipe-actions .swipe-btn.boost:hover{background:rgba(255,51,102,0.15)}
 
-        /* BOTTOM NAV - Outside card like Tinder */
-        .bottom-nav{display:flex;justify-content:space-around;padding:8px 0 14px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F;flex-shrink:0}
-        .bottom-nav .nav-btn{background:transparent;border:none;color:rgba(255,255,255,0.2);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;transition:all .2s}
+        /* ===== BOTTOM NAV ===== */
+        .bottom-nav{display:flex;justify-content:space-around;padding:8px 0 16px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F;flex-shrink:0}
+        .bottom-nav .nav-btn{background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;transition:all .2s}
         .bottom-nav .nav-btn.active{color:#FF3366}
-        .bottom-nav .nav-btn span{font-size:9px;color:inherit}
+        .bottom-nav .nav-btn span{font-size:10px;color:inherit;font-weight:500}
         .bottom-nav .nav-btn:hover{color:rgba(255,255,255,0.5)}
 
-        /* TOP BAR */
-        .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 4px;background:#0A0A0F;flex-shrink:0}
-        .top-bar .brand{display:flex;align-items:center;gap:8px}
-        .top-bar .brand .fire{font-size:18px}
-        .top-bar .brand .name{font-weight:700;font-size:16px;color:#FF3366;letter-spacing:1px}
-        .top-bar .icons{display:flex;gap:12px;font-size:18px;cursor:pointer}
-        .top-bar .icons span{color:rgba(255,255,255,0.3);transition:all .2s}
-        .top-bar .icons span:hover{color:#fff}
+        /* ===== THEMES IN PROFILE ===== */
+        .theme-option{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);cursor:pointer;transition:all .3s ease;flex-shrink:0}
+        .theme-option:hover{transform:scale(1.1)}
+        .theme-option.active{border-color:#FF3366;box-shadow:0 0 20px rgba(255,51,102,0.3)}
 
         /* Match Animation */
         .match-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(20px);animation:matchPop .5s ease}
@@ -150,7 +146,7 @@
 <!-- APP -->
 <div id="app" class="tg-safe-top">
 
-<!-- ===== MAIN SCREEN (TINDER CLONE) ===== -->
+<!-- ===== MAIN SCREEN ===== -->
 <div id="page-main" class="page active" style="background:#0A0A0F">
 
     <!-- TOP BAR -->
@@ -165,78 +161,40 @@
         </div>
     </div>
 
-    <!-- TINDER CARD -->
-    <div class="tinder-card">
+    <!-- CARD -->
+    <div class="card-container">
         <div class="card">
-            <!-- PHOTO AREA -->
             <div class="card-photo">
                 <span class="photo-icon">👤</span>
-                
-                <!-- Verified Badge - TOP RIGHT -->
-                <div class="verified-badge-photo">✓</div>
-                
-                <!-- Tier Badge - TOP LEFT -->
                 <div class="tier-badge elite">🔱 ELITE</div>
-                
-                <!-- Online Status - BOTTOM LEFT -->
                 <div class="online-status">
                     <span class="dot online"></span>
                     <span class="label">Online</span>
                 </div>
             </div>
-
-            <!-- INFO AREA -->
             <div class="card-info">
-                <!-- Name + Age + Verified -->
                 <div class="name-row">
                     <span class="name">Sarah</span>
                     <span class="age">22</span>
                     <span class="verified-badge">✓</span>
                 </div>
-                
-                <!-- Location -->
                 <div class="location">📍 London</div>
-                
-                <!-- Looking For -->
                 <div class="looking-for">🔍 Looking for: <span>Long-term, open to short</span></div>
-                
-                <!-- Interests (Inside card like Tinder) -->
-                <div class="interests">
-                    <div class="interest active" onclick="showToast('❤️ Love')">
-                        <span class="icon">❤️</span>
-                        <span>Love</span>
-                    </div>
-                    <div class="interest" onclick="showToast('🎵 Music')">
-                        <span class="icon">🎵</span>
-                        <span>Music</span>
-                    </div>
-                    <div class="interest" onclick="showToast('✂️ Creative')">
-                        <span class="icon">✂️</span>
-                        <span>Creative</span>
-                    </div>
-                    <div class="interest" onclick="showToast('⭐ Super')">
-                        <span class="icon">⭐</span>
-                        <span>Super</span>
-                    </div>
-                    <div class="interest" onclick="showToast('👤 Profile')">
-                        <span class="icon">👤</span>
-                        <span>Profile</span>
-                    </div>
-                </div>
+                <div class="bio">"Love is the greatest adventure." ❤️‍🔥</div>
             </div>
-        </div>
-
-        <!-- SWIPE BUTTONS (Inside card area) -->
-        <div class="swipe-actions">
-            <button class="swipe-btn" onclick="showToast('↩️ Rewind (3 left)')">↩️</button>
-            <button class="swipe-btn pass" onclick="showToast('❌ Passed!')">✕</button>
-            <button class="swipe-btn super" onclick="showToast('⭐ Super Liked! (1 left)')">⭐</button>
-            <button class="swipe-btn like" onclick="showMatch()">❤️</button>
-            <button class="swipe-btn boost" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
         </div>
     </div>
 
-    <!-- BOTTOM NAV (Outside card) -->
+    <!-- SWIPE BUTTONS -->
+    <div class="swipe-actions">
+        <button class="swipe-btn" onclick="showToast('↩️ Rewind (3 left)')">↩️</button>
+        <button class="swipe-btn pass" onclick="showToast('❌ Passed!')">✕</button>
+        <button class="swipe-btn super" onclick="showToast('⭐ Super Liked! (1 left)')">⭐</button>
+        <button class="swipe-btn like" onclick="showMatch()">❤️</button>
+        <button class="swipe-btn boost" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
+    </div>
+
+    <!-- BOTTOM NAV -->
     <div class="bottom-nav">
         <button class="nav-btn active" onclick="switchNav(this)"><span>❤️‍🔥</span><span>Home</span></button>
         <button class="nav-btn" onclick="switchNav(this);showToast('💞 Likes coming soon!')"><span>💞</span><span>Likes</span></button>
@@ -274,7 +232,6 @@
                 <span style="color:rgba(255,255,255,0.4);font-size:13px">💍 Single</span>
                 <span style="color:rgba(255,255,255,0.2);font-size:13px">·</span>
                 <span style="color:rgba(255,255,255,0.4);font-size:13px">🎂 22</span>
-                <span class="verified-badge">✓</span>
                 <span style="color:#FF0033;font-size:11px;font-weight:700;background:rgba(255,0,51,0.15);padding:2px 10px;border-radius:12px">🔱 ELITE</span>
             </div>
             <p style="color:rgba(255,255,255,0.5);font-size:14px;font-style:italic;margin-top:6px">"Love is the greatest adventure." ❤️‍🔥</p>
@@ -285,6 +242,19 @@
             <p style="color:rgba(255,255,255,0.3);font-size:11px;margin:6px 0 4px">💳 ACCOUNT NUMBER</p>
             <p style="color:rgba(255,255,255,0.5);font-size:13px;letter-spacing:1px">0123-4567-8910-1112</p>
         </div>
+
+        <!-- THEMES -->
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🎨 THEMES</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <div class="theme-option active" style="background:#0A0A0F;border-color:#FF3366" onclick="setTheme('theme-dark',this)" title="Dark"></div>
+                <div class="theme-option" style="background:#F5F5F5" onclick="setTheme('theme-light',this)" title="Light"></div>
+                <div class="theme-option" style="background:#1A0A0F" onclick="setTheme('theme-rose',this)" title="Rose"></div>
+                <div class="theme-option" style="background:#0A1520" onclick="setTheme('theme-ocean',this)" title="Ocean"></div>
+                <div class="theme-option" style="background:#1A0A00;border-color:#FFD700" onclick="setTheme('theme-royal',this)" title="Royal"></div>
+            </div>
+        </div>
+
         <div style="display:flex;flex-direction:column;gap:10px">
             <button class="btn btn-secondary" onclick="showToast('✏️ Edit Profile coming soon!')"><span class="btn-text">✏️ Edit Profile</span></button>
             <button class="btn btn-secondary" onclick="showToast('⚙️ Settings coming soon!')"><span class="btn-text">⚙️ Settings</span></button>
@@ -294,7 +264,7 @@
     </div>
 </div>
 
-<!-- ===== REGISTRATION PAGES (Brief) ===== -->
+<!-- ===== REGISTRATION PAGES ===== -->
 <div id="page-welcome" class="page bg-gradient">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
         <svg width="90" height="90" viewBox="0 0 200 200"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
@@ -389,18 +359,26 @@ function closeMatch() {
     document.getElementById('matchOverlay').classList.remove('show');
 }
 
+function setTheme(themeClass, el) {
+    document.querySelectorAll('.theme-option').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.body.className = themeClass;
+    showToast('🎨 Theme changed to ' + themeClass.replace('theme-',''));
+}
+
 setTimeout(() => {
     document.getElementById('splash').style.display = 'none';
 }, 2800);
 
 document.addEventListener('gesturestart', e => e.preventDefault());
 
-console.log('🔥 Destined — Tinder Clone Style');
+console.log('🔥 Destined — Fixed Version');
 console.log('👑 Built for Daniel — 17-year-old CEO');
-console.log('✅ Verified badge: Blue circle with white checkmark');
-console.log('✅ Tier badge: Elite, VIP, Premium');
-console.log('✅ Interests inside card like Tinder');
-console.log('✅ Full card height, same width as Tinder');
+console.log('✅ Verified badge: BESIDE name (Sarah ✅ 22)');
+console.log('✅ Notifications & Search: TOP RIGHT visible');
+console.log('✅ Themes: IN SETTINGS');
+console.log('✅ No random scissors/music icons');
+console.log('✅ Tabs: FULL SIZE');
 </script>
 
 </body>
