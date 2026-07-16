@@ -14,10 +14,13 @@
         @keyframes fadeSlide{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        @keyframes petIdle{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(2deg)}}
-        @keyframes petHappy{0%,100%{transform:scale(1)}50%{transform:scale(1.1) rotate(-3deg)}}
-        @keyframes heartFloat{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-60px) scale(0);opacity:0}}
+
+        /* Themes */
+        .theme-dark{--bg:#0A0A0F;--card:#14141E;--border:rgba(255,255,255,0.06);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3)}
+        .theme-light{--bg:#F5F5F5;--card:#FFFFFF;--border:rgba(0,0,0,0.06);--text:#1A1A1A;--text2:rgba(0,0,0,0.5);--text3:rgba(0,0,0,0.3)}
+        .theme-rose{--bg:#1A0A0F;--card:#2A1520;--border:rgba(255,51,102,0.15);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3)}
+        .theme-ocean{--bg:#0A1520;--card:#152A3A;--border:rgba(68,136,255,0.15);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3)}
+        .theme-royal{--bg:#1A0A00;--card:#2A1A0A;--border:rgba(255,215,0,0.15);--text:#FFD700;--text2:rgba(255,215,0,0.6);--text3:rgba(255,215,0,0.3)}
 
         .bg-gradient{background:linear-gradient(160deg,#1A0A0F 0%,#2D0A15 30%,#4A0A20 60%,#660025 100%)}
 
@@ -28,31 +31,22 @@
         #splash .name{font-size:36px;font-weight:700;color:#fff;margin-top:16px;letter-spacing:3px;font-family:Georgia,serif}
         #splash .loader{margin-top:40px;width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#FF3366;border-radius:50%;animation:spin .8s linear infinite}
 
-        /* Buttons */
         .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;border:none;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;width:100%;text-decoration:none}
         .btn-primary{background:#FF3366;color:#fff;box-shadow:0 4px 20px rgba(255,51,102,0.3)}
         .btn-primary:active{transform:scale(.97)}
         .btn-secondary{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08)}
         .btn-secondary:hover{background:rgba(255,255,255,0.12)}
-        .btn-agree{background:#FF3366;color:#fff;box-shadow:0 4px 20px rgba(255,51,102,0.3);font-size:18px;letter-spacing:1px;padding:18px}
         .btn:disabled{opacity:.5;cursor:not-allowed}
         .btn .spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#FF3366;border-radius:50%;animation:spin .6s linear infinite;display:none}
         .btn.loading .spinner{display:block}
         .btn.loading .btn-text{display:none}
 
-        .btn-social-oval{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 20px;background:#fff;border:none;border-radius:50px;font-size:15px;font-weight:600;color:#1A0A0F;cursor:pointer;transition:all .3s ease;width:100%;box-shadow:0 2px 12px rgba(0,0,0,0.1)}
-        .btn-social-oval:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.2)}
-        .btn-social-oval svg{width:22px;height:22px;flex-shrink:0}
-        .btn-social-oval .btn-label{flex:1;text-align:center}
-
-        /* Form */
         .form-group{margin-bottom:18px}
         .form-group label{display:block;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);margin-bottom:4px}
         .form-group input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;transition:all .3s ease;outline:none}
         .form-group input:focus{border-color:#FF3366;box-shadow:0 0 0 3px rgba(255,51,102,0.08)}
         .form-group input::placeholder{color:rgba(255,255,255,0.2)}
 
-        /* Toast */
         .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,0.9);border:1px solid rgba(255,255,255,0.06);padding:14px 24px;border-radius:14px;color:#fff;font-size:14px;box-shadow:0 8px 40px rgba(0,0,0,0.6);opacity:0;transition:all .4s ease;z-index:999;max-width:90%;text-align:center;backdrop-filter:blur(20px)}
         .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
         .toast.error{border-color:#FF4444}
@@ -66,15 +60,30 @@
         .tg-safe-top{padding-top:env(safe-area-inset-top,20px)}
         .tg-safe-bottom{padding-bottom:env(safe-area-inset-bottom,20px)}
 
-        /* Verified Badge */
-        .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#4488FF;border-radius:50%;font-size:12px;color:#fff;font-weight:700;margin-left:4px;flex-shrink:0}
-        .verified-badge-lg{width:24px;height:24px;font-size:14px}
+        /* Verified Badge - Tinder Style */
+        .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#4488FF;border-radius:50%;font-size:10px;color:#fff;font-weight:700;margin-left:4px;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.15)}
+        .verified-badge-lg{width:22px;height:22px;font-size:12px}
 
-        /* Pet Animation */
-        .pet-container{display:inline-block;animation:petIdle 2s ease-in-out infinite;cursor:pointer}
-        .pet-container:hover{animation:petHappy 0.5s ease-in-out}
-        .pet-container .pet-emoji{font-size:48px;display:block}
-        .pet-container .pet-name{font-size:12px;color:rgba(255,255,255,0.4);text-align:center;margin-top:2px}
+        /* Theme Selector */
+        .theme-option{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);cursor:pointer;transition:all .3s ease;flex-shrink:0}
+        .theme-option:hover{transform:scale(1.1)}
+        .theme-option.active{border-color:#FF3366;box-shadow:0 0 20px rgba(255,51,102,0.3)}
+
+        /* Match Animation */
+        .match-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;animation:matchPop 0.5s ease;backdrop-filter:blur(20px)}
+        @keyframes matchPop{0%{transform:scale(0.5);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+        @keyframes heartFloat{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-80px) scale(0);opacity:0}}
+        .match-overlay .hearts{font-size:64px;animation:heartFloat 1s ease-in-out infinite}
+        .match-overlay .title{font-size:36px;font-weight:800;color:#FF3366;margin-top:16px;letter-spacing:2px}
+        .match-overlay .sub{color:rgba(255,255,255,0.6);font-size:16px;margin-top:4px}
+        .match-overlay .profiles{display:flex;align-items:center;gap:20px;margin:20px 0}
+        .match-overlay .profiles .p{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid #FF3366}
+        .match-overlay .profiles .heart-icon{font-size:32px;color:#FF3366}
+        .match-overlay .btn{max-width:280px}
+
+        .tab-btn{background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;transition:all .2s}
+        .tab-btn.active{color:#FF3366}
+        .tab-btn span{font-size:9px;color:inherit}
     </style>
 </head>
 <body>
@@ -237,136 +246,150 @@
     </div>
 </div>
 
-<!-- ===== PAGE 10: MAIN SCREEN (REDESIGNED) ===== -->
+<!-- ===== PAGE 10: MAIN SCREEN (TINDER-STYLE) ===== -->
 <div id="page-main" class="page" style="padding:0;background:#0A0A0F">
     <!-- Top Bar -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#0A0A0F;border-bottom:1px solid rgba(255,255,255,0.04)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#0A0A0F;border-bottom:1px solid rgba(255,255,255,0.04)">
         <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:22px">🔥</span>
-            <span style="font-weight:700;font-size:20px;color:#FF3366;letter-spacing:1px">DESTINED</span>
+            <span style="font-size:20px">🔥</span>
+            <span style="font-weight:700;font-size:18px;color:#FF3366;letter-spacing:1px">DESTINED</span>
         </div>
-        <div style="display:flex;gap:16px">
-            <span style="font-size:22px;cursor:pointer" onclick="showToast('🔔 Notifications')">🔔</span>
-            <span style="font-size:22px;cursor:pointer" onclick="showPage('page-search')">🔍</span>
-        </div>
-    </div>
-    
-    <!-- Profile Card - BIGGER AND CLEAN -->
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 20px 10px">
-        <div style="width:100%;max-width:380px;background:linear-gradient(145deg,#14141E,#1A1A2E);border-radius:24px;padding:28px 24px 24px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.4)">
-            <!-- Photo Area -->
-            <div style="width:100%;height:240px;background:linear-gradient(135deg,#2A0A15,#4A0A20);border-radius:16px;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:16px">
-                <span style="font-size:72px">👤</span>
-                <!-- Badges on photo -->
-                <div style="position:absolute;bottom:12px;right:12px;display:flex;gap:6px;align-items:center">
-                    <span style="background:#FF0033;color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px">ELITE</span>
-                    <span class="verified-badge verified-badge-lg" style="background:#4488FF;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700">✓</span>
-                </div>
-                <!-- Pet on photo - ALIVE! -->
-                <div class="pet-container" style="position:absolute;bottom:12px;left:12px">
-                    <span class="pet-emoji" style="font-size:36px">🐉</span>
-                </div>
-            </div>
-            
-            <!-- Name + Verified -->
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-                <h3 style="color:#fff;font-size:22px;font-weight:700">Sarah J.</h3>
-                <span class="verified-badge" style="background:#4488FF;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700">✓</span>
-            </div>
-            
-            <!-- Age + Location -->
-            <p style="color:rgba(255,255,255,0.4);font-size:15px;margin-bottom:10px">28 · London</p>
-            
-            <!-- Tags -->
-            <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-                <span style="background:rgba(255,255,255,0.04);padding:4px 14px;border-radius:20px;font-size:13px;color:rgba(255,255,255,0.6)">💍 Single</span>
-                <span style="background:rgba(255,255,255,0.04);padding:4px 14px;border-radius:20px;font-size:13px;color:rgba(255,255,255,0.6)">💍 Long-term</span>
-            </div>
-            
-            <!-- Bio -->
-            <p style="color:rgba(255,255,255,0.5);font-size:15px;font-style:italic;margin-bottom:12px">"Love is the greatest adventure." ❤️‍🔥</p>
-            
-            <!-- Badge Count -->
-            <div style="display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.04)">
-                <span style="font-size:14px">🏅</span>
-                <span style="color:rgba(255,255,255,0.3);font-size:13px">12 Badges</span>
-                <span style="color:rgba(255,255,255,0.15);font-size:13px;margin-left:auto">✨ +3</span>
-            </div>
+        <div style="display:flex;gap:12px">
+            <span style="font-size:18px;cursor:pointer" onclick="showToast('🔔 Notifications')">🔔</span>
+            <span style="font-size:18px;cursor:pointer" onclick="showPage('page-search')">🔍</span>
         </div>
     </div>
     
-    <!-- Swipe Buttons - TOGETHER LIKE TINDER -->
-    <div style="display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 20px 8px">
-        <button style="width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#FFB800;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('↩️ Rewind (3 left)')">↩️</button>
-        <button style="width:60px;height:60px;border-radius:50%;border:2px solid rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('❌ Passed!')">✕</button>
-        <button style="width:60px;height:60px;border-radius:50%;border:2px solid rgba(68,136,255,0.2);background:rgba(68,136,255,0.08);color:#4488FF;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('⭐ Super Liked! (1 left)')">⭐</button>
-        <button style="width:60px;height:60px;border-radius:50%;border:2px solid rgba(68,255,136,0.2);background:rgba(68,255,136,0.08);color:#44FF88;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('❤️ Liked!')">❤️</button>
-        <button style="width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,51,102,0.2);background:rgba(255,51,102,0.08);color:#FF3366;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
+    <!-- TINDER-STYLE PROFILE CARD - FULL LENGTH -->
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 16px 6px">
+        <div style="width:100%;max-width:400px;background:linear-gradient(145deg,#14141E,#1A1A2E);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.4);min-height:420px;display:flex;flex-direction:column">
+            <!-- Photo Area - Takes most space -->
+            <div style="flex:1;min-height:280px;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;position:relative">
+                <span style="font-size:80px">👤</span>
+                <!-- Verified Badge on Photo -->
+                <div style="position:absolute;bottom:12px;right:12px">
+                    <span class="verified-badge verified-badge-lg" style="background:#4488FF;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;border:2px solid rgba(255,255,255,0.2)">✓</span>
+                </div>
+                <!-- Online Status -->
+                <div style="position:absolute;bottom:12px;left:12px;display:flex;align-items:center;gap:6px">
+                    <span style="width:10px;height:10px;background:#44FF88;border-radius:50%;display:inline-block"></span>
+                    <span style="color:rgba(255,255,255,0.5);font-size:11px">Online</span>
+                </div>
+            </div>
+            
+            <!-- Info Area -->
+            <div style="padding:16px 18px 14px">
+                <!-- Name + Age + Verified -->
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                    <h3 style="color:#fff;font-size:22px;font-weight:700">Sarah</h3>
+                    <span style="color:rgba(255,255,255,0.4);font-size:18px;font-weight:400">22</span>
+                    <span class="verified-badge" style="background:#4488FF;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;border:1px solid rgba(255,255,255,0.15)">✓</span>
+                </div>
+                
+                <!-- Location -->
+                <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-top:2px">📍 London</p>
+                
+                <!-- Bio -->
+                <p style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:8px;line-height:1.5">Love is the greatest adventure. Looking for genuine connections.</p>
+                
+                <!-- Tags -->
+                <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+                    <span style="background:rgba(255,255,255,0.04);padding:3px 12px;border-radius:16px;font-size:12px;color:rgba(255,255,255,0.5)">💍 Single</span>
+                    <span style="background:rgba(255,255,255,0.04);padding:3px 12px;border-radius:16px;font-size:12px;color:rgba(255,255,255,0.5)">💍 Long-term</span>
+                    <span style="background:rgba(255,255,255,0.04);padding:3px 12px;border-radius:16px;font-size:12px;color:rgba(255,255,255,0.5)">⭐ Verified</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Swipe Buttons - TINDER STYLE -->
+    <div style="display:flex;justify-content:center;align-items:center;gap:12px;padding:10px 20px 4px">
+        <button style="width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);color:#FFB800;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('↩️ Rewind (3 left)')">↩️</button>
+        <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('❌ Passed!')">✕</button>
+        <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(68,136,255,0.2);background:rgba(68,136,255,0.08);color:#4488FF;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('⭐ Super Liked! (1 left)')">⭐</button>
+        <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(68,255,136,0.2);background:rgba(68,255,136,0.08);color:#44FF88;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showMatch()">❤️</button>
+        <button style="width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,51,102,0.2);background:rgba(255,51,102,0.08);color:#FF3366;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
     </div>
 
-    <!-- Bottom Tabs -->
-    <div style="display:flex;justify-content:space-around;padding:10px 0 16px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F;margin-top:auto">
-        <button style="background:transparent;border:none;color:#FF3366;font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showPage('page-main')"><span>❤️‍🔥</span><span style="font-size:9px;color:#FF3366">Home</span></button>
-        <button style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('💞 Likes coming soon!')"><span>💞</span><span style="font-size:9px;color:rgba(255,255,255,0.25)">Likes</span></button>
-        <button style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('✨ Spark coming soon!')"><span>✨</span><span style="font-size:9px;color:rgba(255,255,255,0.25)">Spark</span></button>
-        <button style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showToast('💬 Chat coming soon!')"><span>💬</span><span style="font-size:9px;color:rgba(255,255,255,0.25)">Chat</span></button>
-        <button style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px" onclick="showPage('page-profile')"><span>👤</span><span style="font-size:9px;color:rgba(255,255,255,0.25)">Profile</span></button>
+    <!-- Bottom Tabs - TINDER STYLE -->
+    <div style="display:flex;justify-content:space-around;padding:6px 0 14px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F;margin-top:auto">
+        <button class="tab-btn active" onclick="switchTab(this,'page-main')"><span>❤️‍🔥</span><span>Home</span></button>
+        <button class="tab-btn" onclick="switchTab(this,'page-likes')"><span>💞</span><span>Likes</span></button>
+        <button class="tab-btn" onclick="switchTab(this,'page-spark')"><span>✨</span><span>Spark</span></button>
+        <button class="tab-btn" onclick="switchTab(this,'page-chat')"><span>💬</span><span>Chat</span></button>
+        <button class="tab-btn" onclick="switchTab(this,'page-profile')"><span>👤</span><span>Profile</span></button>
     </div>
 </div>
 
-<!-- ===== PAGE 11: PROFILE (REDESIGNED) ===== -->
-<div id="page-profile" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👤 My Profile</h2></div>
-    <div style="flex:1;overflow-y:auto;max-width:380px;margin:0 auto;width:100%;padding-bottom:20px">
+<!-- ===== PAGE 11: LIKES ===== -->
+<div id="page-likes" class="page" style="padding:16px 20px 40px;background:#0A0A0F">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">💞 Likes</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">💞</div>
+        <p style="color:rgba(255,255,255,0.3);font-size:16px">No likes yet</p>
+        <p style="color:rgba(255,255,255,0.2);font-size:13px;margin-top:4px">Keep swiping to find your match!</p>
+        <button class="btn btn-primary" style="max-width:200px;margin-top:16px;padding:12px" onclick="showPage('page-main')"><span class="btn-text">Start Swiping</span></button>
+    </div>
+</div>
+
+<!-- ===== PAGE 12: SPARK ===== -->
+<div id="page-spark" class="page" style="padding:16px 20px 40px;background:#0A0A0F">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">✨ Spark</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">✨</div>
+        <p style="color:rgba(255,255,255,0.3);font-size:16px">Games coming soon!</p>
+        <p style="color:rgba(255,255,255,0.2);font-size:13px;margin-top:4px">Play fun games and challenges</p>
+        <button class="btn btn-secondary" style="max-width:200px;margin-top:16px;padding:12px" onclick="showToast('🎮 Games coming soon!')"><span class="btn-text">Coming Soon</span></button>
+    </div>
+</div>
+
+<!-- ===== PAGE 13: CHAT ===== -->
+<div id="page-chat" class="page" style="padding:16px 20px 40px;background:#0A0A0F">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">💬 Chats</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">💬</div>
+        <p style="color:rgba(255,255,255,0.3);font-size:16px">No messages yet</p>
+        <p style="color:rgba(255,255,255,0.2);font-size:13px;margin-top:4px">Match with someone to start chatting!</p>
+        <button class="btn btn-primary" style="max-width:200px;margin-top:16px;padding:12px" onclick="showPage('page-main')"><span class="btn-text">Find Matches</span></button>
+    </div>
+</div>
+
+<!-- ===== PAGE 14: PROFILE ===== -->
+<div id="page-profile" class="page" style="padding:16px 20px 40px;background:#0A0A0F">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👤 Profile</h2></div>
+    <div style="flex:1;overflow-y:auto;max-width:380px;margin:0 auto;width:100%">
         <!-- Profile Header -->
         <div style="text-align:center;margin-bottom:20px">
-            <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:44px;border:3px solid #FF3366">👤</div>
-            <h3 style="color:#fff;font-size:22px;margin-top:10px">Sarah Johnson</h3>
+            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:36px;border:3px solid #FF3366">👤</div>
+            <h3 style="color:#fff;font-size:20px;margin-top:10px">Sarah Johnson</h3>
             <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;flex-wrap:wrap">
-                <span style="color:#FF0033;font-size:13px;font-weight:600">🔱 Elite</span>
-                <span class="verified-badge" style="background:#4488FF;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">✓</span>
-                <span style="color:rgba(255,255,255,0.3);font-size:13px">·</span>
                 <span style="color:rgba(255,255,255,0.4);font-size:13px">📍 London</span>
+                <span style="color:rgba(255,255,255,0.2);font-size:13px">·</span>
+                <span style="color:rgba(255,255,255,0.4);font-size:13px">💍 Single</span>
+                <span style="color:rgba(255,255,255,0.2);font-size:13px">·</span>
+                <span style="color:rgba(255,255,255,0.4);font-size:13px">🎂 22</span>
+                <span class="verified-badge" style="background:#4488FF;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700">✓</span>
             </div>
-            <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-top:2px">💍 Single · 🎂 28</p>
             <p style="color:rgba(255,255,255,0.5);font-size:14px;font-style:italic;margin-top:6px">"Love is the greatest adventure." ❤️‍🔥</p>
         </div>
 
         <!-- Dest ID + Account -->
-        <div style="background:rgba(255,255,255,0.03);border-radius:14px;padding:16px 18px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:6px">🔑 DEST ID</p>
-            <p style="color:#fff;font-weight:600;font-size:16px;letter-spacing:1px">DEST12345100</p>
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin:8px 0 4px">💳 ACCOUNT NUMBER</p>
-            <p style="color:rgba(255,255,255,0.6);font-size:14px;letter-spacing:1px">0123-4567-8910-1112</p>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
+            <p style="color:rgba(255,255,255,0.3);font-size:11px;margin-bottom:4px">🔑 DEST ID</p>
+            <p style="color:#fff;font-weight:600;font-size:15px;letter-spacing:1px">DEST12345100</p>
+            <p style="color:rgba(255,255,255,0.3);font-size:11px;margin:6px 0 4px">💳 ACCOUNT NUMBER</p>
+            <p style="color:rgba(255,255,255,0.5);font-size:13px;letter-spacing:1px">0123-4567-8910-1112</p>
         </div>
 
-        <!-- Badge Showcase -->
-        <div style="background:rgba(255,255,255,0.03);border-radius:14px;padding:16px 18px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🏅 BADGE SHOWCASE</p>
-            <div style="display:flex;gap:12px;flex-wrap:wrap">
-                <span style="font-size:32px">📸👑</span>
-                <span style="font-size:32px">🌍🏆</span>
-                <span style="font-size:32px">🎁👑</span>
-                <span style="font-size:32px">🐉🔥</span>
-            </div>
-        </div>
-
-        <!-- Pet - ALIVE! -->
-        <div style="background:rgba(255,255,255,0.03);border-radius:14px;padding:16px 18px;border:1px solid rgba(255,255,255,0.04);margin-bottom:16px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🐾 MY PET</p>
-            <div style="display:flex;align-items:center;gap:14px">
-                <div class="pet-container" style="animation:petIdle 2.5s ease-in-out infinite">
-                    <span class="pet-emoji" style="font-size:44px">🐉</span>
-                </div>
-                <div>
-                    <p style="color:#fff;font-weight:600;font-size:16px">Draco</p>
-                    <p style="color:rgba(255,255,255,0.4);font-size:13px">Legendary Dragon</p>
-                    <div style="display:flex;gap:6px;margin-top:4px">
-                        <span style="font-size:10px;color:rgba(255,255,255,0.2)">❤️ 95%</span>
-                        <span style="font-size:10px;color:rgba(255,255,255,0.2)">⚡ 80%</span>
-                        <span style="font-size:10px;color:rgba(255,255,255,0.2)">🍔 60%</span>
-                    </div>
-                </div>
+        <!-- THEMES -->
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🎨 THEMES</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <div class="theme-option active" style="background:#0A0A0F;border-color:#FF3366" onclick="setTheme('theme-dark',this)" title="Dark"></div>
+                <div class="theme-option" style="background:#F5F5F5" onclick="setTheme('theme-light',this)" title="Light"></div>
+                <div class="theme-option" style="background:#1A0A0F" onclick="setTheme('theme-rose',this)" title="Rose"></div>
+                <div class="theme-option" style="background:#0A1520" onclick="setTheme('theme-ocean',this)" title="Ocean"></div>
+                <div class="theme-option" style="background:#1A0A00;border-color:#FFD700" onclick="setTheme('theme-royal',this)" title="Royal"></div>
             </div>
         </div>
 
@@ -380,7 +403,7 @@
     </div>
 </div>
 
-<!-- ===== PAGE 12: ADMIN PANEL ===== -->
+<!-- ===== PAGE 15: ADMIN PANEL ===== -->
 <div id="page-admin" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-profile')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👑 Admin Panel</h2></div>
     <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%">
@@ -410,7 +433,7 @@
     </div>
 </div>
 
-<!-- ===== PAGE 13: DESTINED CORE ===== -->
+<!-- ===== PAGE 16: DESTINED CORE ===== -->
 <div id="page-core" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-admin')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Destined Core</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
@@ -423,7 +446,7 @@
     </div>
 </div>
 
-<!-- ===== PAGE 14: SEARCH ===== -->
+<!-- ===== PAGE 17: SEARCH ===== -->
 <div id="page-search" class="page bg-gradient">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Search</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
@@ -438,6 +461,20 @@
 </div>
 
 </div><!-- end app -->
+
+<!-- Match Overlay -->
+<div id="matchOverlay" class="match-overlay" style="display:none">
+    <div class="hearts">💖</div>
+    <div class="title">IT'S A MATCH! 🎉</div>
+    <div class="sub">You and Sarah liked each other</div>
+    <div class="profiles">
+        <div class="p">👤</div>
+        <div class="heart-icon">❤️</div>
+        <div class="p">👤</div>
+    </div>
+    <button class="btn btn-primary" onclick="closeMatch()"><span class="btn-text">💬 Send a Message</span></button>
+    <button class="btn btn-secondary" style="margin-top:8px;max-width:280px" onclick="closeMatch()"><span class="btn-text">👀 Keep Swiping</span></button>
+</div>
 
 <script>
 let tg = window.Telegram.WebApp;
@@ -518,18 +555,40 @@ function selectPref(btn) {
     btn.style.color = '#fff';
 }
 
+function switchTab(btn, pageId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    showPage(pageId);
+}
+
+function showMatch() {
+    document.getElementById('matchOverlay').style.display = 'flex';
+    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+}
+
+function closeMatch() {
+    document.getElementById('matchOverlay').style.display = 'none';
+}
+
+function setTheme(themeClass, el) {
+    document.querySelectorAll('.theme-option').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.body.className = themeClass;
+    showToast(`🎨 Theme changed to ${themeClass.replace('theme-','')}`);
+}
+
 setTimeout(() => {
     document.getElementById('splash').style.display = 'none';
 }, 2800);
 
 document.addEventListener('gesturestart', e => e.preventDefault());
 
-console.log('🔥 Destined MVP — Redesigned & Professional');
+console.log('🔥 Destined MVP — Tinder Style');
 console.log('👑 Built for Daniel — 17-year-old CEO');
-console.log('✅ Verified Badge: Blue circle with white checkmark');
-console.log('✅ Pet: Alive with animation!');
-console.log('✅ Clean spacing, no jampack');
-console.log('✅ Swipe buttons together like Tinder');
+console.log('✅ Verified badge: Blue circle with white checkmark');
+console.log('✅ Tinder-style profile card length');
+console.log('✅ Tinder-style bottom tabs');
+console.log('✅ Themes feature active');
 </script>
 
 </body>
