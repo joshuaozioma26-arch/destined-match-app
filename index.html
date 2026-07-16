@@ -7,47 +7,37 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0A0F;color:#fff;min-height:100vh;overflow-x:hidden}
-        #app{max-width:480px;margin:0 auto;min-height:100vh;position:relative;overflow:hidden}
-        .page{display:none;min-height:100vh;padding:20px 24px 40px;animation:fadeSlide .4s ease}
-        .page.active{display:flex;flex-direction:column}
-        @keyframes fadeSlide{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-
-        /* Themes */
-        .theme-dark{--bg:#0A0A0F;--card:#14141E;--border:rgba(255,255,255,0.06);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3)}
-        .theme-light{--bg:#F5F5F5;--card:#FFFFFF;--border:rgba(0,0,0,0.06);--text:#1A1A1A;--text2:rgba(0,0,0,0.5);--text3:rgba(0,0,0,0.3)}
-        .theme-rose{--bg:#1A0A0F;--card:#2A1520;--border:rgba(255,51,102,0.15);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3)}
-        .theme-ocean{--bg:#0A1520;--card:#152A3A;--border:rgba(68,136,255,0.15);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3)}
-        .theme-royal{--bg:#1A0A00;--card:#2A1A0A;--border:rgba(255,215,0,0.15);--text:#FFD700;--text2:rgba(255,215,0,0.6);--text3:rgba(255,215,0,0.3)}
-
-        .bg-gradient{background:linear-gradient(160deg,#1A0A0F 0%,#2D0A15 30%,#4A0A20 60%,#660025 100%)}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0A0F;color:#fff;min-height:100vh;overflow:hidden}
+        #app{max-width:480px;margin:0 auto;height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;background:#0A0A0F}
 
         /* Splash */
         #splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0A0A0F;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;animation:fadeOut 2.5s ease forwards;animation-delay:1.5s}
         @keyframes fadeOut{0%{opacity:1}100%{opacity:0;visibility:hidden}}
         #splash .logo{width:100px;height:100px;animation:pulse 1.5s ease-in-out infinite}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        @keyframes spin{to{transform:rotate(360deg)}}
         #splash .name{font-size:36px;font-weight:700;color:#fff;margin-top:16px;letter-spacing:3px;font-family:Georgia,serif}
         #splash .loader{margin-top:40px;width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#FF3366;border-radius:50%;animation:spin .8s linear infinite}
+
+        .page{display:none;flex:1;flex-direction:column;animation:fadeSlide .4s ease}
+        .page.active{display:flex}
+        @keyframes fadeSlide{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+        .bg-gradient{background:linear-gradient(160deg,#1A0A0F 0%,#2D0A15 30%,#4A0A20 60%,#660025 100%)}
 
         .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;border:none;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;width:100%;text-decoration:none}
         .btn-primary{background:#FF3366;color:#fff;box-shadow:0 4px 20px rgba(255,51,102,0.3)}
         .btn-primary:active{transform:scale(.97)}
         .btn-secondary{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08)}
         .btn-secondary:hover{background:rgba(255,255,255,0.12)}
-        .btn:disabled{opacity:.5;cursor:not-allowed}
-        .btn .spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#FF3366;border-radius:50%;animation:spin .6s linear infinite;display:none}
-        .btn.loading .spinner{display:block}
-        .btn.loading .btn-text{display:none}
 
         .form-group{margin-bottom:18px}
         .form-group label{display:block;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);margin-bottom:4px}
-        .form-group input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;transition:all .3s ease;outline:none}
+        .form-group input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none}
         .form-group input:focus{border-color:#FF3366;box-shadow:0 0 0 3px rgba(255,51,102,0.08)}
         .form-group input::placeholder{color:rgba(255,255,255,0.2)}
 
-        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,0.9);border:1px solid rgba(255,255,255,0.06);padding:14px 24px;border-radius:14px;color:#fff;font-size:14px;box-shadow:0 8px 40px rgba(0,0,0,0.6);opacity:0;transition:all .4s ease;z-index:999;max-width:90%;text-align:center;backdrop-filter:blur(20px)}
+        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,0.9);border:1px solid rgba(255,255,255,0.06);padding:14px 24px;border-radius:14px;color:#fff;font-size:14px;box-shadow:0 8px 40px rgba(0,0,0,0.6);opacity:0;transition:all .4s ease;z-index:999;max-width:90%;text-align:center;backdrop-filter:blur(20px)}
         .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
         .toast.error{border-color:#FF4444}
         .toast.success{border-color:#44FF88}
@@ -60,17 +50,80 @@
         .tg-safe-top{padding-top:env(safe-area-inset-top,20px)}
         .tg-safe-bottom{padding-bottom:env(safe-area-inset-bottom,20px)}
 
-        /* Verified Badge - Tinder Style */
         .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#4488FF;border-radius:50%;font-size:10px;color:#fff;font-weight:700;margin-left:4px;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.15)}
-        .verified-badge-lg{width:22px;height:22px;font-size:12px}
 
-        /* Theme Selector */
-        .theme-option{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);cursor:pointer;transition:all .3s ease;flex-shrink:0}
-        .theme-option:hover{transform:scale(1.1)}
-        .theme-option.active{border-color:#FF3366;box-shadow:0 0 20px rgba(255,51,102,0.3)}
+        /* ========== TINDER CLONE CARD ========== */
+        .tinder-card{flex:1;display:flex;flex-direction:column;padding:12px 16px 8px;background:#0A0A0F}
+        .tinder-card .card{flex:1;border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#14141E,#1A1A2E);border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.5);display:flex;flex-direction:column;position:relative}
+
+        /* PHOTO AREA - Takes most of the card */
+        .tinder-card .card-photo{flex:1;min-height:300px;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+        .tinder-card .card-photo .photo-icon{font-size:100px;opacity:0.6}
+
+        /* Verified Badge on Photo - TOP RIGHT like Tinder */
+        .tinder-card .card-photo .verified-badge-photo{position:absolute;top:16px;right:16px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;background:#4488FF;border-radius:50%;font-size:15px;color:#fff;font-weight:700;border:2px solid rgba(255,255,255,0.2);box-shadow:0 2px 12px rgba(68,136,255,0.4)}
+        /* Tier Badge on Photo - TOP LEFT */
+        .tinder-card .card-photo .tier-badge{position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:4px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.05)}
+        .tinder-card .card-photo .tier-badge.elite{color:#FF0033;border-color:rgba(255,0,51,0.3)}
+        .tinder-card .card-photo .tier-badge.vip{color:#C0C0C0;border-color:rgba(192,192,192,0.3)}
+        .tinder-card .card-photo .tier-badge.premium{color:#FFD700;border-color:rgba(255,215,0,0.3)}
+        .tinder-card .card-photo .tier-badge.free{color:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.05)}
+
+        /* Online Status on Photo - BOTTOM LEFT */
+        .tinder-card .card-photo .online-status{position:absolute;bottom:16px;left:16px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.5);padding:4px 12px;border-radius:20px;backdrop-filter:blur(10px)}
+        .tinder-card .card-photo .online-status .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+        .tinder-card .card-photo .online-status .dot.online{background:#44FF88}
+        .tinder-card .card-photo .online-status .dot.offline{background:#FF4444}
+        .tinder-card .card-photo .online-status .label{font-size:12px;color:rgba(255,255,255,0.7)}
+
+        /* INFO AREA - Bottom of card */
+        .tinder-card .card-info{padding:16px 20px 12px;flex-shrink:0}
+        .tinder-card .card-info .name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+        .tinder-card .card-info .name-row .name{font-size:24px;font-weight:700;color:#fff}
+        .tinder-card .card-info .name-row .age{font-size:20px;font-weight:400;color:rgba(255,255,255,0.4)}
+        .tinder-card .card-info .location{font-size:14px;color:rgba(255,255,255,0.4);margin-top:2px}
+        .tinder-card .card-info .looking-for{font-size:14px;color:rgba(255,255,255,0.6);margin-top:6px}
+        .tinder-card .card-info .looking-for span{color:#FF3366}
+
+        /* INTERESTS - Like Tinder's icons inside card */
+        .tinder-card .card-info .interests{display:flex;gap:14px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.04)}
+        .tinder-card .card-info .interests .interest{display:flex;flex-direction:column;align-items:center;gap:4px;color:rgba(255,255,255,0.3);font-size:11px;cursor:pointer;transition:all .2s}
+        .tinder-card .card-info .interests .interest:hover{color:#fff}
+        .tinder-card .card-info .interests .interest .icon{font-size:22px}
+        .tinder-card .card-info .interests .interest.active{color:#FF3366}
+        .tinder-card .card-info .interests .interest.active .icon{color:#FF3366}
+
+        /* SWIPE BUTTONS - At bottom of card like Tinder */
+        .tinder-card .swipe-actions{display:flex;justify-content:center;align-items:center;gap:16px;padding:8px 0 6px;flex-shrink:0;background:#0A0A0F;border-top:1px solid rgba(255,255,255,0.04)}
+        .tinder-card .swipe-actions .swipe-btn{width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .2s;color:#FFB800}
+        .tinder-card .swipe-actions .swipe-btn:hover{transform:scale(1.05)}
+        .tinder-card .swipe-actions .swipe-btn.pass{width:58px;height:58px;border-color:rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:24px}
+        .tinder-card .swipe-actions .swipe-btn.pass:hover{background:rgba(255,68,68,0.15);border-color:rgba(255,68,68,0.4)}
+        .tinder-card .swipe-actions .swipe-btn.super{width:58px;height:58px;border-color:rgba(68,136,255,0.2);background:rgba(68,136,255,0.08);color:#4488FF;font-size:18px}
+        .tinder-card .swipe-actions .swipe-btn.super:hover{background:rgba(68,136,255,0.15);border-color:rgba(68,136,255,0.4)}
+        .tinder-card .swipe-actions .swipe-btn.like{width:58px;height:58px;border-color:rgba(68,255,136,0.2);background:rgba(68,255,136,0.08);color:#44FF88;font-size:24px}
+        .tinder-card .swipe-actions .swipe-btn.like:hover{background:rgba(68,255,136,0.15);border-color:rgba(68,255,136,0.4)}
+        .tinder-card .swipe-actions .swipe-btn.boost{width:52px;height:52px;border-color:rgba(255,51,102,0.2);background:rgba(255,51,102,0.08);color:#FF3366;font-size:14px}
+        .tinder-card .swipe-actions .swipe-btn.boost:hover{background:rgba(255,51,102,0.15);border-color:rgba(255,51,102,0.4)}
+
+        /* BOTTOM NAV - Outside card like Tinder */
+        .bottom-nav{display:flex;justify-content:space-around;padding:8px 0 14px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F;flex-shrink:0}
+        .bottom-nav .nav-btn{background:transparent;border:none;color:rgba(255,255,255,0.2);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;transition:all .2s}
+        .bottom-nav .nav-btn.active{color:#FF3366}
+        .bottom-nav .nav-btn span{font-size:9px;color:inherit}
+        .bottom-nav .nav-btn:hover{color:rgba(255,255,255,0.5)}
+
+        /* TOP BAR */
+        .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 4px;background:#0A0A0F;flex-shrink:0}
+        .top-bar .brand{display:flex;align-items:center;gap:8px}
+        .top-bar .brand .fire{font-size:18px}
+        .top-bar .brand .name{font-weight:700;font-size:16px;color:#FF3366;letter-spacing:1px}
+        .top-bar .icons{display:flex;gap:12px;font-size:18px;cursor:pointer}
+        .top-bar .icons span{color:rgba(255,255,255,0.3);transition:all .2s}
+        .top-bar .icons span:hover{color:#fff}
 
         /* Match Animation */
-        .match-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;animation:matchPop 0.5s ease;backdrop-filter:blur(20px)}
+        .match-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(20px);animation:matchPop .5s ease}
         @keyframes matchPop{0%{transform:scale(0.5);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
         @keyframes heartFloat{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-80px) scale(0);opacity:0}}
         .match-overlay .hearts{font-size:64px;animation:heartFloat 1s ease-in-out infinite}
@@ -80,10 +133,7 @@
         .match-overlay .profiles .p{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid #FF3366}
         .match-overlay .profiles .heart-icon{font-size:32px;color:#FF3366}
         .match-overlay .btn{max-width:280px}
-
-        .tab-btn{background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;transition:all .2s}
-        .tab-btn.active{color:#FF3366}
-        .tab-btn span{font-size:9px;color:inherit}
+        .match-overlay.show{display:flex}
     </style>
 </head>
 <body>
@@ -100,265 +150,121 @@
 <!-- APP -->
 <div id="app" class="tg-safe-top">
 
-<!-- ===== PAGE 1: WELCOME ===== -->
-<div id="page-welcome" class="page active bg-gradient">
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
-        <svg width="90" height="90" viewBox="0 0 200 200"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
-        <h1 style="margin-top:8px">Destined</h1>
-        <p style="color:rgba(255,255,255,0.6);font-size:16px;margin-top:4px">❤️ Where fate meets connection</p>
-        <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-top:2px">Swipe. Match. Spark. Find your soulmate.</p>
+<!-- ===== MAIN SCREEN (TINDER CLONE) ===== -->
+<div id="page-main" class="page active" style="background:#0A0A0F">
 
-        <div style="width:100%;max-width:340px;margin:24px auto;text-align:left;background:rgba(255,255,255,0.03);border-radius:16px;padding:20px;border:1px solid rgba(255,255,255,0.04)">
-            <p style="color:rgba(255,255,255,0.7);font-size:14px;font-weight:600;margin-bottom:14px;text-align:center">📋 Please follow these house rules</p>
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px"><span style="color:#FF3366;font-size:16px">✅</span><span style="font-size:13px;color:rgba(255,255,255,0.7)"><strong style="color:#fff">Be yourself.</strong> Make sure your photos, age and bio are true.</span></div>
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px"><span style="color:#FF3366;font-size:16px">✅</span><span style="font-size:13px;color:rgba(255,255,255,0.7)"><strong style="color:#fff">Stay safe.</strong> Don't give out personal info too quickly.</span></div>
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px"><span style="color:#FF3366;font-size:16px">✅</span><span style="font-size:13px;color:rgba(255,255,255,0.7)"><strong style="color:#fff">Play it cool.</strong> Respect others as you'd like to be treated.</span></div>
-            <div style="display:flex;align-items:flex-start;gap:10px"><span style="color:#FF3366;font-size:16px">✅</span><span style="font-size:13px;color:rgba(255,255,255,0.7)"><strong style="color:#fff">Be proactive.</strong> Always report bad behaviour.</span></div>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="brand">
+            <span class="fire">🔥</span>
+            <span class="name">DESTINED</span>
         </div>
-
-        <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;margin-top:8px">
-            <button class="btn btn-primary" onclick="showPage('page-rules')"><span class="btn-text">Get Started 🌺</span></button>
-            <button class="btn btn-secondary" onclick="showToast('🔐 Secure & Private — Your data is safe with us.')"><span class="btn-text">🔒 Privacy First</span></button>
-        </div>
-        <p class="terms-text">By continuing, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
-    </div>
-</div>
-
-<!-- ===== PAGE 2: RULES ===== -->
-<div id="page-rules" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-welcome')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Safety Rules</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center">
-        <div style="width:100%;max-width:340px;text-align:left">
-            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔞</span><div><h4 style="font-size:14px;color:#fff">18+ Only</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">You must be 18 or older to use Destined</p></div></div>
-            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🤖</span><div><h4 style="font-size:14px;color:#fff">AI Scam Shield</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">AI scans messages for scams. 3 strikes → permanent ban</p></div></div>
-            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">📸</span><div><h4 style="font-size:14px;color:#fff">Face Verification</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Selfie + pose verification ensures you're real</p></div></div>
-            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔐</span><div><h4 style="font-size:14px;color:#fff">2FA &amp; KYC</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Two-factor authentication and 3-tier KYC</p></div></div>
-            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🚫</span><div><h4 style="font-size:14px;color:#fff">Report &amp; Block</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Report suspicious users. Moderators act within 24h</p></div></div>
-            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🧶</span><div><h4 style="font-size:14px;color:#fff">Red Thread</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Fate-based high-compatibility matching</p></div></div>
-        </div>
-        <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;margin-top:16px">
-            <button class="btn btn-primary" onclick="showPage('page-signup')"><span class="btn-text">✅ I Understand &amp; Agree</span></button>
-            <button class="btn btn-secondary" onclick="showPage('page-welcome')"><span class="btn-text">← Back</span></button>
+        <div class="icons">
+            <span onclick="showToast('🔔 Notifications')">🔔</span>
+            <span onclick="showPage('page-search')">🔍</span>
         </div>
     </div>
-</div>
 
-<!-- ===== PAGE 3: SIGN UP / SIGN IN ===== -->
-<div id="page-signup" class="page bg-gradient">
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-        <div style="width:100%;max-width:340px">
-            <svg width="60" height="60" viewBox="0 0 200 200" style="margin:0 auto 12px;display:block"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
-            <h2>Welcome</h2>
-            <p class="subtitle">Create your account or sign in</p>
-            <div style="display:flex;gap:12px;margin:20px 0">
-                <button class="btn btn-primary" style="flex:1;padding:12px;font-size:14px" onclick="showPage('page-register')">Create Account</button>
-                <button class="btn btn-secondary" style="flex:1;padding:12px;font-size:14px" onclick="showPage('page-login')">Sign In</button>
-            </div>
-            <p style="color:rgba(255,255,255,0.3);font-size:13px">Already have an account? <a href="#" onclick="showPage('page-login')" style="color:#FF6699;text-decoration:none">Sign In</a></p>
-            <p style="color:rgba(255,255,255,0.3);font-size:13px;margin-top:4px">Don't have an account? <a href="#" onclick="showPage('page-register')" style="color:#FF6699;text-decoration:none">Sign Up</a></p>
-            <button class="btn btn-secondary" style="margin-top:16px" onclick="showPage('page-rules')"><span class="btn-text">← Back</span></button>
-        </div>
-    </div>
-</div>
-
-<!-- ===== PAGE 4: LOGIN ===== -->
-<div id="page-login" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-signup')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔐 Sign In</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
-        <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:20px">Enter your Dest ID to continue</p>
-        <div class="form-group"><label>Dest ID</label><input type="text" id="loginDestId" placeholder="DEST12345100"></div>
-        <div style="margin:8px 0 16px;text-align:center"><p style="color:rgba(255,255,255,0.3);font-size:13px">Forgot your Dest ID? <a href="#" onclick="showPage('page-forgot')" style="color:#FF6699;text-decoration:none">Click here</a></p></div>
-        <button class="btn btn-primary" onclick="handleLogin()"><span class="btn-text">🔓 Sign In</span></button>
-        <p style="color:rgba(255,255,255,0.3);font-size:13px;text-align:center;margin-top:16px">Don't have an account? <a href="#" onclick="showPage('page-register')" style="color:#FF6699;text-decoration:none">Sign Up</a></p>
-        <button class="btn btn-secondary" style="margin-top:12px" onclick="showPage('page-signup')"><span class="btn-text">← Back</span></button>
-    </div>
-</div>
-
-<!-- ===== PAGE 5: FORGOT DEST ID ===== -->
-<div id="page-forgot" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-login')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Find Your Dest ID</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
-        <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:20px">To recover your Dest ID, we need to verify you.</p>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px"><p style="color:rgba(255,255,255,0.6);font-size:13px">📸 Face Verification required</p><button class="btn btn-primary" style="margin-top:8px;padding:12px;font-size:14px" onclick="showToast('📸 Face verification started!')"><span class="btn-text">Begin Face Verification</span></button></div>
-        <div class="form-group"><label>📱 Registered Telegram Number</label><input type="text" placeholder="+234 801 234 5678"></div>
-        <button class="btn btn-primary" onclick="showToast('✅ Verification successful! Your Dest ID has been sent to your Telegram.')"><span class="btn-text">Continue</span></button>
-        <button class="btn btn-secondary" style="margin-top:12px" onclick="showPage('page-login')"><span class="btn-text">← Back</span></button>
-    </div>
-</div>
-
-<!-- ===== PAGE 6: REGISTER ===== -->
-<div id="page-register" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-signup')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">✏️ Create Profile</h2></div>
-    <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%;padding-bottom:20px">
-        <div class="form-group"><label>👤 Full Name</label><input type="text" placeholder="Sarah Johnson" id="regName"></div>
-        <div class="form-group"><label>🎂 Age (18+)</label><input type="number" placeholder="28" id="regAge"></div>
-        <div class="form-group"><label>📍 Country / City</label><input type="text" placeholder="London, UK" id="regLocation"></div>
-        <div class="form-group"><label>👤 Gender</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectGender(this)">Male</button><button style="flex:1;padding:10px;background:rgba(255,51,102,0.1);border:1px solid #FF3366;border-radius:12px;color:#fff;cursor:pointer" onclick="selectGender(this)">Female</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectGender(this)">Other</button></div></div>
-        <div class="form-group"><label>📝 Bio (20-1000 characters)</label><input type="text" placeholder="Love is the greatest adventure..." id="regBio"></div>
-        <div class="form-group"><label>📸 Photos (3 max)</label><div style="display:flex;gap:8px"><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+</button><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+</button><button style="flex:1;padding:30px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.3);cursor:pointer" onclick="showToast('📸 Photo upload coming soon!')">+</button></div></div>
-        <button class="btn btn-primary" onclick="handleRegister()"><span class="btn-text">Continue →</span></button>
-        <button class="btn btn-secondary" style="margin-top:8px" onclick="showPage('page-signup')"><span class="btn-text">← Back</span></button>
-    </div>
-</div>
-
-<!-- ===== PAGE 7: PREFERENCES ===== -->
-<div id="page-preferences" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-register')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Your Preferences</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
-        <div class="form-group"><label>👥 Show Me</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">Men</button><button style="flex:1;padding:10px;background:rgba(255,51,102,0.1);border:1px solid #FF3366;border-radius:12px;color:#fff;cursor:pointer" onclick="selectPref(this)">Women</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">Everyone</button></div></div>
-        <div class="form-group"><label>🎂 Age Range</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">18-25</button><button style="flex:1;padding:10px;background:rgba(255,51,102,0.1);border:1px solid #FF3366;border-radius:12px;color:#fff;cursor:pointer" onclick="selectPref(this)">26-35</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">36-50</button></div></div>
-        <div class="form-group"><label>🌍 Location</label><div style="display:flex;gap:10px"><button style="flex:1;padding:10px;background:rgba(255,51,102,0.1);border:1px solid #FF3366;border-radius:12px;color:#fff;cursor:pointer" onclick="selectPref(this)">Local</button><button style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="selectPref(this)">Global</button></div></div>
-        <div class="form-group"><label>💍 Looking For</label><div style="display:flex;flex-wrap:wrap;gap:8px"><button style="padding:8px 16px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Friendship</button><button style="padding:8px 16px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer">Long-term</button><button style="padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Short-term</button><button style="padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Marriage</button><button style="padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:20px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer">Casual</button></div></div>
-        <button class="btn btn-primary" onclick="showPage('page-verify')"><span class="btn-text">Continue →</span></button>
-        <button class="btn btn-secondary" style="margin-top:8px" onclick="showPage('page-register')"><span class="btn-text">← Back</span></button>
-    </div>
-</div>
-
-<!-- ===== PAGE 8: VERIFICATION ===== -->
-<div id="page-verify" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-preferences')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">📸 Verify Identity</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;max-width:340px;margin:0 auto;width:100%">
-        <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-bottom:20px">Almost there! Let's verify you're real.</p>
-        <div style="background:rgba(255,255,255,0.03);border-radius:16px;padding:24px;border:1px solid rgba(255,255,255,0.04);width:100%;margin-bottom:16px">
-            <div style="font-size:64px;margin-bottom:8px">📸</div>
-            <p style="color:#fff;font-weight:600;font-size:16px">Face Verification</p>
-            <p style="color:rgba(255,255,255,0.4);font-size:13px">Take a selfie and copy a pose</p>
-            <button class="btn btn-primary" style="margin-top:12px;padding:12px;font-size:14px" onclick="startVerification()"><span class="btn-text">Begin Verification</span></button>
-        </div>
-        <button class="btn btn-secondary" onclick="showPage('page-preferences')"><span class="btn-text">← Back</span></button>
-    </div>
-</div>
-
-<!-- ===== PAGE 9: WELCOME BACK ===== -->
-<div id="page-welcomeback" class="page bg-gradient">
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
-        <div style="font-size:64px;margin-bottom:8px">👋</div>
-        <h1 style="font-size:28px">Welcome Back, Sarah!</h1>
-        <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-top:4px">While you were gone...</p>
-        <div style="width:100%;max-width:340px;margin:20px auto;text-align:left">
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:18px">🔥</span><span style="color:rgba(255,255,255,0.7);font-size:13px">12 new people liked you!</span></div>
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:18px">💬</span><span style="color:rgba(255,255,255,0.7);font-size:13px">5 new messages waiting!</span></div>
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:18px">🎁</span><span style="color:rgba(255,255,255,0.7);font-size:13px">You received 2 gifts!</span></div>
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:18px">🏆</span><span style="color:rgba(255,255,255,0.7);font-size:13px">Global Challenge starts tomorrow!</span></div>
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0"><span style="font-size:18px">🐾</span><span style="color:rgba(255,255,255,0.7);font-size:13px">Your pet is waiting for you!</span></div>
-        </div>
-        <button class="btn btn-primary" style="max-width:340px" onclick="showPage('page-main')"><span class="btn-text">🚀 Continue</span></button>
-    </div>
-</div>
-
-<!-- ===== PAGE 10: MAIN SCREEN (TINDER-STYLE) ===== -->
-<div id="page-main" class="page" style="padding:0;background:#0A0A0F">
-    <!-- Top Bar -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#0A0A0F;border-bottom:1px solid rgba(255,255,255,0.04)">
-        <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:20px">🔥</span>
-            <span style="font-weight:700;font-size:18px;color:#FF3366;letter-spacing:1px">DESTINED</span>
-        </div>
-        <div style="display:flex;gap:12px">
-            <span style="font-size:18px;cursor:pointer" onclick="showToast('🔔 Notifications')">🔔</span>
-            <span style="font-size:18px;cursor:pointer" onclick="showPage('page-search')">🔍</span>
-        </div>
-    </div>
-    
-    <!-- TINDER-STYLE PROFILE CARD - FULL LENGTH -->
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 16px 6px">
-        <div style="width:100%;max-width:400px;background:linear-gradient(145deg,#14141E,#1A1A2E);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.4);min-height:420px;display:flex;flex-direction:column">
-            <!-- Photo Area - Takes most space -->
-            <div style="flex:1;min-height:280px;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;position:relative">
-                <span style="font-size:80px">👤</span>
-                <!-- Verified Badge on Photo -->
-                <div style="position:absolute;bottom:12px;right:12px">
-                    <span class="verified-badge verified-badge-lg" style="background:#4488FF;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;border:2px solid rgba(255,255,255,0.2)">✓</span>
-                </div>
-                <!-- Online Status -->
-                <div style="position:absolute;bottom:12px;left:12px;display:flex;align-items:center;gap:6px">
-                    <span style="width:10px;height:10px;background:#44FF88;border-radius:50%;display:inline-block"></span>
-                    <span style="color:rgba(255,255,255,0.5);font-size:11px">Online</span>
+    <!-- TINDER CARD -->
+    <div class="tinder-card">
+        <div class="card">
+            <!-- PHOTO AREA -->
+            <div class="card-photo">
+                <span class="photo-icon">👤</span>
+                
+                <!-- Verified Badge - TOP RIGHT -->
+                <div class="verified-badge-photo">✓</div>
+                
+                <!-- Tier Badge - TOP LEFT -->
+                <div class="tier-badge elite">🔱 ELITE</div>
+                
+                <!-- Online Status - BOTTOM LEFT -->
+                <div class="online-status">
+                    <span class="dot online"></span>
+                    <span class="label">Online</span>
                 </div>
             </div>
-            
-            <!-- Info Area -->
-            <div style="padding:16px 18px 14px">
+
+            <!-- INFO AREA -->
+            <div class="card-info">
                 <!-- Name + Age + Verified -->
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-                    <h3 style="color:#fff;font-size:22px;font-weight:700">Sarah</h3>
-                    <span style="color:rgba(255,255,255,0.4);font-size:18px;font-weight:400">22</span>
-                    <span class="verified-badge" style="background:#4488FF;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;border:1px solid rgba(255,255,255,0.15)">✓</span>
+                <div class="name-row">
+                    <span class="name">Sarah</span>
+                    <span class="age">22</span>
+                    <span class="verified-badge">✓</span>
                 </div>
                 
                 <!-- Location -->
-                <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-top:2px">📍 London</p>
+                <div class="location">📍 London</div>
                 
-                <!-- Bio -->
-                <p style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:8px;line-height:1.5">Love is the greatest adventure. Looking for genuine connections.</p>
+                <!-- Looking For -->
+                <div class="looking-for">🔍 Looking for: <span>Long-term, open to short</span></div>
                 
-                <!-- Tags -->
-                <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
-                    <span style="background:rgba(255,255,255,0.04);padding:3px 12px;border-radius:16px;font-size:12px;color:rgba(255,255,255,0.5)">💍 Single</span>
-                    <span style="background:rgba(255,255,255,0.04);padding:3px 12px;border-radius:16px;font-size:12px;color:rgba(255,255,255,0.5)">💍 Long-term</span>
-                    <span style="background:rgba(255,255,255,0.04);padding:3px 12px;border-radius:16px;font-size:12px;color:rgba(255,255,255,0.5)">⭐ Verified</span>
+                <!-- Interests (Inside card like Tinder) -->
+                <div class="interests">
+                    <div class="interest active" onclick="showToast('❤️ Love')">
+                        <span class="icon">❤️</span>
+                        <span>Love</span>
+                    </div>
+                    <div class="interest" onclick="showToast('🎵 Music')">
+                        <span class="icon">🎵</span>
+                        <span>Music</span>
+                    </div>
+                    <div class="interest" onclick="showToast('✂️ Creative')">
+                        <span class="icon">✂️</span>
+                        <span>Creative</span>
+                    </div>
+                    <div class="interest" onclick="showToast('⭐ Super')">
+                        <span class="icon">⭐</span>
+                        <span>Super</span>
+                    </div>
+                    <div class="interest" onclick="showToast('👤 Profile')">
+                        <span class="icon">👤</span>
+                        <span>Profile</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Swipe Buttons - TINDER STYLE -->
-    <div style="display:flex;justify-content:center;align-items:center;gap:12px;padding:10px 20px 4px">
-        <button style="width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);color:#FFB800;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('↩️ Rewind (3 left)')">↩️</button>
-        <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('❌ Passed!')">✕</button>
-        <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(68,136,255,0.2);background:rgba(68,136,255,0.08);color:#4488FF;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('⭐ Super Liked! (1 left)')">⭐</button>
-        <button style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(68,255,136,0.2);background:rgba(68,255,136,0.08);color:#44FF88;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showMatch()">❤️</button>
-        <button style="width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,51,102,0.2);background:rgba(255,51,102,0.08);color:#FF3366;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
+
+        <!-- SWIPE BUTTONS (Inside card area) -->
+        <div class="swipe-actions">
+            <button class="swipe-btn" onclick="showToast('↩️ Rewind (3 left)')">↩️</button>
+            <button class="swipe-btn pass" onclick="showToast('❌ Passed!')">✕</button>
+            <button class="swipe-btn super" onclick="showToast('⭐ Super Liked! (1 left)')">⭐</button>
+            <button class="swipe-btn like" onclick="showMatch()">❤️</button>
+            <button class="swipe-btn boost" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
+        </div>
     </div>
 
-    <!-- Bottom Tabs - TINDER STYLE -->
-    <div style="display:flex;justify-content:space-around;padding:6px 0 14px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F;margin-top:auto">
-        <button class="tab-btn active" onclick="switchTab(this,'page-main')"><span>❤️‍🔥</span><span>Home</span></button>
-        <button class="tab-btn" onclick="switchTab(this,'page-likes')"><span>💞</span><span>Likes</span></button>
-        <button class="tab-btn" onclick="switchTab(this,'page-spark')"><span>✨</span><span>Spark</span></button>
-        <button class="tab-btn" onclick="switchTab(this,'page-chat')"><span>💬</span><span>Chat</span></button>
-        <button class="tab-btn" onclick="switchTab(this,'page-profile')"><span>👤</span><span>Profile</span></button>
+    <!-- BOTTOM NAV (Outside card) -->
+    <div class="bottom-nav">
+        <button class="nav-btn active" onclick="switchNav(this)"><span>❤️‍🔥</span><span>Home</span></button>
+        <button class="nav-btn" onclick="switchNav(this);showToast('💞 Likes coming soon!')"><span>💞</span><span>Likes</span></button>
+        <button class="nav-btn" onclick="switchNav(this);showToast('✨ Spark coming soon!')"><span>✨</span><span>Spark</span></button>
+        <button class="nav-btn" onclick="switchNav(this);showToast('💬 Chat coming soon!')"><span>💬</span><span>Chat</span></button>
+        <button class="nav-btn" onclick="switchNav(this);showPage('page-profile')"><span>👤</span><span>Profile</span></button>
     </div>
 </div>
 
-<!-- ===== PAGE 11: LIKES ===== -->
-<div id="page-likes" class="page" style="padding:16px 20px 40px;background:#0A0A0F">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">💞 Likes</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-        <div style="font-size:48px;margin-bottom:12px">💞</div>
-        <p style="color:rgba(255,255,255,0.3);font-size:16px">No likes yet</p>
-        <p style="color:rgba(255,255,255,0.2);font-size:13px;margin-top:4px">Keep swiping to find your match!</p>
-        <button class="btn btn-primary" style="max-width:200px;margin-top:16px;padding:12px" onclick="showPage('page-main')"><span class="btn-text">Start Swiping</span></button>
+<!-- ===== SEARCH PAGE ===== -->
+<div id="page-search" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Search</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:16px">Find users by Dest ID</p>
+        <div style="display:flex;gap:8px;margin-bottom:20px"><input type="text" placeholder="DEST12345100" style="flex:1;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none"><button style="padding:14px 24px;background:#FF3366;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer" onclick="showToast('🔍 Searching...')">Search</button></div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);text-align:center">
+            <p style="color:rgba(255,255,255,0.3);font-size:13px">📋 Your Dest ID</p>
+            <p style="color:#fff;font-weight:600;font-size:20px;margin:6px 0;letter-spacing:1px">DEST12345100</p>
+            <button style="padding:6px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer" onclick="showToast('📋 Copied!')">📋 Copy</button>
+        </div>
+        <button class="btn btn-secondary" style="margin-top:16px" onclick="showPage('page-main')"><span class="btn-text">← Back</span></button>
     </div>
 </div>
 
-<!-- ===== PAGE 12: SPARK ===== -->
-<div id="page-spark" class="page" style="padding:16px 20px 40px;background:#0A0A0F">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">✨ Spark</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-        <div style="font-size:48px;margin-bottom:12px">✨</div>
-        <p style="color:rgba(255,255,255,0.3);font-size:16px">Games coming soon!</p>
-        <p style="color:rgba(255,255,255,0.2);font-size:13px;margin-top:4px">Play fun games and challenges</p>
-        <button class="btn btn-secondary" style="max-width:200px;margin-top:16px;padding:12px" onclick="showToast('🎮 Games coming soon!')"><span class="btn-text">Coming Soon</span></button>
-    </div>
-</div>
-
-<!-- ===== PAGE 13: CHAT ===== -->
-<div id="page-chat" class="page" style="padding:16px 20px 40px;background:#0A0A0F">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">💬 Chats</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-        <div style="font-size:48px;margin-bottom:12px">💬</div>
-        <p style="color:rgba(255,255,255,0.3);font-size:16px">No messages yet</p>
-        <p style="color:rgba(255,255,255,0.2);font-size:13px;margin-top:4px">Match with someone to start chatting!</p>
-        <button class="btn btn-primary" style="max-width:200px;margin-top:16px;padding:12px" onclick="showPage('page-main')"><span class="btn-text">Find Matches</span></button>
-    </div>
-</div>
-
-<!-- ===== PAGE 14: PROFILE ===== -->
-<div id="page-profile" class="page" style="padding:16px 20px 40px;background:#0A0A0F">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👤 Profile</h2></div>
-    <div style="flex:1;overflow-y:auto;max-width:380px;margin:0 auto;width:100%">
-        <!-- Profile Header -->
+<!-- ===== PROFILE PAGE ===== -->
+<div id="page-profile" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👤 Profile</h2></div>
+    <div style="flex:1;overflow-y:auto;max-width:380px;margin:0 auto;width:100%;padding-bottom:20px">
         <div style="text-align:center;margin-bottom:20px">
             <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:36px;border:3px solid #FF3366">👤</div>
             <h3 style="color:#fff;font-size:20px;margin-top:10px">Sarah Johnson</h3>
@@ -368,102 +274,68 @@
                 <span style="color:rgba(255,255,255,0.4);font-size:13px">💍 Single</span>
                 <span style="color:rgba(255,255,255,0.2);font-size:13px">·</span>
                 <span style="color:rgba(255,255,255,0.4);font-size:13px">🎂 22</span>
-                <span class="verified-badge" style="background:#4488FF;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700">✓</span>
+                <span class="verified-badge">✓</span>
+                <span style="color:#FF0033;font-size:11px;font-weight:700;background:rgba(255,0,51,0.15);padding:2px 10px;border-radius:12px">🔱 ELITE</span>
             </div>
             <p style="color:rgba(255,255,255,0.5);font-size:14px;font-style:italic;margin-top:6px">"Love is the greatest adventure." ❤️‍🔥</p>
         </div>
-
-        <!-- Dest ID + Account -->
         <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
             <p style="color:rgba(255,255,255,0.3);font-size:11px;margin-bottom:4px">🔑 DEST ID</p>
             <p style="color:#fff;font-weight:600;font-size:15px;letter-spacing:1px">DEST12345100</p>
             <p style="color:rgba(255,255,255,0.3);font-size:11px;margin:6px 0 4px">💳 ACCOUNT NUMBER</p>
             <p style="color:rgba(255,255,255,0.5);font-size:13px;letter-spacing:1px">0123-4567-8910-1112</p>
         </div>
-
-        <!-- THEMES -->
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🎨 THEMES</p>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-                <div class="theme-option active" style="background:#0A0A0F;border-color:#FF3366" onclick="setTheme('theme-dark',this)" title="Dark"></div>
-                <div class="theme-option" style="background:#F5F5F5" onclick="setTheme('theme-light',this)" title="Light"></div>
-                <div class="theme-option" style="background:#1A0A0F" onclick="setTheme('theme-rose',this)" title="Rose"></div>
-                <div class="theme-option" style="background:#0A1520" onclick="setTheme('theme-ocean',this)" title="Ocean"></div>
-                <div class="theme-option" style="background:#1A0A00;border-color:#FFD700" onclick="setTheme('theme-royal',this)" title="Royal"></div>
-            </div>
-        </div>
-
-        <!-- Buttons -->
         <div style="display:flex;flex-direction:column;gap:10px">
             <button class="btn btn-secondary" onclick="showToast('✏️ Edit Profile coming soon!')"><span class="btn-text">✏️ Edit Profile</span></button>
             <button class="btn btn-secondary" onclick="showToast('⚙️ Settings coming soon!')"><span class="btn-text">⚙️ Settings</span></button>
-            <button class="btn btn-secondary" onclick="showPage('page-admin')"><span class="btn-text">👑 Admin Panel</span></button>
             <button class="btn btn-secondary" onclick="showToast('🚪 Logging out...')"><span class="btn-text">🚪 Logout</span></button>
+            <button class="btn btn-secondary" onclick="showPage('page-main')"><span class="btn-text">← Back</span></button>
         </div>
     </div>
 </div>
 
-<!-- ===== PAGE 15: ADMIN PANEL ===== -->
-<div id="page-admin" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-profile')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👑 Admin Panel</h2></div>
-    <div style="flex:1;overflow-y:auto;max-width:340px;margin:0 auto;width:100%">
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">📊 DASHBOARD</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;text-align:center"><p style="color:#fff;font-size:20px;font-weight:700">1,247</p><p style="color:rgba(255,255,255,0.3);font-size:10px">Users</p></div>
-                <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;text-align:center"><p style="color:#44FF88;font-size:20px;font-weight:700">456</p><p style="color:rgba(255,255,255,0.3);font-size:10px">Online</p></div>
-                <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;text-align:center"><p style="color:#FFD700;font-size:20px;font-weight:700">$45,234</p><p style="color:rgba(255,255,255,0.3);font-size:10px">Revenue</p></div>
-                <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;text-align:center"><p style="color:#4488FF;font-size:20px;font-weight:700">1.2M</p><p style="color:rgba(255,255,255,0.3);font-size:10px">Diamonds</p></div>
-            </div>
-        </div>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">⚡ QUICK ACTIONS</p>
-            <div style="display:flex;flex-wrap:wrap;gap:8px">
-                <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('👥 User management')">👥 Users</button>
-                <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('🛡️ Security')">🛡️ Security</button>
-                <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('🏆 Competitions')">🏆 Comps</button>
-                <button style="flex:1;min-width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer" onclick="showToast('🎛️ Feature Toggles')">🎛️ Toggles</button>
-            </div>
-        </div>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,51,102,0.15);margin-bottom:12px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🛡️ DESTINED CORE</p>
-            <button class="btn btn-primary" style="padding:12px;font-size:14px" onclick="showPage('page-core')"><span class="btn-text">🔐 Access Core</span></button>
-        </div>
-        <button class="btn btn-secondary" onclick="showPage('page-profile')"><span class="btn-text">← Back</span></button>
+<!-- ===== REGISTRATION PAGES (Brief) ===== -->
+<div id="page-welcome" class="page bg-gradient">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
+        <svg width="90" height="90" viewBox="0 0 200 200"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
+        <h1 style="margin-top:8px">Destined</h1>
+        <p style="color:rgba(255,255,255,0.6);font-size:16px;margin-top:4px">❤️ Where fate meets connection</p>
+        <button class="btn btn-primary" style="max-width:340px;margin-top:20px" onclick="showPage('page-rules')"><span class="btn-text">Get Started 🌺</span></button>
     </div>
 </div>
 
-<!-- ===== PAGE 16: DESTINED CORE ===== -->
-<div id="page-core" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-admin')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Destined Core</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
-        <div style="text-align:center;margin-bottom:20px"><span style="font-size:48px">🔒</span><p style="color:rgba(255,255,255,0.4);font-size:13px;margin-top:4px">⚠️ CEO ONLY — Full System Control</p></div>
-        <div class="form-group"><label>🔑 Password 1</label><input type="password" placeholder="••••••••"></div>
-        <div class="form-group"><label>🔑 Password 2</label><input type="password" placeholder="••••••••"></div>
-        <button class="btn btn-primary" onclick="showToast('✅ Core Unlocked! Full system control granted.')"><span class="btn-text">🔓 Unlock Core</span></button>
-        <div style="margin-top:16px;text-align:center"><p style="color:rgba(255,255,255,0.2);font-size:12px">💡 Hint: Both passwords are different</p></div>
-        <button class="btn btn-secondary" style="margin-top:12px" onclick="showPage('page-admin')"><span class="btn-text">← Back</span></button>
+<div id="page-rules" class="page bg-gradient">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-welcome')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Safety Rules</h2></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center">
+        <div style="width:100%;max-width:340px;text-align:left">
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔞</span><div><h4 style="font-size:14px;color:#fff">18+ Only</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">You must be 18 or older</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🤖</span><div><h4 style="font-size:14px;color:#fff">AI Scam Shield</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">3 strikes → permanent ban</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">📸</span><div><h4 style="font-size:14px;color:#fff">Face Verification</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Selfie + pose verification</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔐</span><div><h4 style="font-size:14px;color:#fff">2FA &amp; KYC</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">3-tier verification</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🚫</span><div><h4 style="font-size:14px;color:#fff">Report &amp; Block</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Moderators act in 24h</p></div></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🧶</span><div><h4 style="font-size:14px;color:#fff">Red Thread</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Find your soulmate</p></div></div>
+        </div>
+        <button class="btn btn-primary" style="max-width:340px;margin-top:16px" onclick="showPage('page-signup')"><span class="btn-text">✅ I Understand &amp; Agree</span></button>
     </div>
 </div>
 
-<!-- ===== PAGE 17: SEARCH ===== -->
-<div id="page-search" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Search</h2></div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
-        <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:16px">Find users by Dest ID</p>
-        <div style="display:flex;gap:8px;margin-bottom:20px"><input type="text" placeholder="DEST12345100" style="flex:1;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none"><button style="padding:14px 24px;background:#FF3366;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer" onclick="showToast('🔍 Searching...')">Search</button></div>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);text-align:center">
-            <p style="color:rgba(255,255,255,0.3);font-size:13px">📋 Your Dest ID</p>
-            <p style="color:#fff;font-weight:600;font-size:20px;margin:6px 0;letter-spacing:1px">DEST12345100</p>
-            <button style="padding:6px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer" onclick="showToast('📋 Copied!')">📋 Copy</button>
+<div id="page-signup" class="page bg-gradient">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;max-width:340px;margin:0 auto;width:100%">
+        <svg width="60" height="60" viewBox="0 0 200 200" style="margin:0 auto 12px;display:block"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
+        <h2>Welcome</h2>
+        <p class="subtitle">Create your account or sign in</p>
+        <div style="display:flex;gap:12px;margin:20px 0;width:100%">
+            <button class="btn btn-primary" style="flex:1;padding:12px;font-size:14px" onclick="showToast('📝 Sign up coming soon!')">Create Account</button>
+            <button class="btn btn-secondary" style="flex:1;padding:12px;font-size:14px" onclick="showToast('🔐 Sign in coming soon!')">Sign In</button>
         </div>
+        <button class="btn btn-secondary" onclick="showPage('page-rules')"><span class="btn-text">← Back</span></button>
     </div>
 </div>
 
 </div><!-- end app -->
 
-<!-- Match Overlay -->
-<div id="matchOverlay" class="match-overlay" style="display:none">
+<!-- MATCH OVERLAY -->
+<div id="matchOverlay" class="match-overlay">
     <div class="hearts">💖</div>
     <div class="title">IT'S A MATCH! 🎉</div>
     <div class="sub">You and Sarah liked each other</div>
@@ -503,78 +375,18 @@ function showToast(msg, type = 'info') {
     toastTimeout = setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-function handleLogin() {
-    const id = document.getElementById('loginDestId').value.trim();
-    if (!id) { showToast('⚠️ Please enter your Dest ID', 'error'); return; }
-    showToast('✅ Welcome back!', 'success');
-    setTimeout(() => showPage('page-welcomeback'), 500);
-}
-
-function handleRegister() {
-    const name = document.getElementById('regName').value.trim();
-    const age = document.getElementById('regAge').value.trim();
-    if (!name || !age) { showToast('⚠️ Please fill in all fields', 'error'); return; }
-    if (parseInt(age) < 18) { showToast('⚠️ You must be 18+', 'error'); return; }
-    showToast('✅ Account created!', 'success');
-    setTimeout(() => showPage('page-preferences'), 500);
-}
-
-function startVerification() {
-    showToast('📸 Camera opening...', 'info');
-    setTimeout(() => {
-        showToast('✅ Face Verified! You are REAL! 🎉', 'success');
-        setTimeout(() => showPage('page-welcomeback'), 500);
-    }, 2000);
-}
-
-function selectGender(btn) {
-    const parent = btn.closest('.form-group');
-    if (parent) {
-        parent.querySelectorAll('button').forEach(b => {
-            b.style.background = 'rgba(255,255,255,0.04)';
-            b.style.borderColor = 'rgba(255,255,255,0.06)';
-            b.style.color = 'rgba(255,255,255,0.5)';
-        });
-    }
-    btn.style.background = 'rgba(255,51,102,0.1)';
-    btn.style.borderColor = '#FF3366';
-    btn.style.color = '#fff';
-}
-
-function selectPref(btn) {
-    const parent = btn.closest('.form-group');
-    if (parent) {
-        parent.querySelectorAll('button').forEach(b => {
-            b.style.background = 'rgba(255,255,255,0.04)';
-            b.style.borderColor = 'rgba(255,255,255,0.06)';
-            b.style.color = 'rgba(255,255,255,0.5)';
-        });
-    }
-    btn.style.background = 'rgba(255,51,102,0.1)';
-    btn.style.borderColor = '#FF3366';
-    btn.style.color = '#fff';
-}
-
-function switchTab(btn, pageId) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+function switchNav(btn) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    showPage(pageId);
 }
 
 function showMatch() {
-    document.getElementById('matchOverlay').style.display = 'flex';
+    document.getElementById('matchOverlay').classList.add('show');
     if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 }
 
 function closeMatch() {
-    document.getElementById('matchOverlay').style.display = 'none';
-}
-
-function setTheme(themeClass, el) {
-    document.querySelectorAll('.theme-option').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    document.body.className = themeClass;
-    showToast(`🎨 Theme changed to ${themeClass.replace('theme-','')}`);
+    document.getElementById('matchOverlay').classList.remove('show');
 }
 
 setTimeout(() => {
@@ -583,12 +395,12 @@ setTimeout(() => {
 
 document.addEventListener('gesturestart', e => e.preventDefault());
 
-console.log('🔥 Destined MVP — Tinder Style');
+console.log('🔥 Destined — Tinder Clone Style');
 console.log('👑 Built for Daniel — 17-year-old CEO');
 console.log('✅ Verified badge: Blue circle with white checkmark');
-console.log('✅ Tinder-style profile card length');
-console.log('✅ Tinder-style bottom tabs');
-console.log('✅ Themes feature active');
+console.log('✅ Tier badge: Elite, VIP, Premium');
+console.log('✅ Interests inside card like Tinder');
+console.log('✅ Full card height, same width as Tinder');
 </script>
 
 </body>
