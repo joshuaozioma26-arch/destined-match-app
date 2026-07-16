@@ -7,10 +7,25 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0A0F;color:#fff;min-height:100vh;overflow:hidden}
-        #app{max-width:480px;margin:0 auto;height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;background:#0A0A0F}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0A0F;color:#fff;min-height:100vh;overflow:hidden;transition:background 0.5s ease, color 0.5s ease}
+        #app{max-width:480px;margin:0 auto;height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:background 0.5s ease}
 
-        /* Splash */
+        /* ===== THEMES ===== */
+        .theme-dark{--bg:#0A0A0F;--card:#14141E;--border:rgba(255,255,255,0.06);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3);--glow:#FF3366}
+        .theme-pink{--bg:#1A0A0F;--card:#2A1520;--border:rgba(255,51,102,0.15);--text:#fff;--text2:rgba(255,255,255,0.6);--text3:rgba(255,255,255,0.3);--glow:#FF6699}
+        .theme-white{--bg:#F5F0F0;--card:#FFFFFF;--border:rgba(0,0,0,0.06);--text:#1A1A1A;--text2:rgba(0,0,0,0.5);--text3:rgba(0,0,0,0.3);--glow:#FF3366}
+        .theme-rose{--bg:#1A0A0F;--card:#2A1520;--border:rgba(255,51,102,0.15);--text:#fff;--text2:rgba(255,255,255,0.6);--text3:rgba(255,255,255,0.3);--glow:#FF6699}
+        .theme-ocean{--bg:#0A1520;--card:#152A3A;--border:rgba(68,136,255,0.15);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3);--glow:#4488FF}
+        .theme-royal{--bg:#1A0A00;--card:#2A1A0A;--border:rgba(255,215,0,0.15);--text:#FFD700;--text2:rgba(255,215,0,0.6);--text3:rgba(255,215,0,0.3);--glow:#FFD700}
+
+        body.theme-dark{background:#0A0A0F}
+        body.theme-pink{background:#1A0A0F}
+        body.theme-white{background:#F5F0F0}
+        body.theme-rose{background:#1A0A0F}
+        body.theme-ocean{background:#0A1520}
+        body.theme-royal{background:#1A0A00}
+
+        /* ===== SPLASH ===== */
         #splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0A0A0F;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;animation:fadeOut 2.5s ease forwards;animation-delay:1.5s}
         @keyframes fadeOut{0%{opacity:1}100%{opacity:0;visibility:hidden}}
         #splash .logo{width:100px;height:100px;animation:pulse 1.5s ease-in-out infinite}
@@ -50,51 +65,48 @@
         .tg-safe-top{padding-top:env(safe-area-inset-top,20px)}
         .tg-safe-bottom{padding-bottom:env(safe-area-inset-bottom,20px)}
 
-        /* Verified Badge - BLUE CHECKMARK BESIDE NAME */
         .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#4488FF;border-radius:50%;font-size:11px;color:#fff;font-weight:700;margin-left:6px;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.15)}
+        .verified-badge-lg{width:24px;height:24px;font-size:13px}
 
         /* ===== TOP BAR ===== */
-        .top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;background:#0A0A0F;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.04)}
+        .top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;background:var(--bg);flex-shrink:0;border-bottom:1px solid var(--border);transition:all 0.5s ease}
         .top-bar .brand{display:flex;align-items:center;gap:8px}
-        .top-bar .brand .fire{font-size:20px}
-        .top-bar .brand .name{font-weight:700;font-size:18px;color:#FF3366;letter-spacing:1px}
+        .top-bar .brand .fire{font-size:20px;transition:all 0.5s ease}
+        .top-bar .brand .name{font-weight:700;font-size:18px;color:#FF3366;letter-spacing:1px;transition:all 0.5s ease}
         .top-bar .icons{display:flex;gap:16px;font-size:20px;cursor:pointer}
-        .top-bar .icons span{color:rgba(255,255,255,0.4);transition:all .2s}
+        .top-bar .icons span{color:rgba(255,255,255,0.4);transition:all .3s ease}
         .top-bar .icons span:hover{color:#fff}
 
         /* ===== CARD ===== */
-        .card-container{flex:1;display:flex;flex-direction:column;padding:8px 16px 4px;background:#0A0A0F}
-        .card-container .card{flex:1;border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#14141E,#1A1A2E);border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.5);display:flex;flex-direction:column}
+        .card-container{flex:1;display:flex;flex-direction:column;padding:8px 16px 4px;background:var(--bg);transition:all 0.5s ease}
+        .card-container .card{flex:1;border-radius:24px;overflow:hidden;background:var(--card);border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,0.5);display:flex;flex-direction:column;transition:all 0.5s ease}
 
         .card-container .card-photo{flex:1;min-height:280px;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
         .card-container .card-photo .photo-icon{font-size:100px;opacity:0.5}
 
-        /* Tier Badge - TOP LEFT */
         .card-container .card-photo .tier-badge{position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:4px;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.5px;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.05)}
         .card-container .card-photo .tier-badge.elite{color:#FF0033;border-color:rgba(255,0,51,0.3)}
         .card-container .card-photo .tier-badge.vip{color:#C0C0C0;border-color:rgba(192,192,192,0.3)}
         .card-container .card-photo .tier-badge.premium{color:#FFD700;border-color:rgba(255,215,0,0.3)}
         .card-container .card-photo .tier-badge.free{color:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.05)}
 
-        /* Online Status - BOTTOM LEFT */
         .card-container .card-photo .online-status{position:absolute;bottom:16px;left:16px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.6);padding:4px 14px;border-radius:20px;backdrop-filter:blur(10px)}
         .card-container .card-photo .online-status .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
         .card-container .card-photo .online-status .dot.online{background:#44FF88}
         .card-container .card-photo .online-status .dot.offline{background:#FF4444}
         .card-container .card-photo .online-status .label{font-size:12px;color:rgba(255,255,255,0.7)}
 
-        /* Card Info */
         .card-container .card-info{padding:16px 20px 12px;flex-shrink:0}
         .card-container .card-info .name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-        .card-container .card-info .name-row .name{font-size:24px;font-weight:700;color:#fff}
-        .card-container .card-info .name-row .age{font-size:20px;font-weight:400;color:rgba(255,255,255,0.4)}
-        .card-container .card-info .location{font-size:14px;color:rgba(255,255,255,0.4);margin-top:2px}
-        .card-container .card-info .looking-for{font-size:14px;color:rgba(255,255,255,0.6);margin-top:6px}
+        .card-container .card-info .name-row .name{font-size:24px;font-weight:700;color:var(--text);transition:color 0.5s ease}
+        .card-container .card-info .name-row .age{font-size:20px;font-weight:400;color:var(--text2);transition:color 0.5s ease}
+        .card-container .card-info .location{font-size:14px;color:var(--text2);margin-top:2px;transition:color 0.5s ease}
+        .card-container .card-info .looking-for{font-size:14px;color:var(--text2);margin-top:6px;transition:color 0.5s ease}
         .card-container .card-info .looking-for span{color:#FF3366}
-        .card-container .card-info .bio{font-size:14px;color:rgba(255,255,255,0.5);margin-top:4px;font-style:italic}
+        .card-container .card-info .bio{font-size:14px;color:var(--text3);margin-top:4px;font-style:italic;transition:color 0.5s ease}
 
         /* ===== SWIPE BUTTONS ===== */
-        .swipe-actions{display:flex;justify-content:center;align-items:center;gap:14px;padding:8px 0 6px;flex-shrink:0;background:#0A0A0F}
+        .swipe-actions{display:flex;justify-content:center;align-items:center;gap:14px;padding:8px 0 6px;flex-shrink:0;background:var(--bg);transition:all 0.5s ease}
         .swipe-actions .swipe-btn{width:50px;height:50px;border-radius:50%;border:2px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .2s;color:#FFB800}
         .swipe-actions .swipe-btn:hover{transform:scale(1.05)}
         .swipe-actions .swipe-btn.pass{width:58px;height:58px;border-color:rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:24px}
@@ -107,16 +119,40 @@
         .swipe-actions .swipe-btn.boost:hover{background:rgba(255,51,102,0.15)}
 
         /* ===== BOTTOM NAV ===== */
-        .bottom-nav{display:flex;justify-content:space-around;padding:8px 0 16px;border-top:1px solid rgba(255,255,255,0.04);background:#0A0A0F;flex-shrink:0}
-        .bottom-nav .nav-btn{background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;transition:all .2s}
+        .bottom-nav{display:flex;justify-content:space-around;padding:10px 0 18px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;transition:all 0.5s ease}
+        .bottom-nav .nav-btn{background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:24px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;transition:all .2s;position:relative}
         .bottom-nav .nav-btn.active{color:#FF3366}
-        .bottom-nav .nav-btn span{font-size:10px;color:inherit;font-weight:500}
-        .bottom-nav .nav-btn:hover{color:rgba(255,255,255,0.5)}
+        .bottom-nav .nav-btn.active::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:20px;height:3px;background:#FF3366;border-radius:4px}
+        .bottom-nav .nav-btn span{font-size:11px;color:inherit;font-weight:600;letter-spacing:0.3px}
+        .bottom-nav .nav-btn:hover{color:rgba(255,255,255,0.6)}
+        .bottom-nav .nav-btn.active span{color:#FF3366}
 
-        /* ===== THEMES IN PROFILE ===== */
-        .theme-option{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);cursor:pointer;transition:all .3s ease;flex-shrink:0}
-        .theme-option:hover{transform:scale(1.1)}
-        .theme-option.active{border-color:#FF3366;box-shadow:0 0 20px rgba(255,51,102,0.3)}
+        /* ===== THEME OPTIONS IN PROFILE ===== */
+        .theme-section{background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px;transition:all 0.5s ease}
+        .theme-section .theme-label{color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:10px;font-weight:500;letter-spacing:0.5px}
+        .theme-section .theme-options{display:flex;gap:12px;flex-wrap:wrap}
+        .theme-option{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease}
+        .theme-option:hover{transform:scale(1.08)}
+        .theme-option .circle{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);transition:all 0.3s ease}
+        .theme-option .circle.active{border-color:#FF3366;box-shadow:0 0 24px rgba(255,51,102,0.4)}
+        .theme-option .theme-name{font-size:10px;color:rgba(255,255,255,0.3);transition:color 0.3s ease}
+
+        /* ===== PROFILE ===== */
+        .profile-header{text-align:center;margin-bottom:20px}
+        .profile-header .avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:36px;border:3px solid #FF3366}
+        .profile-header .name-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+        .profile-header .name-row .name{font-size:20px;font-weight:700;color:var(--text);transition:color 0.5s ease}
+        .profile-header .details{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+        .profile-header .details .detail{color:var(--text2);font-size:13px;transition:color 0.5s ease}
+        .profile-header .details .dot{color:rgba(255,255,255,0.15);font-size:13px}
+        .profile-header .details .elite-badge{color:#FF0033;font-size:12px;font-weight:700;background:rgba(255,0,51,0.15);padding:2px 12px;border-radius:12px}
+        .profile-header .bio{color:var(--text3);font-size:14px;font-style:italic;margin-top:6px;transition:color 0.5s ease}
+
+        .info-box{background:rgba(255,255,255,0.03);border-radius:12px;padding:16px 18px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px;transition:all 0.5s ease}
+        .info-box .label{color:rgba(255,255,255,0.3);font-size:11px;font-weight:600;letter-spacing:0.5px;margin-bottom:4px}
+        .info-box .value{color:var(--text);font-weight:700;font-size:16px;letter-spacing:1px;font-family:monospace;transition:color 0.5s ease}
+        .info-box .value-muted{color:var(--text2);font-weight:500;font-size:15px;letter-spacing:1px;font-family:monospace;transition:color 0.5s ease}
+        .info-box .divider{height:1px;background:rgba(255,255,255,0.04);margin:10px 0}
 
         /* Match Animation */
         .match-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(20px);animation:matchPop .5s ease}
@@ -147,9 +183,7 @@
 <div id="app" class="tg-safe-top">
 
 <!-- ===== MAIN SCREEN ===== -->
-<div id="page-main" class="page active" style="background:#0A0A0F">
-
-    <!-- TOP BAR -->
+<div id="page-main" class="page active" style="background:var(--bg)">
     <div class="top-bar">
         <div class="brand">
             <span class="fire">🔥</span>
@@ -161,7 +195,6 @@
         </div>
     </div>
 
-    <!-- CARD -->
     <div class="card-container">
         <div class="card">
             <div class="card-photo">
@@ -185,7 +218,6 @@
         </div>
     </div>
 
-    <!-- SWIPE BUTTONS -->
     <div class="swipe-actions">
         <button class="swipe-btn" onclick="showToast('↩️ Rewind (3 left)')">↩️</button>
         <button class="swipe-btn pass" onclick="showToast('❌ Passed!')">✕</button>
@@ -194,7 +226,6 @@
         <button class="swipe-btn boost" onclick="showToast('⚡ Boost activated! 30 min')">⚡</button>
     </div>
 
-    <!-- BOTTOM NAV -->
     <div class="bottom-nav">
         <button class="nav-btn active" onclick="switchNav(this)"><span>❤️‍🔥</span><span>Home</span></button>
         <button class="nav-btn" onclick="switchNav(this);showToast('💞 Likes coming soon!')"><span>💞</span><span>Likes</span></button>
@@ -206,13 +237,13 @@
 
 <!-- ===== SEARCH PAGE ===== -->
 <div id="page-search" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🔍 Search</h2></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px;font-weight:600">🔍 Search</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:340px;margin:0 auto;width:100%">
         <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:16px">Find users by Dest ID</p>
         <div style="display:flex;gap:8px;margin-bottom:20px"><input type="text" placeholder="DEST12345100" style="flex:1;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none"><button style="padding:14px 24px;background:#FF3366;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer" onclick="showToast('🔍 Searching...')">Search</button></div>
         <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);text-align:center">
             <p style="color:rgba(255,255,255,0.3);font-size:13px">📋 Your Dest ID</p>
-            <p style="color:#fff;font-weight:600;font-size:20px;margin:6px 0;letter-spacing:1px">DEST12345100</p>
+            <p style="color:#fff;font-weight:600;font-size:20px;margin:6px 0;letter-spacing:1px;font-family:monospace">DEST12345100</p>
             <button style="padding:6px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer" onclick="showToast('📋 Copied!')">📋 Copy</button>
         </div>
         <button class="btn btn-secondary" style="margin-top:16px" onclick="showPage('page-main')"><span class="btn-text">← Back</span></button>
@@ -220,51 +251,83 @@
 </div>
 
 <!-- ===== PROFILE PAGE ===== -->
-<div id="page-profile" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px"><button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">👤 Profile</h2></div>
+<div id="page-profile" class="page" style="background:var(--bg);transition:all 0.5s ease">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px">
+        <button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:var(--text);width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;transition:color 0.5s ease">←</button>
+        <h2 style="flex:1;text-align:center;font-size:20px;font-weight:600;color:var(--text);transition:color 0.5s ease">👤 Profile</h2>
+    </div>
     <div style="flex:1;overflow-y:auto;max-width:380px;margin:0 auto;width:100%;padding-bottom:20px">
-        <div style="text-align:center;margin-bottom:20px">
-            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:36px;border:3px solid #FF3366">👤</div>
-            <h3 style="color:#fff;font-size:20px;margin-top:10px">Sarah Johnson</h3>
-            <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;flex-wrap:wrap">
-                <span style="color:rgba(255,255,255,0.4);font-size:13px">📍 London</span>
-                <span style="color:rgba(255,255,255,0.2);font-size:13px">·</span>
-                <span style="color:rgba(255,255,255,0.4);font-size:13px">💍 Single</span>
-                <span style="color:rgba(255,255,255,0.2);font-size:13px">·</span>
-                <span style="color:rgba(255,255,255,0.4);font-size:13px">🎂 22</span>
-                <span style="color:#FF0033;font-size:11px;font-weight:700;background:rgba(255,0,51,0.15);padding:2px 10px;border-radius:12px">🔱 ELITE</span>
+        
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar">👤</div>
+            <div class="name-row">
+                <span class="name">Sarah Johnson</span>
+                <span class="verified-badge" style="width:22px;height:22px;font-size:12px">✓</span>
             </div>
-            <p style="color:rgba(255,255,255,0.5);font-size:14px;font-style:italic;margin-top:6px">"Love is the greatest adventure." ❤️‍🔥</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
-            <p style="color:rgba(255,255,255,0.3);font-size:11px;margin-bottom:4px">🔑 DEST ID</p>
-            <p style="color:#fff;font-weight:600;font-size:15px;letter-spacing:1px">DEST12345100</p>
-            <p style="color:rgba(255,255,255,0.3);font-size:11px;margin:6px 0 4px">💳 ACCOUNT NUMBER</p>
-            <p style="color:rgba(255,255,255,0.5);font-size:13px;letter-spacing:1px">0123-4567-8910-1112</p>
+            <div class="details">
+                <span class="detail">📍 London</span>
+                <span class="dot">·</span>
+                <span class="detail">💍 Single</span>
+                <span class="dot">·</span>
+                <span class="detail">🎂 22</span>
+                <span class="dot">·</span>
+                <span class="elite-badge">🔱 ELITE</span>
+            </div>
+            <div class="bio">"Love is the greatest adventure." ❤️‍🔥</div>
         </div>
 
-        <!-- THEMES -->
-        <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px">
-            <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px">🎨 THEMES</p>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-                <div class="theme-option active" style="background:#0A0A0F;border-color:#FF3366" onclick="setTheme('theme-dark',this)" title="Dark"></div>
-                <div class="theme-option" style="background:#F5F5F5" onclick="setTheme('theme-light',this)" title="Light"></div>
-                <div class="theme-option" style="background:#1A0A0F" onclick="setTheme('theme-rose',this)" title="Rose"></div>
-                <div class="theme-option" style="background:#0A1520" onclick="setTheme('theme-ocean',this)" title="Ocean"></div>
-                <div class="theme-option" style="background:#1A0A00;border-color:#FFD700" onclick="setTheme('theme-royal',this)" title="Royal"></div>
+        <!-- Dest ID & Account -->
+        <div class="info-box">
+            <p class="label">🔑 DEST ID</p>
+            <p class="value">DEST12345100</p>
+            <div class="divider"></div>
+            <p class="label">💳 ACCOUNT NUMBER</p>
+            <p class="value-muted">0123-4567-8910-1112</p>
+        </div>
+
+        <!-- Themes -->
+        <div class="theme-section">
+            <p class="theme-label">🎨 THEMES</p>
+            <div class="theme-options">
+                <div class="theme-option" onclick="setTheme('theme-dark',this)">
+                    <div class="circle active" style="background:#0A0A0F;border-color:#FF3366"></div>
+                    <span class="theme-name">Dark</span>
+                </div>
+                <div class="theme-option" onclick="setTheme('theme-pink',this)">
+                    <div class="circle" style="background:#FF6699"></div>
+                    <span class="theme-name">Pink</span>
+                </div>
+                <div class="theme-option" onclick="setTheme('theme-white',this)">
+                    <div class="circle" style="background:#F5F0F0;border-color:#ccc"></div>
+                    <span class="theme-name">White</span>
+                </div>
+                <div class="theme-option" onclick="setTheme('theme-rose',this)">
+                    <div class="circle" style="background:#2A1520"></div>
+                    <span class="theme-name">Rose</span>
+                </div>
+                <div class="theme-option" onclick="setTheme('theme-ocean',this)">
+                    <div class="circle" style="background:#0A1520"></div>
+                    <span class="theme-name">Ocean</span>
+                </div>
+                <div class="theme-option" onclick="setTheme('theme-royal',this)">
+                    <div class="circle" style="background:#1A0A00;border-color:#FFD700"></div>
+                    <span class="theme-name">Royal</span>
+                </div>
             </div>
         </div>
 
+        <!-- Buttons -->
         <div style="display:flex;flex-direction:column;gap:10px">
-            <button class="btn btn-secondary" onclick="showToast('✏️ Edit Profile coming soon!')"><span class="btn-text">✏️ Edit Profile</span></button>
-            <button class="btn btn-secondary" onclick="showToast('⚙️ Settings coming soon!')"><span class="btn-text">⚙️ Settings</span></button>
-            <button class="btn btn-secondary" onclick="showToast('🚪 Logging out...')"><span class="btn-text">🚪 Logout</span></button>
-            <button class="btn btn-secondary" onclick="showPage('page-main')"><span class="btn-text">← Back</span></button>
+            <button class="btn btn-secondary" onclick="showToast('✏️ Edit Profile coming soon!')" style="padding:14px;border-radius:12px;font-size:15px;border-color:var(--border);color:var(--text);transition:all 0.5s ease"><span class="btn-text">✏️ Edit Profile</span></button>
+            <button class="btn btn-secondary" onclick="showToast('⚙️ Settings coming soon!')" style="padding:14px;border-radius:12px;font-size:15px;border-color:var(--border);color:var(--text);transition:all 0.5s ease"><span class="btn-text">⚙️ Settings</span></button>
+            <button class="btn btn-secondary" onclick="showToast('🚪 Logging out...')" style="padding:14px;border-radius:12px;font-size:15px;border-color:rgba(255,68,68,0.2);color:#FF4444"><span class="btn-text">🚪 Logout</span></button>
+            <button class="btn btn-secondary" onclick="showPage('page-main')" style="padding:14px;border-radius:12px;font-size:15px;border-color:var(--border);color:var(--text);transition:all 0.5s ease"><span class="btn-text">← Back</span></button>
         </div>
     </div>
 </div>
 
-<!-- ===== REGISTRATION PAGES ===== -->
+<!-- ===== REGISTRATION PAGES (Quick) ===== -->
 <div id="page-welcome" class="page bg-gradient">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0">
         <svg width="90" height="90" viewBox="0 0 200 200"><path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/><path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/><path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/><path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/></svg>
@@ -275,7 +338,7 @@
 </div>
 
 <div id="page-rules" class="page bg-gradient">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-welcome')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px">🛡️ Safety Rules</h2></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button onclick="showPage('page-welcome')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button><h2 style="flex:1;text-align:center;font-size:20px;font-weight:600">🛡️ Safety Rules</h2></div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center">
         <div style="width:100%;max-width:340px;text-align:left">
             <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔞</span><div><h4 style="font-size:14px;color:#fff">18+ Only</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">You must be 18 or older</p></div></div>
@@ -360,10 +423,18 @@ function closeMatch() {
 }
 
 function setTheme(themeClass, el) {
-    document.querySelectorAll('.theme-option').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
+    // Update body class
     document.body.className = themeClass;
-    showToast('🎨 Theme changed to ' + themeClass.replace('theme-',''));
+    
+    // Update theme option active states
+    document.querySelectorAll('.theme-option .circle').forEach(c => c.classList.remove('active'));
+    el.querySelector('.circle').classList.add('active');
+    
+    // Get theme name
+    const name = el.querySelector('.theme-name').textContent;
+    
+    // Show toast with animation feedback
+    showToast('🎨 Theme changed to ' + name + '!');
 }
 
 setTimeout(() => {
@@ -372,13 +443,12 @@ setTimeout(() => {
 
 document.addEventListener('gesturestart', e => e.preventDefault());
 
-console.log('🔥 Destined — Fixed Version');
+console.log('🔥 Destined — Final Version');
 console.log('👑 Built for Daniel — 17-year-old CEO');
-console.log('✅ Verified badge: BESIDE name (Sarah ✅ 22)');
-console.log('✅ Notifications & Search: TOP RIGHT visible');
-console.log('✅ Themes: IN SETTINGS');
-console.log('✅ No random scissors/music icons');
-console.log('✅ Tabs: FULL SIZE');
+console.log('✅ Themes: Dark, Pink, White, Rose, Ocean, Royal');
+console.log('✅ Theme animations: Smooth 0.5s transitions');
+console.log('✅ Clean text formatting: DEST ID, ACCOUNT NUMBER');
+console.log('✅ Verified badge beside name');
 </script>
 
 </body>
