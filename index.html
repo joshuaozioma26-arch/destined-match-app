@@ -7,911 +7,1153 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         /* ===== RESET ===== */
-        *{margin:0;padding:0;box-sizing:border-box}
-        html,body{height:100%;overflow:hidden}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0A0F;color:#fff;transition:background 0.5s ease}
-        #app{max-width:480px;margin:0 auto;height:100vh;position:relative;overflow:hidden;background:#0A0A0F;transition:background 0.5s ease}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0A0A0F;
+            color: #fff;
+            transition: background 0.5s ease;
+        }
+        #app {
+            max-width: 480px;
+            margin: 0 auto;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: #0A0A0F;
+            transition: background 0.5s ease;
+        }
 
         /* ===== THEMES ===== */
-        .theme-dark{--bg:#0A0A0F;--card:#14141E;--border:rgba(255,255,255,0.06);--text:#fff;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.3);--glow:#FF3366}
-        .theme-pink{--bg:#1A0A0F;--card:#2A1520;--border:rgba(255,51,102,0.15);--text:#fff;--text2:rgba(255,255,255,0.6);--text3:rgba(255,255,255,0.3);--glow:#FF6699}
-        .theme-white{--bg:#F5F0F0;--card:#FFFFFF;--border:rgba(0,0,0,0.06);--text:#1A1A1A;--text2:rgba(0,0,0,0.5);--text3:rgba(0,0,0,0.3);--glow:#FF3366}
+        .theme-dark {
+            --bg: #0A0A0F;
+            --card: #14141E;
+            --border: rgba(255, 255, 255, 0.06);
+            --text: #fff;
+            --text2: rgba(255, 255, 255, 0.5);
+            --text3: rgba(255, 255, 255, 0.3);
+            --glow: #FF3366
+        }
+        .theme-pink {
+            --bg: #1A0A0F;
+            --card: #2A1520;
+            --border: rgba(255, 51, 102, 0.15);
+            --text: #fff;
+            --text2: rgba(255, 255, 255, 0.6);
+            --text3: rgba(255, 255, 255, 0.3);
+            --glow: #FF6699
+        }
+        .theme-white {
+            --bg: #F5F0F0;
+            --card: #FFFFFF;
+            --border: rgba(0, 0, 0, 0.06);
+            --text: #1A1A1A;
+            --text2: rgba(0, 0, 0, 0.5);
+            --text3: rgba(0, 0, 0, 0.3);
+            --glow: #FF3366
+        }
 
-        body.theme-dark{background:#0A0A0F}
-        body.theme-pink{background:#1A0A0F}
-        body.theme-white{background:#F5F0F0}
+        body.theme-dark {
+            background: #0A0A0F;
+        }
+        body.theme-pink {
+            background: #1A0A0F;
+        }
+        body.theme-white {
+            background: #F5F0F0;
+        }
 
-        /* ===== SPLASH ===== */
-        #splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0A0A0F;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;animation:fadeOut 2.5s ease forwards;animation-delay:1.5s}
-        @keyframes fadeOut{0%{opacity:1}100%{opacity:0;visibility:hidden}}
-        #splash .logo{width:100px;height:100px;animation:pulse 1.5s ease-in-out infinite}
-        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        #splash .name{font-size:36px;font-weight:700;color:#fff;margin-top:16px;letter-spacing:3px;font-family:Georgia,serif}
-        #splash .loader{margin-top:40px;width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#FF3366;border-radius:50%;animation:spin .8s linear infinite}
+        .page {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            animation: fadeSlide .3s ease;
+            background: var(--bg);
+            transition: background 0.5s ease;
+        }
+        .page.active {
+            display: flex;
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-        /* ===== PAGES ===== */
-        .page{display:none;position:absolute;top:0;left:0;right:0;bottom:0;flex-direction:column;background:#0A0A0F;overflow-y:auto;z-index:1;transition:background 0.5s ease}
-        .page.active{display:flex;z-index:10;animation:fadeSlide .3s ease}
-        @keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-        .bg-gradient{background:linear-gradient(160deg,#1A0A0F 0%,#2D0A15 30%,#4A0A20 60%,#660025 100%)}
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px 8px;
+            background: var(--bg);
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.5s ease;
+        }
+        .top-bar .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .top-bar .brand .fire {
+            font-size: 20px;
+        }
+        .top-bar .brand .name {
+            font-weight: 700;
+            font-size: 18px;
+            color: #FF3366;
+            letter-spacing: 1px;
+        }
+        .top-bar .icons {
+            display: flex;
+            gap: 16px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .top-bar .icons span {
+            color: rgba(255, 255, 255, 0.3);
+            transition: all .3s ease;
+        }
+        .top-bar .icons span:hover {
+            color: #fff;
+        }
 
-        /* ===== BUTTONS ===== */
-        .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;border:none;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;width:100%;text-decoration:none}
-        .btn-primary{background:#FF3366;color:#fff;box-shadow:0 4px 20px rgba(255,51,102,0.3)}
-        .btn-primary:active{transform:scale(.97)}
-        .btn-secondary{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08)}
-        .btn-secondary:hover{background:rgba(255,255,255,0.12)}
-        .btn-danger{background:rgba(255,68,68,0.1);color:#FF4444;border:1px solid rgba(255,68,68,0.2)}
+        /* ===== CHAT LIST ===== */
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 16px;
+            background: var(--bg);
+            transition: background 0.5s ease;
+        }
+        .chat-item {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .chat-item .row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chat-item .row .avatar {
+            font-size: 32px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-item .row .avatar .online-dot {
+            position: absolute;
+            bottom: 2px;
+            right: 0px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--bg);
+        }
+        .chat-item .row .avatar .online-dot.online {
+            background: #44FF88;
+        }
+        .chat-item .row .avatar .online-dot.offline {
+            display: none;
+        }
+        .chat-item .row .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .chat-item .row .verified {
+            font-size: 14px;
+            color: #4488FF;
+        }
+        .chat-item .tier {
+            font-size: 12px;
+            color: var(--text2);
+            margin-left: 42px;
+            transition: color 0.5s ease;
+        }
+        .chat-item .preview {
+            font-size: 13px;
+            color: var(--text3);
+            margin-left: 42px;
+            margin-top: 2px;
+            transition: color 0.5s ease;
+        }
+        .chat-item .preview .unread {
+            background: #FF3366;
+            color: #fff;
+            border-radius: 50%;
+            padding: 0 6px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+        .chat-item .preview .read-receipt {
+            font-size: 11px;
+            color: #44FF88;
+            margin-left: 4px;
+        }
 
-        /* ===== FORM ===== */
-        .form-group{margin-bottom:18px}
-        .form-group label{display:block;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);margin-bottom:4px}
-        .form-group input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none;transition:all .3s ease}
-        .form-group input:focus{border-color:#FF3366;box-shadow:0 0 0 3px rgba(255,51,102,0.08)}
-        .form-group input::placeholder{color:rgba(255,255,255,0.2)}
+        /* ===== INSIDE CHAT ===== */
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+        }
+        .chat-header .left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        .chat-header .left .back {
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .chat-header .left .avatar {
+            font-size: 28px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-header .left .avatar .online-dot {
+            position: absolute;
+            bottom: 0px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1.5px solid var(--bg);
+        }
+        .chat-header .left .avatar .online-dot.online {
+            background: #44FF88;
+        }
+        .chat-header .left .avatar .online-dot.offline {
+            display: none;
+        }
+        .chat-header .left .info {
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header .left .info .name-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .chat-header .left .info .name-row .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .chat-header .left .info .name-row .verified {
+            font-size: 13px;
+            color: #4488FF;
+        }
+        .chat-header .left .info .tier {
+            font-size: 11px;
+            color: var(--text2);
+            transition: color 0.5s ease;
+        }
+        .chat-header .right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .chat-header .right .icon {
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text2);
+            transition: color 0.3s ease;
+        }
+        .chat-header .right .icon:hover {
+            color: var(--text);
+        }
 
-        /* ===== TOAST ===== */
-        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,0.9);border:1px solid rgba(255,255,255,0.06);padding:14px 24px;border-radius:14px;color:#fff;font-size:14px;box-shadow:0 8px 40px rgba(0,0,0,0.6);opacity:0;transition:all .4s ease;z-index:999;max-width:90%;text-align:center;backdrop-filter:blur(20px)}
-        .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-        .toast.error{border-color:#FF4444}
-        .toast.success{border-color:#44FF88}
+        /* ===== MESSAGES AREA ===== */
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+            background: var(--bg);
+            transition: background 0.5s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .messages-area .timestamp {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text3);
+            padding: 8px 0;
+            transition: color 0.5s ease;
+        }
+        .messages-area .msg {
+            max-width: 75%;
+            padding: 8px 12px;
+            border-radius: 16px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+        }
+        .messages-area .msg.received {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text);
+            border-bottom-left-radius: 4px;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+        .messages-area .msg.received .sender {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text2);
+            margin-bottom: 2px;
+            transition: color 0.5s ease;
+        }
+        .messages-area .msg.sent {
+            align-self: flex-end;
+            background: #FF3366;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .messages-area .msg.sent .read-receipt {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-left: 4px;
+        }
 
-        /* ===== TYPOGRAPHY ===== */
-        h1{font-size:36px;font-weight:700;color:#fff;text-align:center;font-family:Georgia,serif;letter-spacing:2px}
-        h2{font-size:24px;font-weight:700;color:#fff;text-align:center;font-family:Georgia,serif;letter-spacing:1px}
-        h3{font-size:20px;font-weight:700;color:#fff}
-        .subtitle{color:rgba(255,255,255,0.6);text-align:center;font-size:14px;margin-top:4px;line-height:1.6}
-        .text-center{text-align:center}
-        .mt-20{margin-top:20px}
-        .mb-20{margin-bottom:20px}
-        .flex-1{flex:1}
-        .flex-center{display:flex;flex-direction:column;justify-content:center;align-items:center}
-        .w-full{width:100%}
-        .max-w-340{max-width:340px}
-        .mx-auto{margin-left:auto;margin-right:auto}
+        /* ===== CHAT INPUT ===== */
+        .chat-input {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 12px 12px;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+        }
+        .chat-input .input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chat-input .input-row .spark {
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text2);
+            transition: color 0.3s ease;
+        }
+        .chat-input .input-row .spark:hover {
+            color: #FFD700;
+        }
+        .chat-input .input-row input {
+            flex: 1;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .chat-input .input-row input:focus {
+            border-color: #FF3366;
+        }
+        .chat-input .input-row input::placeholder {
+            color: var(--text3);
+        }
+        .chat-input .input-row .voice {
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text2);
+            transition: color 0.3s ease;
+        }
+        .chat-input .input-row .voice:hover {
+            color: var(--text);
+        }
+        .chat-input .input-row .attach {
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text2);
+            transition: color 0.3s ease;
+        }
+        .chat-input .input-row .attach:hover {
+            color: var(--text);
+        }
+        .chat-input .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+            padding-left: 26px;
+        }
+        .chat-input .quick-actions span {
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+        .chat-input .quick-actions span:hover {
+            opacity: 1;
+        }
 
-        /* ===== VERIFIED BADGE ===== */
-        .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#4488FF;border-radius:50%;font-size:11px;color:#fff;font-weight:700;margin-left:6px;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.15)}
-        .verified-badge-lg{width:24px;height:24px;font-size:13px}
+        /* ===== LIKES TAB ===== */
+        .likes-header {
+            text-align: center;
+            padding: 12px 0 8px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #FFD700;
+            letter-spacing: 1px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+        }
+        .likes-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 16px;
+            background: var(--bg);
+            transition: background 0.5s ease;
+        }
+        .like-item {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            transition: border 0.5s ease;
+        }
+        .like-item .row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .like-item .row .avatar {
+            font-size: 32px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .like-item .row .avatar .online-dot {
+            position: absolute;
+            bottom: 2px;
+            right: 0px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--bg);
+        }
+        .like-item .row .avatar .online-dot.online {
+            background: #44FF88;
+        }
+        .like-item .row .avatar .online-dot.offline {
+            display: none;
+        }
+        .like-item .row .info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .like-item .row .info .name-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .like-item .row .info .name-row .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .like-item .row .info .name-row .verified {
+            font-size: 13px;
+            color: #4488FF;
+        }
+        .like-item .row .info .tier {
+            font-size: 12px;
+            color: var(--text2);
+            transition: color 0.5s ease;
+        }
+        .like-item .row .info .award {
+            font-size: 12px;
+            color: #FFD700;
+            font-weight: 600;
+            margin-top: 1px;
+        }
+        .like-item .row .info .like-type {
+            font-size: 12px;
+            color: var(--text3);
+            transition: color 0.5s ease;
+        }
+        .like-item .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+            margin-left: 42px;
+        }
+        .like-item .actions button {
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .like-item .actions .like-back {
+            background: #FF3366;
+            color: #fff;
+        }
+        .like-item .actions .like-back:hover {
+            transform: scale(1.05);
+        }
+        .like-item .actions .super-like {
+            background: #4488FF;
+            color: #fff;
+        }
+        .like-item .actions .super-like:hover {
+            transform: scale(1.05);
+        }
+        .like-item .actions .view-profile {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .like-item .actions .view-profile:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
 
-        /* ===== TIER BADGES ===== */
-        .tier-elite{color:#FF0033;font-weight:700;background:rgba(255,0,51,0.15);padding:2px 12px;border-radius:12px;border:1px solid rgba(255,0,51,0.2);font-size:11px}
-        .tier-vip{color:#C0C0C0;font-weight:700;background:rgba(192,192,192,0.15);padding:2px 12px;border-radius:12px;border:1px solid rgba(192,192,192,0.2);font-size:11px}
-        .tier-premium{color:#FFD700;font-weight:700;background:rgba(255,215,0,0.15);padding:2px 12px;border-radius:12px;border:1px solid rgba(255,215,0,0.2);font-size:11px}
-        .tier-free{color:rgba(255,255,255,0.3);font-weight:700;background:rgba(255,255,255,0.05);padding:2px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);font-size:11px}
+        .matches-section {
+            padding: 12px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+        .matches-section .title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FF3366;
+            cursor: pointer;
+        }
+        .matches-section .title:hover {
+            text-decoration: underline;
+        }
 
-        /* ============================================
-           MAIN SCREEN
-           ============================================ */
-
-        .top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;background:var(--bg);flex-shrink:0;border-bottom:1px solid var(--border);transition:all 0.5s ease}
-        .top-bar .brand{display:flex;align-items:center;gap:8px}
-        .top-bar .brand .fire{font-size:20px}
-        .top-bar .brand .name{font-weight:700;font-size:18px;color:#FF3366;letter-spacing:1px}
-        .top-bar .icons{display:flex;gap:16px;font-size:20px;cursor:pointer}
-        .top-bar .icons span{color:rgba(255,255,255,0.4);transition:all .3s ease}
-        .top-bar .icons span:hover{color:#fff}
-
-        /* Card Container */
-        .card-container{flex:1;display:flex;flex-direction:column;padding:8px 16px 4px;background:var(--bg);transition:all 0.5s ease;position:relative}
-        .card-container .card{flex:1;border-radius:24px;overflow:hidden;background:var(--card);border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,0.5);display:flex;flex-direction:column;transition:all 0.5s ease;min-height:380px;position:relative}
-
-        .card-container .card-photo{flex:1;min-height:240px;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-        .card-container .card-photo .photo-icon{font-size:80px;opacity:0.4}
-
-        /* Tier Badge on Photo */
-        .card-container .card-photo .tier-badge{position:absolute;top:14px;left:14px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.05)}
-
-        /* Verified on Photo */
-        .card-container .card-photo .verified-on-photo{position:absolute;top:14px;right:14px;display:flex;align-items:center;justify-content:center;width:26px;height:26px;background:#4488FF;border-radius:50%;font-size:13px;color:#fff;font-weight:700;border:2px solid rgba(255,255,255,0.2);box-shadow:0 2px 12px rgba(68,136,255,0.4)}
-
-        /* Online Status */
-        .card-container .card-photo .online-status{position:absolute;bottom:14px;left:14px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.6);padding:4px 14px;border-radius:20px;backdrop-filter:blur(10px)}
-        .card-container .card-photo .online-status .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-        .card-container .card-photo .online-status .dot.online{background:#44FF88}
-        .card-container .card-photo .online-status .dot.offline{background:#FF4444}
-        .card-container .card-photo .online-status .label{font-size:12px;color:rgba(255,255,255,0.7)}
-
-        /* Card Info */
-        .card-container .card-info{padding:14px 18px 12px;flex-shrink:0}
-        .card-container .card-info .name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-        .card-container .card-info .name-row .name{font-size:22px;font-weight:700;color:var(--text);transition:color 0.5s ease}
-        .card-container .card-info .name-row .age{font-size:18px;font-weight:400;color:var(--text2);transition:color 0.5s ease}
-        .card-container .card-info .location{font-size:13px;color:var(--text2);margin-top:1px;transition:color 0.5s ease}
-        .card-container .card-info .bio{font-size:14px;color:var(--text3);margin-top:6px;font-style:italic;transition:color 0.5s ease}
-        .card-container .card-info .tier-label{font-size:12px;margin-top:4px;display:inline-block}
-
-        /* Interests - INSIDE CARD */
-        .card-container .card-info .interests{display:flex;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);transition:border-color 0.5s ease}
-        .card-container .card-info .interests .interest{display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(255,255,255,0.3);font-size:10px;cursor:pointer;transition:all .2s;background:transparent;border:none;padding:4px 8px;border-radius:8px}
-        .card-container .card-info .interests .interest:hover{color:#fff;background:rgba(255,255,255,0.05)}
-        .card-container .card-info .interests .interest .icon{font-size:20px}
-        .card-container .card-info .interests .interest.active{color:#FF3366}
-        .card-container .card-info .interests .interest.active .icon{color:#FF3366}
-
-        /* Swipe Buttons */
-        .swipe-actions{display:flex;justify-content:center;align-items:center;gap:12px;padding:8px 0 6px;flex-shrink:0;background:var(--bg);transition:all 0.5s ease}
-        .swipe-actions .swipe-btn{width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .2s;color:#FFB800}
-        .swipe-actions .swipe-btn:hover{transform:scale(1.05)}
-        .swipe-actions .swipe-btn.pass{width:56px;height:56px;border-color:rgba(255,68,68,0.2);background:rgba(255,68,68,0.08);color:#FF4444;font-size:22px}
-        .swipe-actions .swipe-btn.pass:hover{background:rgba(255,68,68,0.15)}
-        .swipe-actions .swipe-btn.super{width:56px;height:56px;border-color:rgba(68,136,255,0.2);background:rgba(68,136,255,0.08);color:#4488FF;font-size:16px}
-        .swipe-actions .swipe-btn.super:hover{background:rgba(68,136,255,0.15)}
-        .swipe-actions .swipe-btn.like{width:56px;height:56px;border-color:rgba(68,255,136,0.2);background:rgba(68,255,136,0.08);color:#44FF88;font-size:22px}
-        .swipe-actions .swipe-btn.like:hover{background:rgba(68,255,136,0.15)}
-        .swipe-actions .swipe-btn.boost{width:48px;height:48px;border-color:rgba(255,51,102,0.2);background:rgba(255,51,102,0.08);color:#FF3366;font-size:14px}
-        .swipe-actions .swipe-btn.boost:hover{background:rgba(255,51,102,0.15)}
-
-        /* Bottom Nav */
-        .bottom-nav{display:flex;justify-content:space-around;padding:8px 0 16px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;transition:all 0.5s ease}
-        .bottom-nav .nav-btn{background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;transition:all .2s;position:relative}
-        .bottom-nav .nav-btn.active{color:#FF3366}
-        .bottom-nav .nav-btn.active::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:20px;height:3px;background:#FF3366;border-radius:4px}
-        .bottom-nav .nav-btn span{font-size:10px;color:inherit;font-weight:600;letter-spacing:0.3px}
-        .bottom-nav .nav-btn:hover{color:rgba(255,255,255,0.5)}
-
-        /* ===== PROFILE PAGE ===== */
-        .profile-header{text-align:center;margin-bottom:20px}
-        .profile-header .avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:36px;border:3px solid #FF3366}
-        .profile-header .name-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}
-        .profile-header .name-row .name{font-size:20px;font-weight:700;color:var(--text);transition:color 0.5s ease}
-        .profile-header .details{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;flex-wrap:wrap}
-        .profile-header .details .detail{color:var(--text2);font-size:13px;transition:color 0.5s ease}
-        .profile-header .details .dot{color:rgba(255,255,255,0.15);font-size:13px}
-        .profile-header .bio{color:var(--text3);font-size:14px;font-style:italic;margin-top:6px;transition:color 0.5s ease}
-
-        .info-box{background:rgba(255,255,255,0.03);border-radius:12px;padding:16px 18px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px;transition:all 0.5s ease}
-        .info-box .label{color:rgba(255,255,255,0.3);font-size:11px;font-weight:600;letter-spacing:0.5px;margin-bottom:4px}
-        .info-box .value{color:var(--text);font-weight:700;font-size:16px;letter-spacing:1px;font-family:monospace;transition:color 0.5s ease}
-        .info-box .divider{height:1px;background:rgba(255,255,255,0.04);margin:10px 0}
-        .info-box .value-muted{color:var(--text2);font-weight:500;font-size:15px;letter-spacing:1px;font-family:monospace;transition:color 0.5s ease}
-
-        .theme-section{background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:14px;transition:all 0.5s ease}
-        .theme-section .theme-label{color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:10px;font-weight:500;letter-spacing:0.5px}
-        .theme-section .theme-options{display:flex;gap:10px;flex-wrap:wrap}
-        .theme-option{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease}
-        .theme-option:hover{transform:scale(1.08)}
-        .theme-option .circle{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);transition:all 0.3s ease}
-        .theme-option .circle.active{border-color:#FF3366;box-shadow:0 0 24px rgba(255,51,102,0.4)}
-        .theme-option .theme-name{font-size:10px;color:rgba(255,255,255,0.3);transition:color 0.3s ease}
+        /* ===== UPGRADE PROMPT ===== */
+        .upgrade-prompt {
+            padding: 16px;
+            background: rgba(255, 51, 102, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 51, 102, 0.15);
+            text-align: center;
+            margin-top: 12px;
+        }
+        .upgrade-prompt .text {
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 8px;
+        }
+        .upgrade-prompt .btn-upgrade {
+            padding: 8px 24px;
+            background: #FF3366;
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .upgrade-prompt .btn-upgrade:hover {
+            transform: scale(1.05);
+        }
 
         /* ===== MATCH OVERLAY ===== */
-        .match-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);flex-direction:column;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(20px);animation:matchPop .5s ease}
-        .match-overlay.show{display:flex}
-        @keyframes matchPop{0%{transform:scale(0.5);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
-        @keyframes heartFloat{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-80px) scale(0);opacity:0}}
-        .match-overlay .hearts{font-size:64px;animation:heartFloat 1s ease-in-out infinite}
-        .match-overlay .title{font-size:36px;font-weight:800;color:#FF3366;margin-top:16px;letter-spacing:2px}
-        .match-overlay .sub{color:rgba(255,255,255,0.6);font-size:16px;margin-top:4px}
-        .match-overlay .profiles{display:flex;align-items:center;gap:20px;margin:20px 0}
-        .match-overlay .profiles .p{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2A0A15,#4A0A20);display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid #FF3366}
-        .match-overlay .profiles .heart-icon{font-size:32px;color:#FF3366}
-        .match-overlay .btn{max-width:280px}
+        .match-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            backdrop-filter: blur(20px);
+            animation: matchPop .5s ease;
+        }
+        .match-overlay.show {
+            display: flex;
+        }
+        @keyframes matchPop {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes heartFloat {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-80px) scale(0);
+                opacity: 0;
+            }
+        }
+        .match-overlay .hearts {
+            font-size: 64px;
+            animation: heartFloat 1s ease-in-out infinite;
+        }
+        .match-overlay .title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #FF3366;
+            margin-top: 16px;
+            letter-spacing: 2px;
+        }
+        .match-overlay .sub {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            margin-top: 4px;
+        }
+        .match-overlay .profiles {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .match-overlay .profiles .p {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2A0A15, #4A0A20);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border: 3px solid #FF3366;
+        }
+        .match-overlay .profiles .heart-icon {
+            font-size: 32px;
+            color: #FF3366;
+        }
+        .match-overlay .btn {
+            max-width: 280px;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .3s ease;
+            width: 100%;
+        }
+        .match-overlay .btn-primary {
+            background: #FF3366;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(255, 51, 102, 0.3);
+        }
+        .match-overlay .btn-primary:active {
+            transform: scale(.97);
+        }
+        .match-overlay .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 8px;
+        }
 
-        /* ===== CHAT PAGE ===== */
-        .chat-message{display:flex;margin-bottom:10px}
-        .chat-message.sent{justify-content:flex-end}
-        .chat-message.received{justify-content:flex-start}
-        .chat-message .bubble{max-width:75%;padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.4}
-        .chat-message.sent .bubble{background:#FF3366;color:#fff;border-bottom-right-radius:4px}
-        .chat-message.received .bubble{background:#1A1A2E;color:#fff;border-bottom-left-radius:4px}
-        .chat-message .time{font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px;display:block}
-        .chat-input{display:flex;gap:10px;padding:10px 16px;background:#0A0A0F;border-top:1px solid rgba(255,255,255,0.04)}
-        .chat-input input{flex:1;padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:24px;color:#fff;font-size:15px;outline:none}
-        .chat-input input:focus{border-color:#FF3366}
-        .chat-input button{padding:12px 20px;background:#FF3366;border:none;border-radius:24px;color:#fff;font-weight:600;cursor:pointer}
-        .chat-input button:active{transform:scale(.95)}
+        .match-overlay .tier-badge {
+            font-size: 12px;
+            font-weight: 600;
+            color: #FFD700;
+            margin-top: 2px;
+        }
+        .match-overlay .award-badge {
+            font-size: 12px;
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 14px 24px;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transition: all .4s ease;
+            z-index: 999;
+            max-width: 90%;
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.error {
+            border-color: #FF4444;
+        }
+        .toast.success {
+            border-color: #44FF88;
+        }
+
+        /* ===== BOTTOM NAV ===== */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 16px;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+        }
+        .bottom-nav .nav-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 4px 12px;
+            transition: all .2s;
+            position: relative;
+        }
+        .bottom-nav .nav-btn.active {
+            color: #FF3366;
+        }
+        .bottom-nav .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: #FF3366;
+            border-radius: 4px;
+        }
+        .bottom-nav .nav-btn span {
+            font-size: 10px;
+            color: inherit;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .bottom-nav .nav-btn:hover {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
 
-<div id="toast" class="toast"></div>
+    <div id="toast" class="toast"></div>
 
-<!-- ===== SPLASH ===== -->
-<div id="splash">
-    <svg class="logo" viewBox="0 0 200 200">
-        <path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/>
-        <path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/>
-        <path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/>
-        <path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/>
-    </svg>
-    <div class="name">Destined</div>
-    <div class="loader"></div>
-</div>
+    <div id="app">
 
-<!-- ===== APP ===== -->
-<div id="app">
-
-    <!-- ===== WELCOME ===== -->
-    <div id="page-welcome" class="page active bg-gradient flex-center">
-        <svg width="90" height="90" viewBox="0 0 200 200">
-            <path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/>
-            <path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/>
-            <path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/>
-            <path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/>
-        </svg>
-        <h1 style="margin-top:8px">Destined</h1>
-        <p class="subtitle">❤️ Where fate meets connection</p>
-        <button class="btn btn-primary max-w-340 mx-auto mt-20" onclick="showPage('page-rules')"><span class="btn-text">Get Started 🌺</span></button>
-    </div>
-
-    <!-- ===== RULES ===== -->
-    <div id="page-rules" class="page bg-gradient">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-top:8px">
-            <button onclick="showPage('page-welcome')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer">←</button>
-            <h2 style="flex:1;text-align:center;font-size:20px;font-weight:600">🛡️ Safety Rules</h2>
-        </div>
-        <div class="flex-1 flex-center">
-            <div class="w-full max-w-340" style="text-align:left">
-                <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔞</span><div><h4 style="font-size:14px;color:#fff">18+ Only</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">You must be 18 or older</p></div></div>
-                <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🤖</span><div><h4 style="font-size:14px;color:#fff">AI Scam Shield</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">3 strikes → permanent ban</p></div></div>
-                <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">📸</span><div><h4 style="font-size:14px;color:#fff">Face Verification</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Selfie + pose verification</p></div></div>
-                <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🔐</span><div><h4 style="font-size:14px;color:#fff">2FA &amp; KYC</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">3-tier verification</p></div></div>
-                <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🚫</span><div><h4 style="font-size:14px;color:#fff">Report &amp; Block</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Moderators act in 24h</p></div></div>
-                <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.04)"><span style="font-size:22px">🧶</span><div><h4 style="font-size:14px;color:#fff">Red Thread</h4><p style="font-size:12px;color:rgba(255,255,255,0.4)">Find your soulmate</p></div></div>
-            </div>
-            <button class="btn btn-primary max-w-340 mx-auto mt-20" onclick="showPage('page-signup')"><span class="btn-text">✅ I Understand &amp; Agree</span></button>
-        </div>
-    </div>
-
-    <!-- ===== SIGNUP/LOGIN ===== -->
-    <div id="page-signup" class="page bg-gradient flex-center">
-        <div class="w-full max-w-340 mx-auto text-center">
-            <svg width="60" height="60" viewBox="0 0 200 200" style="margin:0 auto 12px;display:block">
-                <path d="M100 190 C80 160 50 130 40 100 C30 70 35 40 55 25 C65 17 80 20 90 35 C85 25 95 10 105 10 C115 10 125 25 120 35 C130 20 145 17 155 25 C175 40 180 70 170 100 C160 130 130 160 100 190Z" fill="#FFFFFF"/>
-                <path d="M100 180 C85 155 65 130 55 105 C48 85 52 65 65 52 C72 45 82 48 90 58 C86 50 94 38 100 38 C106 38 114 50 110 58 C118 48 128 45 135 52 C148 65 152 85 145 105 C135 130 115 155 100 180Z" fill="#0A0A0F"/>
-                <path d="M100 170 C88 150 72 130 64 110 C58 94 60 78 70 68 C76 62 84 64 90 72 C88 66 94 56 100 56 C106 56 112 66 110 72 C116 64 124 62 130 68 C140 78 142 94 136 110 C128 130 112 150 100 170Z" fill="#FF3366"/>
-                <path d="M100 155 C92 142 82 128 78 116 C74 104 76 92 84 86 C88 82 94 84 96 88 C94 84 98 78 100 78 C102 78 106 84 104 88 C106 84 112 82 116 86 C124 92 126 104 122 116 C118 128 108 142 100 155Z" fill="#FFFFFF"/>
-            </svg>
-            <h2>Welcome</h2>
-            <p class="subtitle">Create your account or sign in</p>
-            <div style="display:flex;gap:12px;margin:20px 0">
-                <button class="btn btn-primary" style="flex:1;padding:12px;font-size:14px" onclick="showPage('page-register')">Create Account</button>
-                <button class="btn btn-secondary" style="flex:1;padding:12px;font-size:14px" onclick="showPage('page-login')">Sign In</button>
-            </div>
-            <button class="btn btn-secondary" onclick="showPage('page-rules')"><span class="btn-text">← Back</span></button>
-        </div>
-    </div>
-
-    <!-- ===== REGISTER ===== -->
-    <div id="page-register" class="page bg-gradient">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px">
-            <button onclick="showPage('page-signup')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button>
-            <h2 style="flex:1;text-align:center;font-size:20px;font-weight:600">✏️ Create Profile</h2>
-        </div>
-        <div class="flex-1" style="overflow-y:auto;max-width:340px;margin:0 auto;width:100%;padding-bottom:20px">
-            <div class="form-group"><label>👤 Full Name</label><input type="text" placeholder="Sarah Johnson" id="regName"></div>
-            <div class="form-group"><label>🎂 Age (18+)</label><input type="number" placeholder="28" id="regAge"></div>
-            <div class="form-group"><label>📍 Location</label><input type="text" placeholder="London, UK" id="regLocation"></div>
-            <div class="form-group"><label>📝 Bio</label><input type="text" placeholder="Love is the greatest adventure..." id="regBio"></div>
-            <button class="btn btn-primary" onclick="registerUser()"><span class="btn-text">Create Account →</span></button>
-            <button class="btn btn-secondary" style="margin-top:8px" onclick="showPage('page-signup')"><span class="btn-text">← Back</span></button>
-        </div>
-    </div>
-
-    <!-- ===== LOGIN ===== -->
-    <div id="page-login" class="page bg-gradient">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-top:8px">
-            <button onclick="showPage('page-signup')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button>
-            <h2 style="flex:1;text-align:center;font-size:20px;font-weight:600">🔐 Sign In</h2>
-        </div>
-        <div class="flex-1 flex-center" style="max-width:340px;margin:0 auto;width:100%">
-            <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:20px">Enter your Dest ID to continue</p>
-            <div class="form-group w-full"><label>Dest ID</label><input type="text" id="loginDestId" placeholder="DEST12345100"></div>
-            <button class="btn btn-primary" onclick="loginUser()"><span class="btn-text">🔓 Sign In</span></button>
-            <button class="btn btn-secondary" style="margin-top:12px" onclick="showPage('page-signup')"><span class="btn-text">← Back</span></button>
-        </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- ===== MAIN SCREEN ===== -->
-    <!-- ============================================================ -->
-    <div id="page-main" class="page" style="padding:0;background:var(--bg);display:none">
-        
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <div class="brand">
-                <span class="fire">🔥</span>
-                <span class="name">DESTINED</span>
-            </div>
-            <div class="icons">
-                <span onclick="showToast('🔔 Notifications')">🔔</span>
-                <span onclick="showPage('page-search')">🔍</span>
-            </div>
-        </div>
-
-        <!-- Card Stack -->
-        <div class="card-container" id="cardContainer">
-            <!-- Cards will be injected here by JavaScript -->
-        </div>
-
-        <!-- Swipe Buttons -->
-        <div class="swipe-actions">
-            <button class="swipe-btn" onclick="swipeAction('rewind')" title="Rewind">↩️</button>
-            <button class="swipe-btn pass" onclick="swipeAction('pass')" title="Pass">✕</button>
-            <button class="swipe-btn super" onclick="swipeAction('super')" title="Super Like">⭐</button>
-            <button class="swipe-btn like" onclick="swipeAction('like')" title="Like">❤️</button>
-            <button class="swipe-btn boost" onclick="swipeAction('boost')" title="Boost">⚡</button>
-        </div>
-
-        <!-- Bottom Nav -->
-        <div class="bottom-nav">
-            <button class="nav-btn active" onclick="switchNav(this,'page-main')"><span>❤️‍🔥</span><span>Home</span></button>
-            <button class="nav-btn" onclick="switchNav(this,'page-likes')"><span>💞</span><span>Likes</span></button>
-            <button class="nav-btn" onclick="switchNav(this,'page-chat')"><span>💬</span><span>Chat</span></button>
-            <button class="nav-btn" onclick="switchNav(this,'page-profile')"><span>👤</span><span>Profile</span></button>
-        </div>
-    </div>
-
-    <!-- ===== LIKES PAGE ===== -->
-    <div id="page-likes" class="page" style="padding:16px 20px;background:var(--bg);display:none">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px">
-            <button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button>
-            <h2 style="flex:1;text-align:center;font-size:20px;font-weight:600;color:var(--text)">💞 Likes</h2>
-        </div>
-        <div class="flex-1 flex-center">
-            <div style="font-size:48px;margin-bottom:12px">💞</div>
-            <p style="color:var(--text2);font-size:16px">No likes yet</p>
-            <p style="color:var(--text3);font-size:13px;margin-top:4px">Keep swiping to find your match!</p>
-            <button class="btn btn-primary max-w-340 mx-auto mt-20" onclick="showPage('page-main')"><span class="btn-text">Start Swiping</span></button>
-        </div>
-    </div>
-
-    <!-- ===== CHAT PAGE ===== -->
-    <div id="page-chat" class="page" style="padding:0;background:var(--bg);display:none">
-        <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)">
-            <button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:var(--text);width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button>
-            <h2 style="flex:1;text-align:center;font-size:18px;font-weight:600;color:var(--text)">💬 Chat</h2>
-        </div>
-        <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px;background:var(--bg)">
-            <div class="flex-center" style="height:100%">
-                <div style="font-size:48px;margin-bottom:12px">💬</div>
-                <p style="color:var(--text2);font-size:16px">No messages yet</p>
-                <p style="color:var(--text3);font-size:13px;margin-top:4px">Match with someone to start chatting!</p>
-            </div>
-        </div>
-        <div class="chat-input" style="background:var(--bg);border-top:1px solid var(--border)">
-            <input type="text" id="chatInput" placeholder="Type a message..." style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text)">
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
-
-    <!-- ===== PROFILE PAGE ===== -->
-    <div id="page-profile" class="page" style="padding:16px 20px;background:var(--bg);display:none">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px">
-            <button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:var(--text);width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button>
-            <h2 style="flex:1;text-align:center;font-size:20px;font-weight:600;color:var(--text)">👤 Profile</h2>
-        </div>
-        <div class="flex-1" style="overflow-y:auto;max-width:380px;margin:0 auto;width:100%;padding-bottom:20px">
-            <div class="profile-header">
-                <div class="avatar">👤</div>
-                <div class="name-row">
-                    <span class="name" id="profileNameDisplay">Sarah Johnson</span>
-                    <span class="verified-badge" style="width:22px;height:22px;font-size:12px">✓</span>
+        <!-- ===== CHAT TAB ===== -->
+        <div id="page-chat" class="page active">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="brand">
+                    <span class="fire">🔥</span>
+                    <span class="name">DESTINED</span>
                 </div>
-                <div class="details">
-                    <span class="detail" id="profileLocationDisplay">📍 London</span>
-                    <span class="dot">·</span>
-                    <span class="detail" id="profileStatusDisplay">💍 Single</span>
-                    <span class="dot">·</span>
-                    <span class="detail" id="profileAgeDisplay">🎂 22</span>
-                    <span class="dot">·</span>
-                    <span class="tier-elite" id="profileTierDisplay">🔱 ELITE</span>
-                </div>
-                <div class="bio" id="profileBioDisplay">"Love is the greatest adventure." ❤️‍🔥</div>
-            </div>
-
-            <div class="info-box">
-                <p class="label">🔑 DEST ID</p>
-                <p class="value" id="profileDestIdDisplay">DEST12345100</p>
-                <div class="divider"></div>
-                <p class="label">💳 ACCOUNT NUMBER</p>
-                <p class="value-muted" id="profileAccountDisplay">0123-4567-8910-1112</p>
-            </div>
-
-            <!-- Themes -->
-            <div class="theme-section">
-                <p class="theme-label">🎨 THEMES</p>
-                <div class="theme-options">
-                    <div class="theme-option" onclick="setTheme('theme-dark',this)">
-                        <div class="circle active" style="background:#0A0A0F;border-color:#FF3366"></div>
-                        <span class="theme-name">Dark</span>
-                    </div>
-                    <div class="theme-option" onclick="setTheme('theme-pink',this)">
-                        <div class="circle" style="background:#FF6699"></div>
-                        <span class="theme-name">Pink</span>
-                    </div>
-                    <div class="theme-option" onclick="setTheme('theme-white',this)">
-                        <div class="circle" style="background:#F5F0F0;border-color:#ccc"></div>
-                        <span class="theme-name">White</span>
-                    </div>
+                <div class="icons">
+                    <span onclick="showToast('🛡️ Support')">🛡️</span>
                 </div>
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:10px">
-                <button class="btn btn-secondary" onclick="showToast('✏️ Edit Profile coming soon!')"><span class="btn-text">✏️ Edit Profile</span></button>
-                <button class="btn btn-secondary" onclick="showToast('⚙️ Settings coming soon!')"><span class="btn-text">⚙️ Settings</span></button>
-                <button class="btn btn-danger" onclick="logoutUser()"><span class="btn-text">🚪 Logout</span></button>
-                <button class="btn btn-secondary" onclick="showPage('page-main')"><span class="btn-text">← Back</span></button>
+            <!-- New Matches -->
+            <div style="padding: 8px 16px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: all 0.5s ease;">
+                <span style="color: var(--text2); font-size: 14px; font-weight: 500;">New matches (20)</span>
+                <span style="color: var(--text3); font-size: 18px; cursor: pointer;" onclick="showToast('📋 Menu')">⋮</span>
+            </div>
+
+            <!-- Chat List -->
+            <div class="chat-list">
+                <div class="chat-item" onclick="showPage('page-inside-chat')">
+                    <div class="row">
+                        <div class="avatar">
+                            👸
+                            <span class="online-dot online"></span>
+                        </div>
+                        <span class="name">Sarah</span>
+                        <span class="verified">✅</span>
+                    </div>
+                    <div class="tier">VIP 🌟</div>
+                    <div class="preview">Hey! How are you doing? <span class="unread">2</span></div>
+                </div>
+
+                <div class="chat-item" onclick="showPage('page-inside-chat')">
+                    <div class="row">
+                        <div class="avatar">
+                            🧔
+                            <span class="online-dot online"></span>
+                        </div>
+                        <span class="name">Marcus</span>
+                        <span class="verified">✅</span>
+                    </div>
+                    <div class="tier">Elite 🔱</div>
+                    <div class="preview">I miss you! <span class="read-receipt">✔️</span></div>
+                </div>
+
+                <div class="chat-item" onclick="showPage('page-inside-chat')">
+                    <div class="row">
+                        <div class="avatar">
+                            👩
+                            <span class="online-dot offline"></span>
+                        </div>
+                        <span class="name">Emma</span>
+                        <span class="verified">✅</span>
+                    </div>
+                    <div class="tier">Premium ⭐</div>
+                    <div class="preview">When can we meet?</div>
+                </div>
+
+                <div class="chat-item" onclick="showPage('page-inside-chat')">
+                    <div class="row">
+                        <div class="avatar">
+                            🧑
+                            <span class="online-dot online"></span>
+                        </div>
+                        <span class="name">John</span>
+                    </div>
+                    <div class="tier" style="color: var(--text3);">Free</div>
+                    <div class="preview" style="color: var(--text3);">How are you John (sent by you)</div>
+                </div>
+            </div>
+
+            <!-- Bottom Nav -->
+            <div class="bottom-nav">
+                <button class="nav-btn" onclick="showToast('🔥 Home')"><span>❤️‍🔥</span><span>Home</span></button>
+                <button class="nav-btn" onclick="showPage('page-likes')"><span>💞</span><span>Likes</span></button>
+                <button class="nav-btn active" onclick="showPage('page-chat')"><span>💬</span><span>Chat</span></button>
+                <button class="nav-btn" onclick="showToast('👤 Profile')"><span>👤</span><span>Profile</span></button>
             </div>
         </div>
-    </div>
 
-    <!-- ===== SEARCH ===== -->
-    <div id="page-search" class="page bg-gradient">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:8px">
-            <button onclick="showPage('page-main')" style="background:rgba(255,255,255,0.06);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer">←</button>
-            <h2 style="flex:1;text-align:center;font-size:20px;font-weight:600">🔍 Search</h2>
-        </div>
-        <div class="flex-1 flex-center" style="max-width:340px;margin:0 auto;width:100%">
-            <p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;margin-bottom:16px">Find users by Dest ID</p>
-            <div style="display:flex;gap:8px;margin-bottom:20px;width:100%">
-                <input type="text" placeholder="DEST12345100" style="flex:1;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;color:#fff;font-size:15px;outline:none">
-                <button style="padding:14px 24px;background:#FF3366;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer" onclick="showToast('🔍 Searching...')">Search</button>
+        <!-- ===== INSIDE CHAT ===== -->
+        <div id="page-inside-chat" class="page">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="left">
+                    <span class="back" onclick="showPage('page-chat')">←</span>
+                    <div class="avatar">
+                        🧔
+                        <span class="online-dot online"></span>
+                    </div>
+                    <div class="info">
+                        <div class="name-row">
+                            <span class="name">Samantha</span>
+                            <span class="verified">✅</span>
+                        </div>
+                        <div class="tier">Premium ⭐</div>
+                    </div>
+                </div>
+                <div class="right">
+                    <span class="icon" onclick="showToast('📞 Call menu')">📞</span>
+                    <span class="icon" onclick="showToast('°°° Menu')">°°°</span>
+                </div>
             </div>
-            <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);text-align:center;width:100%">
-                <p style="color:rgba(255,255,255,0.3);font-size:13px">📋 Your Dest ID</p>
-                <p style="color:#fff;font-weight:600;font-size:20px;margin:6px 0;letter-spacing:1px;font-family:monospace" id="searchDestId">DEST12345100</p>
-                <button style="padding:6px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer" onclick="copyDestId()">📋 Copy</button>
+
+            <!-- Messages -->
+            <div class="messages-area">
+                <div class="timestamp">Today 3:40 AM</div>
+
+                <div class="msg received">
+                    <div class="sender">Samantha:</div>
+                    Hi
+                </div>
+
+                <div class="msg sent">
+                    Hi <span class="read-receipt">✔️</span>
+                </div>
+
+                <div class="msg received">
+                    <div class="sender">Samantha:</div>
+                    How are you Daniel hope<br>You feeling good.
+                </div>
+
+                <div class="msg sent">
+                    Yeah brah <span class="read-receipt">✔️</span>
+                </div>
+
+                <div class="timestamp">Yesterday 8:15 PM</div>
+
+                <div class="msg received">
+                    <div class="sender">Samantha:</div>
+                    Hey! What are you up to?
+                </div>
+
+                <div class="msg sent">
+                    Just chillin <span class="read-receipt">✔️</span>
+                </div>
             </div>
-            <button class="btn btn-secondary" style="margin-top:16px" onclick="showPage('page-main')"><span class="btn-text">← Back</span></button>
+
+            <!-- Chat Input -->
+            <div class="chat-input">
+                <div class="input-row">
+                    <span class="spark" onclick="showToast('💡 Spark AI')">💡</span>
+                    <input type="text" placeholder="message" id="chatInput">
+                    <span class="voice" onclick="showToast('🎙️ Voice note')">🎙️</span>
+                    <span class="attach" onclick="showToast('📎 Attach')">📎</span>
+                </div>
+                <div class="quick-actions">
+                    <span onclick="showToast('🎁 Gift')">🎁</span>
+                    <span onclick="showToast('🌹 Rose')">🌹</span>
+                    <span onclick="showToast('🍰 Cake')">🍰</span>
+                </div>
+            </div>
         </div>
+
+        <!-- ===== LIKES TAB ===== -->
+        <div id="page-likes" class="page">
+            <div class="likes-header">💛 LIKES 💛</div>
+
+            <div class="likes-list">
+                <!-- Like Item 1 -->
+                <div class="like-item">
+                    <div class="row">
+                        <div class="avatar">
+                            🧔
+                            <span class="online-dot online"></span>
+                        </div>
+                        <div class="info">
+                            <div class="name-row">
+                                <span class="name">James</span>
+                                <span class="verified">✅</span>
+                            </div>
+                            <div class="tier">Elite 🔱</div>
+                            <div class="award">Face of Destined</div>
+                            <div class="like-type">⭐ Super Liked you</div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="like-back">❤️ Like Back</button>
+                        <button class="super-like">⭐</button>
+                        <button class="view-profile" onclick="showToast('👤 View Profile')">👁️‍🗨️</button>
+                    </div>
+                </div>
+
+                <!-- Like Item 2 -->
+                <div class="like-item">
+                    <div class="row">
+                        <div class="avatar">
+                            👸
+                            <span class="online-dot offline"></span>
+                        </div>
+                        <div class="info">
+                            <div class="name-row">
+                                <span class="name">Queen</span>
+                                <span class="verified">✅</span>
+                            </div>
+                            <div class="tier">VIP 🌟</div>
+                            <div class="like-type">⭐ Super Liked you</div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="like-back">❤️ Like Back</button>
+                        <button class="super-like">⭐</button>
+                        <button class="view-profile" onclick="showToast('👤 View Profile')">👁️‍🗨️</button>
+                    </div>
+                </div>
+
+                <!-- Like Item 3 -->
+                <div class="like-item">
+                    <div class="row">
+                        <div class="avatar">
+                            🧛
+                            <span class="online-dot online"></span>
+                        </div>
+                        <div class="info">
+                            <div class="name-row">
+                                <span class="name">Drake</span>
+                            </div>
+                            <div class="tier">Premium ⭐</div>
+                            <div class="like-type">❤️ Liked you</div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="like-back">❤️ Like Back</button>
+                        <button class="super-like">⭐</button>
+                        <button class="view-profile" onclick="showToast('👤 View Profile')">👁️‍🗨️</button>
+                    </div>
+                </div>
+
+                <!-- Like Item 4 (Free) -->
+                <div class="like-item">
+                    <div class="row">
+                        <div class="avatar">
+                            🧑‍🦰
+                            <span class="online-dot offline"></span>
+                        </div>
+                        <div class="info">
+                            <div class="name-row">
+                                <span class="name">Sammy</span>
+                            </div>
+                            <div class="tier" style="color: var(--text3);">Free</div>
+                            <div class="like-type">⭐ Super Liked you</div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="like-back">❤️ Like Back</button>
+                        <button class="super-like">⭐</button>
+                        <button class="view-profile" onclick="showToast('👤 View Profile')">👁️‍🗨️</button>
+                    </div>
+                </div>
+
+                <!-- Matches Section -->
+                <div class="matches-section">
+                    <span class="title" onclick="showPage('page-chat')">❤️‍🔥 MY MATCHES →</span>
+                </div>
+
+                <!-- Upgrade Prompt (Free User) -->
+                <div class="upgrade-prompt">
+                    <div class="text">🔒 Upgrade to Premium+ now to see who liked you 👀</div>
+                    <button class="btn-upgrade" onclick="showToast('⬆️ Upgrade')">⬆️ UPGRADE</button>
+                </div>
+            </div>
+
+            <!-- Bottom Nav -->
+            <div class="bottom-nav">
+                <button class="nav-btn" onclick="showToast('🔥 Home')"><span>❤️‍🔥</span><span>Home</span></button>
+                <button class="nav-btn active" onclick="showPage('page-likes')"><span>💞</span><span>Likes</span></button>
+                <button class="nav-btn" onclick="showPage('page-chat')"><span>💬</span><span>Chat</span></button>
+                <button class="nav-btn" onclick="showToast('👤 Profile')"><span>👤</span><span>Profile</span></button>
+            </div>
+        </div>
+
+        <!-- ===== MATCH OVERLAY ===== -->
+        <div id="matchOverlay" class="match-overlay">
+            <div class="hearts">💖</div>
+            <div class="title">IT'S A MATCH</div>
+            <div class="sub">You and Samantha have liked each other</div>
+            <div class="profiles">
+                <div class="p" style="position:relative;">👸</div>
+                <div class="heart-icon">❤️</div>
+                <div class="p" style="position:relative;">🧔</div>
+            </div>
+            <div style="display:flex; gap:16px; margin-top:4px;">
+                <span style="font-size:12px; color:#FFD700;">🔱 Elite</span>
+                <span style="font-size:12px; color:var(--text3);">✨📸 Face of Destined</span>
+            </div>
+            <button class="btn btn-primary" onclick="closeMatch(); showPage('page-inside-chat')">💬 Send Message</button>
+            <button class="btn btn-secondary" onclick="closeMatch()">👀 Keep Swiping</button>
+        </div>
+
     </div>
 
-</div>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
 
-<!-- ===== MATCH OVERLAY ===== -->
-<div id="matchOverlay" class="match-overlay">
-    <div class="hearts">💖</div>
-    <div class="title">IT'S A MATCH! 🎉</div>
-    <div class="sub">You and Sarah liked each other</div>
-    <div class="profiles">
-        <div class="p" id="matchUser1">👤</div>
-        <div class="heart-icon">❤️</div>
-        <div class="p" id="matchUser2">👤</div>
-    </div>
-    <button class="btn btn-primary" onclick="closeMatch()"><span class="btn-text">💬 Send a Message</span></button>
-    <button class="btn btn-secondary" style="margin-top:8px;max-width:280px" onclick="closeMatch()"><span class="btn-text">👀 Keep Swiping</span></button>
-</div>
-
-<script>
-    // ===== TELEGRAM INIT =====
-    let tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.enableClosingConfirmation();
-
-    // ===== DEMO PROFILES =====
-    const profiles = [
-        { id: 1, name: 'Sarah', age: 22, location: 'London, UK', bio: 'Love is the greatest adventure.', tier: 'elite', verified: true, online: true, emoji: '👤' },
-        { id: 2, name: 'Marcus', age: 28, location: 'Paris, France', bio: 'Entrepreneur & Traveler 🌍', tier: 'vip', verified: true, online: true, emoji: '👤' },
-        { id: 3, name: 'Emma', age: 24, location: 'Berlin, Germany', bio: 'Music lover | Foodie 🍕', tier: 'premium', verified: false, online: false, emoji: '👤' },
-        { id: 4, name: 'Alex', age: 30, location: 'Milan, Italy', bio: 'Art & Design 🎨', tier: 'elite', verified: true, online: true, emoji: '👤' },
-        { id: 5, name: 'Lily', age: 26, location: 'Barcelona, Spain', bio: 'Yoga & Wellness 🧘', tier: 'vip', verified: true, online: false, emoji: '👤' },
-        { id: 6, name: 'James', age: 29, location: 'Amsterdam, NL', bio: 'Tech & Startups 💻', tier: 'premium', verified: false, online: true, emoji: '👤' },
-        { id: 7, name: 'Sofia', age: 23, location: 'Lisbon, Portugal', bio: 'Photography 📸', tier: 'free', verified: false, online: true, emoji: '👤' },
-        { id: 8, name: 'Lucas', age: 27, location: 'Vienna, Austria', bio: 'Nature lover 🌿', tier: 'elite', verified: true, online: false, emoji: '👤' },
-        { id: 9, name: 'Mia', age: 25, location: 'Copenhagen, DK', bio: 'Design & Fashion 👗', tier: 'vip', verified: true, online: true, emoji: '👤' },
-        { id: 10, name: 'Noah', age: 31, location: 'Dublin, Ireland', bio: 'Writer & Poet 📖', tier: 'premium', verified: false, online: false, emoji: '👤' }
-    ];
-
-    let currentIndex = 0;
-    let likedProfiles = [];
-    let matchedProfiles = [];
-    let chatMessages = [];
-    let currentMatchId = null;
-
-    // ===== TOAST =====
-    let toastTimeout;
-    function showToast(msg, type = 'info') {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.className = 'toast';
-        if (type === 'error') t.classList.add('error');
-        if (type === 'success') t.classList.add('success');
-        t.classList.add('show');
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => t.classList.remove('show'), 3500);
-    }
-
-    // ===== PAGE NAV =====
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => {
-            p.classList.remove('active');
-            p.style.display = 'none';
-        });
-        const page = document.getElementById(id);
-        if (page) {
-            page.style.display = 'flex';
-            page.classList.add('active');
-            window.scrollTo(0, 0);
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
-    }
-
-    function switchNav(btn, pageId) {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        showPage(pageId);
-    }
-
-    // ===== THEMES =====
-    function setTheme(themeClass, el) {
-        document.body.className = themeClass;
-        document.querySelectorAll('.theme-option .circle').forEach(c => c.classList.remove('active'));
-        el.querySelector('.circle').classList.add('active');
-        showToast('🎨 Theme changed to ' + el.querySelector('.theme-name').textContent + '!');
-    }
-
-    // ===== COPY DEST ID =====
-    function copyDestId() {
-        const id = document.getElementById('searchDestId').textContent;
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(id);
-            showToast('📋 Dest ID copied!');
-        } else {
-            const ta = document.createElement('textarea');
-            ta.value = id;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            showToast('📋 Dest ID copied!');
-        }
-    }
-
-    // ===== GENERATE DEST ID =====
-    function generateDestId() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let result = 'DEST';
-        for (let i = 0; i < 8; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
-        return result;
-    }
-
-    function generateAccountNumber() {
-        let result = '';
-        for (let i = 0; i < 4; i++) {
-            let block = '';
-            for (let j = 0; j < 4; j++) block += Math.floor(Math.random() * 10);
-            result += (i > 0 ? '-' : '') + block;
-        }
-        return result;
-    }
-
-    // ===== REGISTER =====
-    function registerUser() {
-        const name = document.getElementById('regName').value.trim();
-        const age = parseInt(document.getElementById('regAge').value);
-        const location = document.getElementById('regLocation').value.trim();
-        const bio = document.getElementById('regBio').value.trim();
-
-        if (!name || !age || age < 18) {
-            showToast('⚠️ Please fill all fields and be 18+', 'error');
-            return;
-        }
-
-        const userData = {
-            full_name: name,
-            age: age,
-            location: location || 'Unknown',
-            bio: bio || 'Love is the greatest adventure.',
-            dest_id: generateDestId(),
-            account_number: generateAccountNumber(),
-            tier: 'elite',
-            verified: true,
-            relationship_status: 'Single'
-        };
-
-        localStorage.setItem('destined_user', JSON.stringify(userData));
-        updateUI(userData);
-        showToast('✅ Account created! Welcome ' + name + '! 🎉', 'success');
-        setTimeout(() => { showPage('page-main'); renderCards(); }, 500);
-    }
-
-    // ===== LOGIN =====
-    function loginUser() {
-        const destId = document.getElementById('loginDestId').value.trim().toUpperCase();
-        if (!destId) {
-            showToast('⚠️ Please enter your Dest ID', 'error');
-            return;
-        }
-
-        const savedUser = localStorage.getItem('destined_user');
-        if (savedUser) {
-            const user = JSON.parse(savedUser);
-            if (user.dest_id === destId) {
-                updateUI(user);
-                showToast('✅ Welcome back, ' + user.full_name + '! 🎉', 'success');
-                setTimeout(() => { showPage('page-main'); renderCards(); }, 500);
-                return;
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const page = document.getElementById(id);
+            if (page) {
+                page.classList.add('active');
+                window.scrollTo(0, 0);
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
             }
         }
 
-        if (destId === 'DEST12345100') {
-            const demoUser = {
-                full_name: 'Sarah Johnson',
-                age: 22,
-                location: 'London',
-                bio: 'Love is the greatest adventure.',
-                dest_id: 'DEST12345100',
-                account_number: '0123-4567-8910-1112',
-                tier: 'elite',
-                verified: true,
-                relationship_status: 'Single'
-            };
-            localStorage.setItem('destined_user', JSON.stringify(demoUser));
-            updateUI(demoUser);
-            showToast('✅ Demo account loaded! 🎉', 'success');
-            setTimeout(() => { showPage('page-main'); renderCards(); }, 500);
-            return;
+        let toastTimeout;
+
+        function showToast(msg, type = 'info') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast';
+            if (type === 'error') t.classList.add('error');
+            if (type === 'success') t.classList.add('success');
+            t.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => t.classList.remove('show'), 3500);
         }
 
-        showToast('❌ User not found. Please check your Dest ID.', 'error');
-    }
-
-    // ===== LOGOUT =====
-    function logoutUser() {
-        localStorage.removeItem('destined_user');
-        showToast('🚪 Logged out successfully');
-        setTimeout(() => showPage('page-welcome'), 300);
-    }
-
-    // ===== UPDATE UI =====
-    function updateUI(user) {
-        document.getElementById('profileNameDisplay').textContent = user.full_name;
-        document.getElementById('profileLocationDisplay').textContent = '📍 ' + (user.location || 'Unknown');
-        document.getElementById('profileStatusDisplay').textContent = '💍 ' + (user.relationship_status || 'Single');
-        document.getElementById('profileAgeDisplay').textContent = '🎂 ' + (user.age || '?');
-        document.getElementById('profileBioDisplay').textContent = '"' + (user.bio || 'Love is the greatest adventure.') + '" ❤️‍🔥';
-        document.getElementById('profileDestIdDisplay').textContent = user.dest_id;
-        document.getElementById('profileAccountDisplay').textContent = user.account_number;
-        document.getElementById('searchDestId').textContent = user.dest_id;
-
-        // Tier badge
-        const tierMap = {
-            'elite': { class: 'tier-elite', text: '🔱 ELITE' },
-            'vip': { class: 'tier-vip', text: '🌟 VIP' },
-            'premium': { class: 'tier-premium', text: '⭐ PREMIUM' },
-            'free': { class: 'tier-free', text: 'FREE' }
-        };
-        const tier = tierMap[user.tier] || tierMap['free'];
-        const el = document.getElementById('profileTierDisplay');
-        el.className = tier.class;
-        el.textContent = tier.text;
-    }
-
-    // ============================================================
-    // ===== CARD RENDER =====
-    // ============================================================
-    function renderCards() {
-        const container = document.getElementById('cardContainer');
-        if (currentIndex >= profiles.length) {
-            container.innerHTML = `
-                <div class="flex-center" style="height:100%;color:var(--text2);text-align:center;padding:20px">
-                    <div style="font-size:48px;margin-bottom:12px">🔥</div>
-                    <p style="font-size:18px;font-weight:600">No more profiles!</p>
-                    <p style="font-size:14px;margin-top:4px">Check back later for new people</p>
-                    <button class="btn btn-primary" style="margin-top:16px;max-width:200px;padding:12px" onclick="resetSwipes()"><span class="btn-text">Refresh</span></button>
-                </div>
-            `;
-            return;
+        function showMatch() {
+            document.getElementById('matchOverlay').classList.add('show');
+            if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
         }
 
-        const p = profiles[currentIndex];
-        const tierMap = {
-            'elite': { class: 'tier-elite', label: '🔱 ELITE' },
-            'vip': { class: 'tier-vip', label: '🌟 VIP' },
-            'premium': { class: 'tier-premium', label: '⭐ PREMIUM' },
-            'free': { class: 'tier-free', label: 'FREE' }
-        };
-        const tier = tierMap[p.tier] || tierMap['free'];
-        const verifiedHtml = p.verified ? '<div class="verified-on-photo">✓</div>' : '';
-        const onlineHtml = p.online ? '<span class="dot online"></span><span class="label">Online</span>' : '<span class="dot offline"></span><span class="label">Offline</span>';
+        function closeMatch() {
+            document.getElementById('matchOverlay').classList.remove('show');
+        }
 
-        container.innerHTML = `
-            <div class="card" id="currentCard">
-                <div class="card-photo">
-                    <span class="photo-icon">${p.emoji}</span>
-                    <div class="tier-badge ${p.tier}">${tier.label}</div>
-                    ${verifiedHtml}
-                    <div class="online-status">${onlineHtml}</div>
-                </div>
-                <div class="card-info">
-                    <div class="name-row">
-                        <span class="name">${p.name}</span>
-                        <span class="age">${p.age}</span>
-                        ${p.verified ? '<span class="verified-badge">✓</span>' : ''}
-                    </div>
-                    <div class="location">📍 ${p.location}</div>
-                    <div class="bio">"${p.bio}"</div>
-                    <div class="tier-label ${tier.class}">${tier.label}</div>
-                    <div class="interests">
-                        <button class="interest active" onclick="showToast('❤️ Love')"><span class="icon">❤️</span></button>
-                        <button class="interest" onclick="showToast('🎵 Music')"><span class="icon">🎵</span></button>
-                        <button class="interest" onclick="showToast('✈️ Travel')"><span class="icon">✈️</span></button>
-                        <button class="interest" onclick="showToast('📸 Photo')"><span class="icon">📸</span></button>
-                        <button class="interest" onclick="showToast('⭐ Super')"><span class="icon">⭐</span></button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    // ============================================================
-    // ===== SWIPE ACTIONS =====
-    // ============================================================
-    function swipeAction(action) {
-        if (currentIndex >= profiles.length) return;
-
-        const profile = profiles[currentIndex];
-        let message = '';
-
-        switch(action) {
-            case 'like':
-                message = `❤️ You liked ${profile.name}!`;
-                likedProfiles.push(profile);
-                // 50% chance of match
-                if (Math.random() > 0.5) {
-                    matchedProfiles.push(profile);
-                    showMatch(profile);
+        // Enter key to send message in chat
+        document.getElementById('chatInput')?.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const msg = this.value.trim();
+                if (msg) {
+                    showToast('📤 Sent: ' + msg);
+                    this.value = '';
                 }
-                break;
-            case 'pass':
-                message = `❌ You passed on ${profile.name}`;
-                break;
-            case 'super':
-                message = `⭐ You Super Liked ${profile.name}!`;
-                likedProfiles.push(profile);
-                // Higher chance of match for Super Like
-                if (Math.random() > 0.3) {
-                    matchedProfiles.push(profile);
-                    showMatch(profile);
-                }
-                break;
-            case 'rewind':
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    renderCards();
-                    showToast('↩️ Rewound!');
-                    return;
-                } else {
-                    showToast('⚠️ Nothing to rewind');
-                    return;
-                }
-            case 'boost':
-                showToast('⚡ Boost activated! 30 min');
-                return;
-            default:
-                return;
-        }
-
-        showToast(message);
-        currentIndex++;
-        renderCards();
-    }
-
-    // ============================================================
-    // ===== MATCH =====
-    // ============================================================
-    function showMatch(profile) {
-        const overlay = document.getElementById('matchOverlay');
-        document.getElementById('matchUser1').textContent = '👤';
-        document.getElementById('matchUser2').textContent = '👤';
-        overlay.classList.add('show');
-        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-        // Add to chat
-        currentMatchId = profile.id;
-        chatMessages.push({ sender: profile.name, text: 'Hey! We matched! 🎉', time: 'Just now' });
-    }
-
-    function closeMatch() {
-        document.getElementById('matchOverlay').classList.remove('show');
-        showPage('page-chat');
-        renderChat();
-    }
-
-    // ============================================================
-    // ===== CHAT =====
-    // ============================================================
-    function renderChat() {
-        const container = document.getElementById('chatMessages');
-        if (chatMessages.length === 0) {
-            container.innerHTML = `
-                <div class="flex-center" style="height:100%">
-                    <div style="font-size:48px;margin-bottom:12px">💬</div>
-                    <p style="color:var(--text2);font-size:16px">No messages yet</p>
-                    <p style="color:var(--text3);font-size:13px;margin-top:4px">Match with someone to start chatting!</p>
-                </div>
-            `;
-            return;
-        }
-
-        let html = '';
-        chatMessages.forEach((msg, i) => {
-            const isSent = i % 2 === 0;
-            html += `
-                <div class="chat-message ${isSent ? 'sent' : 'received'}">
-                    <div class="bubble">
-                        ${msg.text}
-                        <span class="time">${msg.time || 'Just now'}</span>
-                    </div>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
-        container.scrollTop = container.scrollHeight;
-    }
-
-    function sendMessage() {
-        const input = document.getElementById('chatInput');
-        const text = input.value.trim();
-        if (!text) return;
-
-        chatMessages.push({ sender: 'You', text: text, time: 'Just now' });
-        input.value = '';
-        renderChat();
-
-        // Auto-reply from bot
-        setTimeout(() => {
-            const replies = [
-                'That\'s great! 😊',
-                'I agree with you!',
-                'Tell me more!',
-                'Haha, you\'re funny! 😄',
-                'That\'s interesting!',
-                'I was just thinking that!',
-                'Where are you from?',
-                'What do you like to do?',
-                'That\'s so cool!',
-                'I feel the same way!'
-            ];
-            const reply = replies[Math.floor(Math.random() * replies.length)];
-            const matchedProfile = matchedProfiles[matchedProfiles.length - 1];
-            chatMessages.push({ sender: matchedProfile ? matchedProfile.name : 'Match', text: reply, time: 'Just now' });
-            renderChat();
-        }, 1000);
-    }
-
-    // ============================================================
-    // ===== RESET =====
-    // ============================================================
-    function resetSwipes() {
-        currentIndex = 0;
-        renderCards();
-        showToast('🔄 Refreshed!');
-    }
-
-    // ============================================================
-    // ===== CHECK SESSION =====
-    // ============================================================
-    function checkSession() {
-        const savedUser = localStorage.getItem('destined_user');
-        if (savedUser) {
-            try {
-                const user = JSON.parse(savedUser);
-                updateUI(user);
-                showPage('page-main');
-                renderCards();
-                return;
-            } catch (e) {
-                localStorage.removeItem('destined_user');
             }
-        }
-        showPage('page-welcome');
-    }
+        });
 
-    // ============================================================
-    // ===== SPLASH =====
-    // ============================================================
-    setTimeout(() => {
-        document.getElementById('splash').style.display = 'none';
-        checkSession();
-    }, 2800);
-
-    document.addEventListener('gesturestart', e => e.preventDefault());
-    console.log('🔥 Destined — Professional Demo');
-    console.log('👑 10 profiles loaded. Swipe, match, and chat!');
-</script>
+        document.addEventListener('gesturestart', e => e.preventDefault());
+        console.log('🔥 Destined — Chat & Likes UI Complete');
+        console.log('👑 Built for Daniel — 17-year-old CEO');
+    </script>
 
 </body>
 </html>
